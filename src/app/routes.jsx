@@ -4,11 +4,8 @@ import sessionRoutes from "./views/sessions/SessionRoutes";
 import { Navigate } from "react-router-dom";
 import NotFound from "./views/sessions/NotFound";
 import HomePage from "./views/Home/Home";
-import priceBookDirectoryRoutes from "./views/priceBookDirectory/priceBookDirectoryRoutes";
 import UnderDevelopment from "./views/sessions/UnderDevelopment";
-import profileRoutes from "./views/profile/ProfileRoutes";
-import pricebookRoutes from "./views/PriceBook/PriceBookRoutes";
-import SecurityRoutes from "./views/Security/SecurityRoutes";
+import Mainroutes from "./views/main/Mainroutes";
 
 
 const routes = [
@@ -20,10 +17,8 @@ const routes = [
     ),
     children: [
       { path: "/home", element: <HomePage /> },
-      ...priceBookDirectoryRoutes,
-      ...profileRoutes,
-      ...pricebookRoutes,
-      ...SecurityRoutes,
+      ...Mainroutes,
+      
       { path: "*", element: <UnderDevelopment /> },
     ],
   },

@@ -29,13 +29,13 @@ const ContentBox = styled("div")(() => ({
 }));
 
 const StyledRoot = styled("div")(() => ({
-  backgroundImage: `url(/assets/images/meat1.jpg)`,
+  backgroundImage: `url(/assets/images/hsp3.jpg)`,
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   backgroundSize: "cover", // Cover the whole container
   backgroundRepeat: "no-repeat",
-  backgroundPosition: "center center",
+  backgroundPosition: "center",
   // backgroundColor:"#c0c0c0",
   minHeight: "100% !important",
   "& .card": {
@@ -100,8 +100,8 @@ export default function JwtLogin() {
           <Grid item xs={12}>
             <div className="img-wrapper">
               <img
-                src="/assets/images/logo.png"
-                width="150px"
+                src="/assets/images/lo.png"
+                width="190px"
                 height={"150px"}
                 alt=""
               />
@@ -110,10 +110,20 @@ export default function JwtLogin() {
                   fontSize: { xs: "1.2rem", sm: "1.5rem", md: "1.75rem" }, // Responsive font size
                   textAlign: "center",
                   color: "#dd2c00",
-                  marginTop: 3,
+                  marginTop: 0,
                 }}
               >
-                Control Panel
+                Hospital Management
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: { xs: "1.2rem", sm: "1rem", md: "1.25rem" }, // Responsive font size
+                  textAlign: "center",
+                  color: "green",
+                  marginTop: 0,
+                }}
+              >
+                Patient
               </Typography>
             </div>
           </Grid>
@@ -163,33 +173,47 @@ export default function JwtLogin() {
                       error={Boolean(errors.password && touched.password)}
                       sx={{ mb: 1.5 }}
                     />
-
-                    <FlexBox justifyContent="space-between">
-                      <FlexBox gap={1}>
-                        {/* <Checkbox
-                          size="small"
-                          name="remember"
-                          onChange={handleChange}
-                          checked={values.remember}
-                          sx={{ padding: 0 }}
-                        /> */}
-
-                        {/* <Paragraph>Remember Me</Paragraph> */}
-                      </FlexBox>
-
+                    <FlexBox style={{display: 'flex', flexDirection: 'row-reverse', justifyContent:'space-between'}}>
+                    <FlexBox
+                      flexDirection="column"
+                      gap={2}
+                      alignItems="flex-end"
+                    >
                       <NavLink
-                        to="/session/forgot-password"
+                        to="/session/unlock-password"
                         style={{ color: theme.palette.primary.main }}
                       >
                         Forgot password?
                       </NavLink>
-                      {/* <NavLink
-                        to="/session/unlock-password"
+                      <NavLink
+                        to="/session/forgot-password"
                         style={{ color: theme.palette.primary.main }}
                       >
                         Unlock password?
-                      </NavLink> */}
+                      </NavLink>
                     </FlexBox>
+
+                    <FlexBox
+                      flexDirection="column"
+                      gap={2}
+                      alignItems="flex-start"
+                    >
+                      <NavLink
+                        to='/session/doctor'
+                        style={{ color: theme.palette.primary.main }}
+                      >
+                        Are You a Doctor?
+                      </NavLink>
+                      <NavLink
+                        to='/session/admin'
+                        style={{ color: theme.palette.primary.main }}
+                      >
+                        Are You a Desk Admin?
+                      </NavLink>
+                    </FlexBox>
+
+                    </FlexBox>
+
 
                     <LoadingButton
                       type="submit"

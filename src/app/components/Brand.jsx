@@ -28,9 +28,9 @@ const BrandRoot = styled(Box)(() => ({
       <BrandRoot>
           <Link to={"/home"}>
         <Box display="flex" alignItems="center" >
-          <img src={"/assets/images/logo.png"} height={50}  style={{ objectFit: "cover"}}/>
+          <img src={"/assets/images/lo.png"} height={50}  style={{ objectFit: "cover"}}/>
           <StyledSpan mode={mode} className="sidenavHoverShow">
-          Control Panel
+          Hospital Management
           </StyledSpan>
         </Box>
           </Link>
