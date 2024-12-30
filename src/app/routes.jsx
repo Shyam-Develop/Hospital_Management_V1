@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom";
 import NotFound from "./views/sessions/NotFound";
 import HomePage from "./views/Home/Home";
 import UnderDevelopment from "./views/sessions/UnderDevelopment";
-import Mainroutes from "./views/main/Mainroutes";
+import DashBoardRoutes from "./views/DashBoard/DashBoardRoutes";
 
 
 const routes = [
@@ -17,7 +17,7 @@ const routes = [
     ),
     children: [
       { path: "/home", element: <HomePage /> },
-      ...Mainroutes,
+      ...DashBoardRoutes,
       
       { path: "*", element: <UnderDevelopment /> },
     ],
