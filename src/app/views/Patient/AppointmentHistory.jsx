@@ -203,7 +203,7 @@ const AppointmentHistory = () => {
           flexDirection: "row",
           justifyContent: "flex-end",
           width: "100%",
-          padding: 2,
+          padding: 1,
         }}
       >
         <Box
@@ -212,8 +212,8 @@ const AppointmentHistory = () => {
             flexDirection: "row",
             justifyContent: "flex-end",
             alignItems: "center",
-            gap: 2,
-            paddingX: 2,
+            gap: 1,
+            paddingX: 1,
           }}
         >
           <GridToolbarQuickFilter />

@@ -38,7 +38,7 @@ const Container = styled("div")(({ theme }) => ({
 }));
 
 // ********************** ITEMS SCREEN LISTVIEW ********************** //
-const Appointments = () => {
+const PrescriptionList = () => {
   // ********************** HOOKS AND CONSTANTS ********************** //
   const theme = useTheme();
   const naviate = useNavigate();
@@ -51,8 +51,8 @@ const Appointments = () => {
   const columns = [
     { headerName: "Rec ID",
         field: "rec_id",
-        width: "150",
-        align: "left",
+        width: "100",
+        align: "right",
         headerAlign: "left",
         hide: false,
     },
@@ -60,18 +60,11 @@ const Appointments = () => {
       headerName: "Patient ID",
       field: "patient_id",
       width: "100",
-      align: "left",
+      align: "right",
       headerAlign: "left",
       hide: true,
     },
-    {
-      headerName: "Appointment ID",
-      field: "appointment_id",
-      width: "170",
-      align: "left",
-      headerAlign: "left",
-      hide: true,
-    },
+  
     {
       headerName: "First Name",
       field: "first_name",
@@ -88,32 +81,17 @@ const Appointments = () => {
       headerAlign: "center",
       hide: true,
     },
-    {
-      headerName: "Gender",
-      field: "gender",
-      width: "170",
-      align: "right",
-      headerAlign: "center",
-      hide: true,
-    },
-    {
-      headerName: "Email",
-      field: "email",
-      width: "170",
-      align: "left",
-      headerAlign: "center",
-      hide: true,
-    },
-    {
-        headerName: "Contact",
-        field: "contact",
+ 
+      {
+        headerName: "Appointment ID",
+        field: "appointment_id",
         width: "170",
         align: "left",
         headerAlign: "center",
         hide: true,
       },
       {
-        headerName: "Appointment Date",
+        headerName: "Appointment date",
         field: "appointment_date",
         width: "170",
         align: "left",
@@ -121,7 +99,7 @@ const Appointments = () => {
         hide: true,
       },
       {
-        headerName: "Appointment Time",
+        headerName: "Appointment time",
         field: "appointment_time",
         width: "170",
         align: "left",
@@ -129,96 +107,107 @@ const Appointments = () => {
         hide: true,
       },
       {
-        headerName: "Current Status",
-        field: "current_status",
+        headerName: " Disease",
+        field: "disease",
         width: "170",
         align: "right",
         headerAlign: "center",
         hide: true,
       },
-    {
-      field: "Action",
-      headerName: "Action",
-      minWidth: 400,
-      flex: 1,
-      sortable: false,
-      headerAlign: "center",
-      filterable: false,
-      disableColumnMenu: true,
-      disableExport: true,
-      align: "center",
-      renderCell: (params) => {
-        return (
-          <div>
-            <Button
-              sx={{ height: 25, marginLeft: 1 }}
-              variant="contained"
-              color="secondary"
-              size="small"
-              startIcon={<Add color="primary" size="small" />}
-              onClick={() => {}}
-            >
-              Prescription
-            </Button>
-            <Button
-              sx={{ height: 25, marginLeft: 1 }}
-              variant="contained"
-              color="secondary"
-              size="small"
-              startIcon={<DeleteIcon color="error" size="small" />}
-              onClick={() => {}}
-            >
-              Delete
-            </Button>
-          </div>
-        );
+      {
+        headerName: "Allergy",
+        field: "allergy",
+        width: "170",
+        align: "right",
+        headerAlign: "center",
+        hide: true,
       },
-    },
+      {
+        headerName: "Prescribe",
+        field: "prescribe",
+        width: "170",
+        align: "right",
+        headerAlign: "center",
+        hide: true,
+      },
+    // {
+    //   field: "Action",
+    //   headerName: "Action",
+    //   minWidth: 400,
+    //   flex: 1,
+    //   sortable: false,
+    //   headerAlign: "center",
+    //   filterable: false,
+    //   disableColumnMenu: true,
+    //   disableExport: true,
+    //   align: "center",
+    //   renderCell: (params) => {
+    //     return (
+    //       <div>
+    //         <Button
+    //           sx={{ height: 25, marginLeft: 1 }}
+    //           variant="contained"
+    //           color="secondary"
+    //           size="small"
+    //           startIcon={<Add color="primary" size="small" />}
+    //           onClick={() => {}}
+    //         >
+    //           Prescribetion
+    //         </Button>
+    //         <Button
+    //           sx={{ height: 25, marginLeft: 1 }}
+    //           variant="contained"
+    //           color="secondary"
+    //           size="small"
+    //           startIcon={<DeleteIcon color="error" size="small" />}
+    //           onClick={() => {}}
+    //         >
+    //           Delete
+    //         </Button>
+    //       </div>
+    //     );
+    //   },
+    // },
   ];
 
   const rows = [
     {
         rec_id: "1",
         patient_id: "17",
-        appointment_id: "16",
-        first_name: "abi",
-        last_name: "kumar",
-        gender: "male",
-        email: "mughesh2001@gmail.com",
-        contact: "8248517047",
-        appointment_date: "2024-12-11",
-        appointment_time: "14:00:00",
-        current_status: "Active"
-
-    },
-    { rec_id: "2",
-        patient_id: "18",
-        appointment_id: "17",
         first_name: "madhan",
         last_name: "kumar",
-        gender: "male",
-        email: "sam2001@gmail.com",
-        contact: "8248517049",
-        appointment_date: "2024-12-12",
-        appointment_time: "10:00:00",
-        current_status: "Active"
+        appointment_id: "16",
+        appointment_date: "2024-12-11",
+        appointment_time: "14:00:00",
+        disease: "fever",
+        allergy: "nill",
+        prescribe: "dolo650",
+    },
+    { 
+       rec_id: "2",
+      patient_id: "18",
+      first_name: "madhan",
+      last_name: "kumar",
+      appointment_id: "17",
+      appointment_date: "2024-12-14",
+      appointment_time: "10:00:00",
+      disease: "headache",
+      allergy: "nill",
+      prescribe: "combiflam plus",
     },
     {
-        rec_id: "3",
-        patient_id: "19",
-        appointment_id: "18",
-        first_name: "lokesh",
-        last_name: "kumar",
-        gender: "male",
-        email: "lokesh2001@gmail.com",
-        contact: "8248517040",
-        appointment_date: "2024-12-27",
-        appointment_time: "16:00:00",
-        current_status: "Cancelled by pateint"
+      rec_id: "3",
+      patient_id: "19",
+      first_name: "madhan",
+      last_name: "kumar",
+      appointment_id: "18",
+      appointment_date: "2024-12-27",
+      appointment_time: "09:00:00",
+      disease: "cough",
+      allergy: "nill",
+      prescribe: "cofsils",
     },
-   
-    
-   
+  
   ];
 
   // ********************** TOOLBAR ********************** //
@@ -253,7 +242,7 @@ const Appointments = () => {
     <Container>
       <div className="breadcrumb">
         <Breadcrumb
-          routeSegments={[{ name: "Appointments" }]}
+          routeSegments={[{ name: "Prescription List" }]}
         />
       </div>
 
@@ -308,6 +297,7 @@ const Appointments = () => {
             columnVisibilityModel={{
                 doctorname: true,
                 rec_id:false,
+
             }}
             disableColumnFilter
             disableColumnSelector
@@ -326,4 +316,4 @@ const Appointments = () => {
   );
 };
 
-export default Appointments;
+export default PrescriptionList;

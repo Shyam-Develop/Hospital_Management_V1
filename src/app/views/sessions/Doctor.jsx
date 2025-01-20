@@ -2,7 +2,6 @@ import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   Card,
-  Checkbox,
   Grid,
   TextField,
   Box,
@@ -14,7 +13,6 @@ import { LoadingButton } from "@mui/lab";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import useAuth from "app/hooks/useAuth";
-import { Paragraph } from "app/components/Typography";
 
 // STYLED COMPONENTS
 const FlexBox = styled(Box)(() => ({
@@ -29,7 +27,7 @@ const ContentBox = styled("div")(() => ({
 }));
 
 const StyledRoot = styled("div")(() => ({
-  backgroundImage: `url(/assets/images/hsp3.jpg)`,
+  backgroundImage: `url(/assets/images/bg.jpg)`,
   display: "flex",
   alignItems: "center",
   justifyContent: "center",

@@ -3,13 +3,13 @@ import { lazy } from 'react';
 
 
 const Appointments = Loadable(lazy(() => import('./Appointments')));
-const Prescriptions = Loadable(lazy(() => import('./Prescriptions')));
+const PrescriptionList = Loadable(lazy(() => import('./PrescriptionList')));
 
-const DashBoardRoutes = [
+const DoctorRoutes = [
 
     { path: '/doctor/appointments', element: <Appointments /> },
-    { path: '/doctor/prescriptions', element: <Prescriptions /> },
+    { path: '/doctor/prescription-list', element: <PrescriptionList /> },
   ];
   
-  export default DashBoardRoutes;
+  export default DoctorRoutes;
   

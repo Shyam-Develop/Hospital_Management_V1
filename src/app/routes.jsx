@@ -5,7 +5,10 @@ import { Navigate } from "react-router-dom";
 import NotFound from "./views/sessions/NotFound";
 import HomePage from "./views/Home/Home";
 import UnderDevelopment from "./views/sessions/UnderDevelopment";
-import DashBoardRoutes from "./views/DashBoard/DashBoardRoutes";
+import DoctorRoutes from "./views/Doctor/DoctorRoutes";
+import AdminRoutes from "./views/Admin/AdminRoutes";
+import PatientRoutes from "./views/Patient/PatientRoutes";
+
 
 
 const routes = [
@@ -17,7 +20,10 @@ const routes = [
     ),
     children: [
       { path: "/home", element: <HomePage /> },
-      ...DashBoardRoutes,
+      ...DoctorRoutes,
+      ...AdminRoutes,
+      ...PatientRoutes,
+      
       
       { path: "*", element: <UnderDevelopment /> },
     ],

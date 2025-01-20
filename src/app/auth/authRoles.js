@@ -4,7 +4,7 @@ export const authRoles = {
     // editor: ['SA', 'ADMIN', 'EDITOR'], // Only SA & Admin & Editor has access
     // guest: ['SA', 'ADMIN', 'EDITOR', 'GUEST'], // Everyone has access
     admin:['ADMIN'],  // Only  Admin has access
-       user:['PATIENT'],  // Only USER & Admin has access
+       patient:['PATIENT'],  // Only USER & Admin has access
        doctor:[ 'DOCTOR' ]
 
 

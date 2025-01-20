@@ -198,7 +198,7 @@ const HomePage = () => {
         <Box sx={{ height: "250px" }}>
           <IMG
             alt={"Plymouth"}
-            src={"/assets/images/plylogo.png"}
+            src={"/assets/images/lo.png"}
             width={"100%"}
             height={"100%"}
           />

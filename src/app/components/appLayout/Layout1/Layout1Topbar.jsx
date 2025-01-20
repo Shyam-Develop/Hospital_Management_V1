@@ -164,8 +164,16 @@ const Layout1Topbar = () => {
             menuButton={
               <UserMenu>
                 <Hidden xsDown>
-                  <Span>
-                    Welcome 
+                <Span
+                    style={{
+                      fontSize: "20px",
+                      fontWeight: "bold",
+                      display: "block",
+                      margin: "auto",
+                      textAlign: "center", // Add this for centering the text
+                    }}
+                  >
+                    Welcome Shyam
                   </Span>
                 </Hidden>
                 {/* <Avatar src={user.avatar} sx={{ cursor: "pointer" }} /> */}

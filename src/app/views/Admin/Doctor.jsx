@@ -21,7 +21,8 @@ import { dataGridHeight, dataGridRowHeight } from "app/utils/constant";
 
 // ********************** ICONS ********************** //
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Add, Cancel, Edit } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
@@ -38,7 +39,7 @@ const Container = styled("div")(({ theme }) => ({
 }));
 
 // ********************** ITEMS SCREEN LISTVIEW ********************** //
-const Appointments = () => {
+const Doctor = () => {
   // ********************** HOOKS AND CONSTANTS ********************** //
   const theme = useTheme();
   const naviate = useNavigate();
@@ -49,52 +50,29 @@ const Appointments = () => {
 
   // ********************** COLUMN AND ROWS ********************** //
   const columns = [
-    { headerName: "Rec ID",
-        field: "rec_id",
-        width: "150",
-        align: "left",
-        headerAlign: "left",
-        hide: false,
-    },
-    {
-      headerName: "Patient ID",
-      field: "patient_id",
-      width: "100",
-      align: "left",
-      headerAlign: "left",
-      hide: true,
-    },
-    {
-      headerName: "Appointment ID",
-      field: "appointment_id",
-      width: "170",
-      align: "left",
-      headerAlign: "left",
-      hide: true,
-    },
     {
       headerName: "First Name",
-      field: "first_name",
+      field: "firstname",
       width: "150",
-      align: "right",
+      align: "left",
       headerAlign: "left",
       hide: true,
     },
     {
       headerName: "Last Name",
-      field: "last_name",
+      field: "lastname",
       width: "150",
-      align: "right",
-      headerAlign: "center",
-      hide: true,
+      align: "left",
+      headerAlign: "left",
+      hide: false,
     },
     {
-      headerName: "Gender",
-      field: "gender",
-      width: "170",
+      headerName: "Global ID",
+      field: "globalid",
+      width: "150",
       align: "right",
-      headerAlign: "center",
-      hide: true,
+      headerAlign: "left",
+      hide: false,
     },
     {
       headerName: "Email",
@@ -102,44 +80,60 @@ const Appointments = () => {
       width: "170",
       align: "left",
       headerAlign: "center",
-      hide: true,
+      hide: false,
     },
     {
-        headerName: "Contact",
-        field: "contact",
-        width: "170",
-        align: "left",
-        headerAlign: "center",
-        hide: true,
-      },
-      {
-        headerName: "Appointment Date",
-        field: "appointment_date",
-        width: "170",
-        align: "left",
-        headerAlign: "center",
-        hide: true,
-      },
-      {
-        headerName: "Appointment Time",
-        field: "appointment_time",
-        width: "170",
-        align: "left",
-        headerAlign: "center",
-        hide: true,
-      },
-      {
-        headerName: "Current Status",
-        field: "current_status",
-        width: "170",
-        align: "right",
-        headerAlign: "center",
-        hide: true,
-      },
+      headerName: "Phone",
+      field: "phone",
+      width: "170",
+      align: "right",
+      headerAlign: "center",
+      hide: false,
+    },
+    {
+      headerName: "Alternate Phone",
+      field: "alternatephone",
+      width: "170",
+      align: "right",
+      headerAlign: "center",
+      hide: false,
+    },
+    {
+      headerName: "Qualification",
+      field: "qualification",
+      width: "170",
+      align: "left",
+      headerAlign: "center",
+      hide: false,
+    },
+    {
+      headerName: "Special Qualification",
+      field: "splqualification",
+      width: "170",
+      align: "left",
+      headerAlign: "center",
+      hide: false,
+    },
+    {
+      headerName: "DOB",
+      field: "dateofbirth",
+      width: "170",
+      align: "right",
+      headerAlign: "center",
+      hide: false,
+    },
+    {
+      headerName: "DOJ",
+      field: "dateofjoining",
+      width: "170",
+      align: "right",
+      headerAlign: "center",
+      hide: false,
+    },
     {
       field: "Action",
       headerName: "Action",
-      minWidth: 400,
+      minWidth: 300,
       flex: 1,
       sortable: false,
       headerAlign: "center",
@@ -153,22 +147,14 @@ const Appointments = () => {
             <Button
               sx={{ height: 25, marginLeft: 1 }}
               variant="contained"
-              color="secondary"
+              color="primary"
               size="small"
-              startIcon={<Add color="primary" size="small" />}
-              onClick={() => {}}
+              startIcon={<EditIcon color="action" size="small" />}
+              onClick={() => {
+                // navigate('/pages/price-list/price-list-detail/edit');
+              }}
             >
-              Prescription
-            </Button>
-            <Button
-              sx={{ height: 25, marginLeft: 1 }}
-              variant="contained"
-              color="secondary"
-              size="small"
-              startIcon={<DeleteIcon color="error" size="small" />}
-              onClick={() => {}}
-            >
-              Delete
+              Edit
             </Button>
           </div>
         );
@@ -178,49 +164,44 @@ const Appointments = () => {
 
   const rows = [
     {
-        rec_id: "1",
-        patient_id: "17",
-        appointment_id: "16",
-        first_name: "abi",
-        last_name: "kumar",
-        gender: "male",
-        email: "mughesh2001@gmail.com",
-        contact: "8248517047",
-        appointment_date: "2024-12-11",
-        appointment_time: "14:00:00",
-        current_status: "Active"
-
-    },
-    { rec_id: "2",
-        patient_id: "18",
-        appointment_id: "17",
-        first_name: "madhan",
-        last_name: "kumar",
-        gender: "male",
-        email: "sam2001@gmail.com",
-        contact: "8248517049",
-        appointment_date: "2024-12-12",
-        appointment_time: "10:00:00",
-        current_status: "Active"
+      firstname: "Dinesh",
+      lastname: "Kumar",
+      globalid: "0098",
+      email: "dinesh@gmail.com",
+      phone: "8907654321",
+      alternatephone: "7890654321",
+      qualification: "MBBS",
+      splqualification: "Pediatrics",
+      dateofbirth: "19-04-1992",
+      dateofjoining: "12-03-2001",
     },
     {
-        rec_id: "3",
-        patient_id: "19",
-        appointment_id: "18",
-        first_name: "lokesh",
-        last_name: "kumar",
-        gender: "male",
-        email: "lokesh2001@gmail.com",
-        contact: "8248517040",
-        appointment_date: "2024-12-27",
-        appointment_time: "16:00:00",
-        current_status: "Cancelled by pateint"
+      firstname: "Mathew",
+      lastname: "Henry",
+      globalid: "0099",
+      email: "henry@gmail.com",
+      phone: "9807654312",
+      alternatephone: "9900876543",
+      qualification: "MBBS",
+      splqualification: "Pathology",
+      dateofbirth: "20-08-1993",
+      dateofjoining: "25-07-2000",
     },
-   
-    
-   
+    {
+      firstname: "Kevin",
+      lastname: "Rick",
+      globalid: "0097",
+      email: "kevin@gmail.com",
+      phone: "8899007654",
+      alternatephone: "9087654321",
+      qualification: "MBBS",
+      splqualification: "Cardiology",
+      dateofbirth: "09-06-1990",
+      dateofjoining: "20-09-2000",
+    },
   ];
 
+  // ********************** TOOLBAR ********************** //
   // ********************** TOOLBAR ********************** //
   function CustomToolbar() {
     return (
@@ -228,7 +209,7 @@ const Appointments = () => {
         sx={{
           display: "flex",
           flexDirection: "row",
-          justifyContent: "flex-end",
+          justifyContent: "flex-end", // Align everything to the right
           width: "100%",
           padding: 1,
         }}
@@ -237,13 +218,22 @@ const Appointments = () => {
           sx={{
             display: "flex",
             flexDirection: "row",
-            justifyContent: "flex-end",
             alignItems: "center",
             gap: 1,
-            paddingX: 1,
           }}
         >
           <GridToolbarQuickFilter />
+          {/* Add Button next to the search box */}
+          <Button
+            sx={{ height: 25, marginLeft: 1 }}
+            variant="contained"
+            color="primary"
+            size="small"
+            startIcon={<AddIcon color="action" size="small" />}
+            onClick={() => {}}
+          >
+            Add
+          </Button>
         </Box>
       </GridToolbarContainer>
     );
@@ -252,9 +242,7 @@ const Appointments = () => {
   return (
     <Container>
       <div className="breadcrumb">
-        <Breadcrumb
-          routeSegments={[{ name: "Appointments" }]}
-        />
+        <Breadcrumb routeSegments={[{ name: "Doctor" }]} />
       </div>
 
       <Paper sx={{ width: "100%", mb: 2 }}>
@@ -300,14 +288,13 @@ const Appointments = () => {
             rowHeight={dataGridRowHeight}
             rows={rows}
             columns={columns}
-            getRowId={(row) => row.rec_id}
+            getRowId={(row) => row.firstname}
             initialState={{
               pagination: { paginationModel: { pageSize: 20 } },
             }}
             pageSizeOptions={[5, 10, 20, 25]}
             columnVisibilityModel={{
-                doctorname: true,
-                rec_id:false,
+              doctorname: true,
             }}
             disableColumnFilter
             disableColumnSelector
@@ -326,4 +313,4 @@ const Appointments = () => {
   );
 };
 
-export default Appointments;
+export default Doctor;

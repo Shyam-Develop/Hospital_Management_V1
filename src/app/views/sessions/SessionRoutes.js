@@ -6,6 +6,7 @@ const NotFound = Loadable(lazy(() => import('./NotFound')));
 const ForgotPassword = Loadable(lazy(() => import('./ForgotPassword')));
 const ResetPassword = Loadable(lazy(() => import('./ResetPassword')));
 const JwtLogin = Loadable(lazy(() => import('./JwtLogin')));
+const Patient = Loadable(lazy(() => import('./Patient')));
 const Doctor = Loadable(lazy(() => import('./Doctor')));
 const Admin = Loadable(lazy(() => import('./Admin')));
 const JwtRegister = Loadable(lazy(() => import('./JwtRegister')));
@@ -17,6 +18,7 @@ const sessionRoutes = [
 
   { path: '/session/signup', element: <JwtRegister /> },
   { path: '/session/signin', element: <JwtLogin /> },
+  { path: '/session/patient', element: <Patient /> },
   { path: '/session/doctor', element: <Doctor /> },
   { path: '/session/admin', element: <Admin /> },
   { path: '/session/forgot-password', element: <ForgotPassword /> },

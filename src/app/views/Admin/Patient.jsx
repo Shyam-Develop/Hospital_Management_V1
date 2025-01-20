@@ -21,12 +21,12 @@ import { dataGridHeight, dataGridRowHeight } from "app/utils/constant";
 
 // ********************** ICONS ********************** //
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Add, Cancel } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
 import CancelIcon from "@mui/icons-material/Cancel";
-import PaymentIcon from "@mui/icons-material/Payment";
 
 // ********************** STYLED COMPONENTS ********************** //
 const Container = styled("div")(({ theme }) => ({
@@ -39,7 +39,7 @@ const Container = styled("div")(({ theme }) => ({
 }));
 
 // ********************** ITEMS SCREEN LISTVIEW ********************** //
-const Prescription = () => {
+const Patient = () => {
   // ********************** HOOKS AND CONSTANTS ********************** //
   const theme = useTheme();
   const naviate = useNavigate();
@@ -51,65 +51,73 @@ const Prescription = () => {
   // ********************** COLUMN AND ROWS ********************** //
   const columns = [
     {
-      headerName: "Doctor Name",
-      field: "doctorname",
+      headerName: "First Name",
+      field: "firstname",
+      width: "150",
+      align: "left",
+      headerAlign: "left",
+      hide: true,
+    },
+    {
+      headerName: "Last Name",
+      field: "lastname",
       width: "150",
       align: "left",
       headerAlign: "left",
       hide: false,
     },
     {
-      headerName: "Appointment ID",
-      field: "appointment_id",
-      width: "150",
+      headerName: "Global ID",
+      field: "globalid",
+      width: "100",
       align: "right",
       headerAlign: "left",
       hide: false,
     },
     {
-      headerName: "Appointment Date",
-      field: "date",
+      headerName: "Email",
+      field: "email",
+      width: "170",
+      align: "left",
+      headerAlign: "center",
+      hide: false,
+    },
+    {
+      headerName: "Phone",
+      field: "phone",
       width: "170",
       align: "right",
       headerAlign: "center",
       hide: false,
     },
     {
-      headerName: "Appointment Time",
-      field: "time",
+      headerName: "Alternate Phone",
+      field: "alternatephone",
       width: "170",
       align: "right",
       headerAlign: "center",
       hide: false,
     },
     {
-      headerName: "Diseases",
-      field: "diseases",
+      headerName: "DOB",
+      field: "dateofbirth",
       width: "170",
-      align: "left",
+      align: "right",
       headerAlign: "center",
       hide: false,
     },
     {
-      headerName: "Allergies",
-      field: "allergies",
+      headerName: "DOJ",
+      field: "dateofjoining",
       width: "170",
-      align: "left",
-      headerAlign: "center",
-      hide: false,
-    },
-    {
-      headerName: "Prescriptions",
-      field: "prescription",
-      width: "170",
-      align: "left",
+      align: "right",
       headerAlign: "center",
       hide: false,
     },
     {
       field: "Action",
       headerName: "Action",
-      minWidth: 200,
+      minWidth: 300,
       flex: 1,
       sortable: false,
       headerAlign: "center",
@@ -125,10 +133,12 @@ const Prescription = () => {
               variant="contained"
               color="primary"
               size="small"
-              startIcon={<PaymentIcon color="action" size="small" />}
-              onClick={() => {}}
+              startIcon={<EditIcon color="action" size="small" />}
+              onClick={() => {
+                // navigate('/pages/price-list/price-list-detail/edit');
+              }}
             >
-              Pay Bill
+              Edit
             </Button>
           </div>
         );
@@ -138,13 +148,34 @@ const Prescription = () => {
 
   const rows = [
     {
-      doctorname: "Dinesh",
-      appointment_id: "16",
-      date: "2024-12-11",
-      time: "14:00:00",
-      diseases: "Fever",
-      allergies: "nill",
-      prescription: "dolo650",
+      firstname: "Madhesh",
+      lastname: "Kumar",
+      globalid: "0098",
+      email: "madhesh@gmail.com",
+      phone: "8907655566",
+      alternatephone: "9878985432",
+      dateofbirth: "19-04-1999",
+      dateofjoining: "12-01-2025",
+    },
+    {
+      firstname: "Lokesh",
+      lastname: "Paul",
+      globalid: "0099",
+      email: "lokesh@gmail.com",
+      phone: "7765489023",
+      alternatephone: "8890763452",
+      dateofbirth: "20-08-1998",
+      dateofjoining: "05-01-2025",
+    },
+    {
+      firstname: "Dharma",
+      lastname: "Durai",
+      globalid: "0097",
+      email: "durai@gmail.com",
+      phone: "9089024561",
+      alternatephone: "7612345676",
+      dateofbirth: "09-06-1995",
+      dateofjoining: "02-01-2025",
     },
   ];
 
@@ -155,22 +186,31 @@ const Prescription = () => {
         sx={{
           display: "flex",
           flexDirection: "row",
-          justifyContent: "flex-end",
+          justifyContent: "flex-end", // Align everything to the right
           width: "100%",
-          padding: 2,
+          padding: 1,
         }}
       >
         <Box
           sx={{
             display: "flex",
             flexDirection: "row",
-            justifyContent: "flex-end",
             alignItems: "center",
-            gap: 2,
-            paddingX: 2,
+            gap: 1,
           }}
         >
           <GridToolbarQuickFilter />
+          {/* Add Button next to the search box */}
+          <Button
+            sx={{ height: 25, marginLeft: 1 }}
+            variant="contained"
+            color="primary"
+            size="small"
+            startIcon={<AddIcon color="action" size="small" />}
+            onClick={() => {}}
+          >
+            Add
+          </Button>
         </Box>
       </GridToolbarContainer>
     );
@@ -179,7 +219,7 @@ const Prescription = () => {
   return (
     <Container>
       <div className="breadcrumb">
-        <Breadcrumb routeSegments={[{ name: "Appointment History" }]} />
+        <Breadcrumb routeSegments={[{ name: "Patient" }]} />
       </div>
 
       <Paper sx={{ width: "100%", mb: 2 }}>
@@ -225,13 +265,13 @@ const Prescription = () => {
             rowHeight={dataGridRowHeight}
             rows={rows}
             columns={columns}
-            getRowId={(row) => row.appointment_id}
+            getRowId={(row) => row.firstname}
             initialState={{
               pagination: { paginationModel: { pageSize: 20 } },
             }}
             pageSizeOptions={[5, 10, 20, 25]}
             columnVisibilityModel={{
-              appointment_id: true,
+              doctorname: true,
             }}
             disableColumnFilter
             disableColumnSelector
@@ -250,4 +290,4 @@ const Prescription = () => {
   );
 };
 
-export default Prescription;
+export default Patient;

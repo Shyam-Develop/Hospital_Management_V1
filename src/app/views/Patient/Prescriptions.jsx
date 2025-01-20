@@ -21,11 +21,12 @@ import { dataGridHeight, dataGridRowHeight } from "app/utils/constant";
 
 // ********************** ICONS ********************** //
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Add, Cancel, Edit } from "@mui/icons-material";
+import { Add, Cancel } from "@mui/icons-material";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
 import CancelIcon from "@mui/icons-material/Cancel";
+import PaymentIcon from "@mui/icons-material/Payment";
 
 // ********************** STYLED COMPONENTS ********************** //
 const Container = styled("div")(({ theme }) => ({
@@ -38,7 +39,7 @@ const Container = styled("div")(({ theme }) => ({
 }));
 
 // ********************** ITEMS SCREEN LISTVIEW ********************** //
-const Appointments = () => {
+const Prescriptions = () => {
   // ********************** HOOKS AND CONSTANTS ********************** //
   const theme = useTheme();
   const naviate = useNavigate();
@@ -49,97 +50,74 @@ const Appointments = () => {
 
   // ********************** COLUMN AND ROWS ********************** //
   const columns = [
-    { headerName: "Rec ID",
-        field: "rec_id",
-        width: "150",
-        align: "left",
-        headerAlign: "left",
-        hide: false,
-    },
     {
-      headerName: "Patient ID",
-      field: "patient_id",
-      width: "100",
-      align: "left",
+      headerName: "Rec ID",
+      field: "rec_id",
+      width: "170",
+      align: "right",
       headerAlign: "left",
       hide: true,
+    },
+    {
+      headerName: "Doctor Name",
+      field: "doctorname",
+      width: "170",
+      align: "right",
+      headerAlign: "left",
+      hide: false,
     },
     {
       headerName: "Appointment ID",
       field: "appointment_id",
-      width: "170",
+      width: "150",
       align: "left",
       headerAlign: "left",
-      hide: true,
+      hide: false,
     },
     {
-      headerName: "First Name",
-      field: "first_name",
-      width: "150",
-      align: "right",
-      headerAlign: "left",
-      hide: true,
-    },
-    {
-      headerName: "Last Name",
-      field: "last_name",
-      width: "150",
-      align: "right",
-      headerAlign: "center",
-      hide: true,
-    },
-    {
-      headerName: "Gender",
-      field: "gender",
-      width: "170",
-      align: "right",
-      headerAlign: "center",
-      hide: true,
-    },
-    {
-      headerName: "Email",
-      field: "email",
+      headerName: "Appointment Date",
+      field: "date",
       width: "170",
       align: "left",
       headerAlign: "center",
-      hide: true,
+      hide: false,
     },
     {
-        headerName: "Contact",
-        field: "contact",
-        width: "170",
-        align: "left",
-        headerAlign: "center",
-        hide: true,
-      },
-      {
-        headerName: "Appointment Date",
-        field: "appointment_date",
-        width: "170",
-        align: "left",
-        headerAlign: "center",
-        hide: true,
-      },
-      {
-        headerName: "Appointment Time",
-        field: "appointment_time",
-        width: "170",
-        align: "left",
-        headerAlign: "center",
-        hide: true,
-      },
-      {
-        headerName: "Current Status",
-        field: "current_status",
-        width: "170",
-        align: "right",
-        headerAlign: "center",
-        hide: true,
-      },
+      headerName: "Appointment Time",
+      field: "time",
+      width: "150",
+      align: "left",
+      headerAlign: "center",
+      hide: false,
+    },
+    {
+      headerName: "Diseases",
+      field: "diseases",
+      width: "150",
+      align: "right",
+      headerAlign: "center",
+      hide: false,
+    },
+    {
+      headerName: "Allergies",
+      field: "allergies",
+      width: "100",
+      align: "right",
+      headerAlign: "center",
+      hide: false,
+    },
+    {
+      headerName: "Prescriptions",
+      field: "prescription",
+      width: "170",
+      align: "right",
+      headerAlign: "center",
+      hide: false,
+    },
     {
       field: "Action",
       headerName: "Action",
-      minWidth: 400,
+      minWidth: 200,
       flex: 1,
       sortable: false,
       headerAlign: "center",
@@ -153,22 +131,12 @@ const Appointments = () => {
             <Button
               sx={{ height: 25, marginLeft: 1 }}
               variant="contained"
-              color="secondary"
+              color="primary"
               size="small"
-              startIcon={<Add color="primary" size="small" />}
+              startIcon={<PaymentIcon color="action" size="small" />}
               onClick={() => {}}
             >
-              Prescription
-            </Button>
-            <Button
-              sx={{ height: 25, marginLeft: 1 }}
-              variant="contained"
-              color="secondary"
-              size="small"
-              startIcon={<DeleteIcon color="error" size="small" />}
-              onClick={() => {}}
-            >
-              Delete
+              Pay Bill
             </Button>
           </div>
         );
@@ -178,47 +146,37 @@ const Appointments = () => {
 
   const rows = [
     {
-        rec_id: "1",
-        patient_id: "17",
-        appointment_id: "16",
-        first_name: "abi",
-        last_name: "kumar",
-        gender: "male",
-        email: "mughesh2001@gmail.com",
-        contact: "8248517047",
-        appointment_date: "2024-12-11",
-        appointment_time: "14:00:00",
-        current_status: "Active"
-
-    },
-    { rec_id: "2",
-        patient_id: "18",
-        appointment_id: "17",
-        first_name: "madhan",
-        last_name: "kumar",
-        gender: "male",
-        email: "sam2001@gmail.com",
-        contact: "8248517049",
-        appointment_date: "2024-12-12",
-        appointment_time: "10:00:00",
-        current_status: "Active"
+      rec_id: "1",
+      doctorname: "Dinesh",
+      appointment_id: "16",
+      date: "2024-12-11",
+      time: "14:00:00",
+      diseases: "Fever",
+      allergies: "nill",
+      prescription: "dolo650",
     },
     {
+      rec_id: "2",
+
+        doctorname: "Henry",
+        appointment_id: "17",
+        date: "2024-12-14",
+        time: "10:00:00",
+        diseases: "Headache",
+        allergies: "nill",
+        prescription: "combiflam plus",
+      },
+      {
         rec_id: "3",
-        patient_id: "19",
+
+        doctorname: "Loki",
         appointment_id: "18",
-        first_name: "lokesh",
-        last_name: "kumar",
-        gender: "male",
-        email: "lokesh2001@gmail.com",
-        contact: "8248517040",
-        appointment_date: "2024-12-27",
-        appointment_time: "16:00:00",
-        current_status: "Cancelled by pateint"
-    },
-   
-    
-   
+        date: "2024-12-27",
+        time: "09:00:00",
+        diseases: "cough",
+        allergies: "nill",
+        prescription: "cofsils",
+      },
   ];
 
   // ********************** TOOLBAR ********************** //
@@ -252,9 +210,7 @@ const Appointments = () => {
   return (
     <Container>
       <div className="breadcrumb">
-        <Breadcrumb
-          routeSegments={[{ name: "Appointments" }]}
-        />
+        <Breadcrumb routeSegments={[{ name: "Prescriptions" }]} />
       </div>
 
       <Paper sx={{ width: "100%", mb: 2 }}>
@@ -306,8 +262,7 @@ const Appointments = () => {
             }}
             pageSizeOptions={[5, 10, 20, 25]}
             columnVisibilityModel={{
-                doctorname: true,
-                rec_id:false,
+              appointment_id: true,
             }}
             disableColumnFilter
             disableColumnSelector
@@ -326,4 +281,4 @@ const Appointments = () => {
   );
 };
 
-export default Appointments;
+export default Prescriptions;
