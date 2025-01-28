@@ -1,9 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
-  IconButton,
   LinearProgress,
   Paper,
-  Tooltip,
   Button,
   Box,
   styled,
@@ -11,22 +9,17 @@ import {
 } from "@mui/material";
 import {
   DataGrid,
-  GridToolbar,
   GridToolbarQuickFilter,
   GridToolbarContainer,
-  GridToolbarExport,
 } from "@mui/x-data-grid";
 import { Breadcrumb } from "app/components";
 import { dataGridHeight, dataGridRowHeight } from "app/utils/constant";
 
 // ********************** ICONS ********************** //
-import DeleteIcon from "@mui/icons-material/Delete";
-import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
-import CancelIcon from "@mui/icons-material/Cancel";
+import AddIcon from "@mui/icons-material/Add";
+
 
 // ********************** STYLED COMPONENTS ********************** //
 const Container = styled("div")(({ theme }) => ({
@@ -42,7 +35,7 @@ const Container = styled("div")(({ theme }) => ({
 const Doctor = () => {
   // ********************** HOOKS AND CONSTANTS ********************** //
   const theme = useTheme();
-  const naviate = useNavigate();
+  const navigate = useNavigate();
 
   // ********************** LOCAL STATE ********************** //
 
@@ -69,7 +62,7 @@ const Doctor = () => {
     {
       headerName: "Global ID",
       field: "globalid",
-      width: "150",
+      width: "100",
       align: "right",
       headerAlign: "left",
       hide: false,
@@ -101,7 +94,7 @@ const Doctor = () => {
     {
       headerName: "Qualification",
       field: "qualification",
-      width: "170",
+      width: "150",
       align: "left",
       headerAlign: "center",
       hide: false,
@@ -151,7 +144,7 @@ const Doctor = () => {
               size="small"
               startIcon={<EditIcon color="action" size="small" />}
               onClick={() => {
-                // navigate('/pages/price-list/price-list-detail/edit');
+                navigate("/admin/doctor-edit");
               }}
             >
               Edit
@@ -211,7 +204,7 @@ const Doctor = () => {
           flexDirection: "row",
           justifyContent: "flex-end", // Align everything to the right
           width: "100%",
-          padding: 1,
+          padding: 0.5,
         }}
       >
         <Box
@@ -230,7 +223,9 @@ const Doctor = () => {
             color="primary"
             size="small"
             startIcon={<AddIcon color="action" size="small" />}
-            onClick={() => {}}
+            onClick={() => {
+              navigate("/admin/doctor-edit");
+            }}
           >
             Add
           </Button>
@@ -263,6 +258,7 @@ const Doctor = () => {
               color: theme.palette.info.contrastText,
               fontWeight: "bold",
               fontSize: theme.typography.subtitle2.fontSize,
+              
             },
             "& .MuiDataGrid-virtualScroller": {
               backgroundColor: theme.palette.info.light,

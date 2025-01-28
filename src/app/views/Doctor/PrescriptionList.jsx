@@ -219,7 +219,7 @@ const PrescriptionList = () => {
           flexDirection: "row",
           justifyContent: "flex-end",
           width: "100%",
-          padding: 1,
+          padding: 0.5,
         }}
       >
         <Box

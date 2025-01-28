@@ -1,9 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
-  IconButton,
   LinearProgress,
   Paper,
-  Tooltip,
   Button,
   Box,
   styled,
@@ -11,23 +9,16 @@ import {
 } from "@mui/material";
 import {
   DataGrid,
-  GridToolbar,
   GridToolbarQuickFilter,
   GridToolbarContainer,
-  GridToolbarExport,
 } from "@mui/x-data-grid";
 import { Breadcrumb } from "app/components";
 import { dataGridHeight, dataGridRowHeight } from "app/utils/constant";
 
 // ********************** ICONS ********************** //
-import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
-import CancelIcon from "@mui/icons-material/Cancel";
-
 // ********************** STYLED COMPONENTS ********************** //
 const Container = styled("div")(({ theme }) => ({
   margin: "15px",
@@ -42,7 +33,7 @@ const Container = styled("div")(({ theme }) => ({
 const Patient = () => {
   // ********************** HOOKS AND CONSTANTS ********************** //
   const theme = useTheme();
-  const naviate = useNavigate();
+  const navigate = useNavigate();
 
   // ********************** LOCAL STATE ********************** //
 
@@ -66,14 +57,7 @@ const Patient = () => {
       headerAlign: "left",
       hide: false,
     },
-    {
-      headerName: "Global ID",
-      field: "globalid",
-      width: "100",
-      align: "right",
-      headerAlign: "left",
-      hide: false,
-    },
+
     {
       headerName: "Email",
       field: "email",
@@ -135,7 +119,7 @@ const Patient = () => {
               size="small"
               startIcon={<EditIcon color="action" size="small" />}
               onClick={() => {
-                // navigate('/pages/price-list/price-list-detail/edit');
+                navigate("/admin/patient-edit");
               }}
             >
               Edit
@@ -188,7 +172,7 @@ const Patient = () => {
           flexDirection: "row",
           justifyContent: "flex-end", // Align everything to the right
           width: "100%",
-          padding: 1,
+          padding: 0.5,
         }}
       >
         <Box
@@ -207,7 +191,9 @@ const Patient = () => {
             color="primary"
             size="small"
             startIcon={<AddIcon color="action" size="small" />}
-            onClick={() => {}}
+            onClick={() => {
+              navigate("/admin/patient-edit");
+            }}
           >
             Add
           </Button>

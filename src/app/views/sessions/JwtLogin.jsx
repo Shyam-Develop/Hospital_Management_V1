@@ -197,11 +197,18 @@ export default function JwtLogin() {
                       gap={2}
                       alignItems="flex-start"
                     >
+                      
                        <NavLink
                         to='/session/patient'
                         style={{ color: theme.palette.primary.main }}
                       >
-                        Sign Up Patient
+                        Sign Up In To Patient
+                      </NavLink>
+                      <NavLink
+                        to='/session/pharmacy'
+                        style={{ color: theme.palette.primary.main }}
+                      >
+                        Sign Up In To Pharmacy
                       </NavLink>
                       <NavLink
                         to='/session/doctor'

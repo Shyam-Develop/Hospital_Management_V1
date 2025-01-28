@@ -119,7 +119,6 @@ const Layout1Topbar = () => {
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
-
     setOpen(true);
   };
   const handleClose = (event, reason) => {
@@ -131,7 +130,6 @@ const Layout1Topbar = () => {
 
     Swal.fire({
       title: "Favourite Added Successfully",
-      // text: "You clicked the button!",
       icon: "success"
     });
   };
@@ -143,94 +141,68 @@ const Layout1Topbar = () => {
           <StyledIconButton onClick={handleSidebarToggle}>
             <Icon>menu</Icon>
           </StyledIconButton>
-
-          {/* <IconBox>
-            <StyledIconButton onClick={handleClick}>
-              <Tooltip title="Add Favourite">
-                {!open ? (
-                  <Icon>star_outline</Icon>
-                ) : (
-                  <Icon color="warning">star</Icon>
-                )}
-              </Tooltip>
-            </StyledIconButton>
-          </IconBox> */}
         </Box>
 
         <Box display="flex" alignItems="center">
-          {/* <AppSearchBox /> */}
-
           <AppMenu
             menuButton={
               <UserMenu>
-                <Hidden xsDown>
                 <Span
-                    style={{
-                      fontSize: "20px",
-                      fontWeight: "bold",
-                      display: "block",
-                      margin: "auto",
-                      textAlign: "center", // Add this for centering the text
-                    }}
-                  >
-                    Welcome Shyam
-                  </Span>
-                </Hidden>
-                {/* <Avatar src={user.avatar} sx={{ cursor: "pointer" }} /> */}
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                    display: "block",
+                    margin: "auto",
+                    textAlign: "center", 
+                  }}
+                >
+                  Welcome Shyam
+                </Span>
+                <Avatar src={user.avatar} sx={{ cursor: "pointer" }} />
               </UserMenu>
             }
           >
             <StyledItem>
               <Link to="/home">
-                <Icon> home </Icon>
-                <Span> Home </Span>
+              <Icon> person </Icon>
+              <Span> Profile </Span>
               </Link>
             </StyledItem>
 
-            {/* <StyledItem>
+            {/* New Profile item */}
+            <StyledItem>
               <Link to="/user-profile">
-                <Icon> person </Icon>
-                <Span> Profile </Span>
+                <Icon> password </Icon>
+                <Span> Change Password </Span>
               </Link>
-            </StyledItem> */}
+            </StyledItem>
 
-            {/* {user.role == 'ADMIN'&&<StyledItem
-              onClick={() => {
-                navigate("/profile/setting");
-
-              }}>
-              <Link to="/user-settings">
-                <Icon> settings </Icon>
-                <Span> Settings </Span>
-              </Link>
-            </StyledItem>} */}
-
+          
             <StyledItem
               onClick={() => {
-                navigate("/session/signin");
+                navigate("/session/admin");
                 logout();
               }}
             >
-              <Icon> power_settings_new </Icon>
+              <Icon> logout </Icon>
               <Span> Logout </Span>
             </StyledItem>
           </AppMenu>
           <Dialog
-            open={open} // Bind the state to the Dialog's open prop
+            open={open}
             onClose={() => setOpen(false)}
             PaperProps={{
               component: "form",
               onSubmit: (e) => {
-                e.preventDefault(); // Prevent form submission
-                handleClose(); // Close dialog on submit
+                e.preventDefault();
+                handleClose();
               },
             }}
           >
             <DialogTitle>Add Favourite</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                To create a new  Favourite, please fill out the  Favourite Name
-                below.
+                To create a new Favourite, please fill out the Favourite Name below.
               </DialogContentText>
               <TextField
                 autoFocus

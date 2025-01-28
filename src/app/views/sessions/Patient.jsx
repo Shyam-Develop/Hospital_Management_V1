@@ -58,6 +58,7 @@ const initialValues = {
   patientname: "",
   phonenumber: "",
   patientdob: "",
+  email:"",
 };
 
 const validationSchema = Yup.object().shape({
@@ -178,8 +179,23 @@ export default function Doctor() {
                       error={Boolean(errors.phonenumber && touched.phonenumber)}
                       sx={{ mb: 1.5 }}
                     />
-
+                    
                     <TextField
+                      fullWidth
+                      size="small"
+                      name="email"
+                      type="email"
+                      label="Email ID"
+                      variant="outlined"
+                      onBlur={handleBlur}
+                      value={values.email}
+                      onChange={handleChange}
+                      helperText={touched.email && errors.email}
+                      error={Boolean(errors.email && touched.email)}
+                      sx={{ mb: 1.5 }}
+                    />
+
+                    {/* <TextField
                       fullWidth
                       size="small"
                       name="patientdob"
@@ -192,7 +208,7 @@ export default function Doctor() {
                       helperText={touched.patientdob && errors.patientdob}
                       error={Boolean(errors.patientdob && touched.patientdob)}
                       sx={{ mb: 1.5 }}
-                    />
+                    /> */}
                     <FlexBox style={{ display: 'flex', flexDirection: 'row-reverse', justifyContent:'space-between' }}>
                       <FlexBox
                         flexDirection="column"

@@ -121,7 +121,7 @@ export default function Doctor() {
                   marginTop: 0,
                 }}
               >
-                Doctor
+                Pharmacy
               </Typography>
             </div>
           </Grid>
