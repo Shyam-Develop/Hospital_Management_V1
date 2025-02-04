@@ -42,7 +42,7 @@ const userList = [
   },
   {
     id: 3,
-    role: "USER",
+    role: "PHARMACY",
     name: "Neelakrishnan",
     username: "nk01",
     email: "neel@gmail.com",

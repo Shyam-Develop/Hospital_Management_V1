@@ -9,12 +9,12 @@ const BrandRoot = styled(Box)(() => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  padding: '20px 18px 20px 29px',
+  padding: '20px 18px 20px 59px',
 }));
 
 const StyledSpan = styled(Span)(({ mode }) => ({
-  fontSize: 22,
-  marginLeft: '-1rem',
+  fontSize: 32,
+  marginLeft: '0rem',
   display: mode === 'compact' ? 'none' : 'block',
 }));
 
@@ -30,17 +30,18 @@ const Brand = ({ children }) => {
   const { settings } = useSettings();
   const leftSidebar = settings.layout1Settings.leftSidebar;
   const { mode } = leftSidebar;
+  const {user} = useAuth();
 
   return (
     <BrandRoot>
       <Link to={"/home"}>
         <Box display="flex" alignItems="center" flexDirection="column" textAlign="center">
-          <img src={"/assets/images/lo.png"} height={50} style={{ objectFit: "cover" }} />
+          <img src={"/assets/images/lo.png"} height={80} style={{ objectFit: "cover" }} />
           <StyledSpan mode={mode} className="sidenavHoverShow">
-            Hospital Management
+            HMS
           </StyledSpan>
           <Heading>
-            ADMIN
+            {user.role}
           </Heading>
         </Box>
       </Link>

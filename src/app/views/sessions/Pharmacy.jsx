@@ -58,7 +58,7 @@ const StyledRoot = styled("div")(() => ({
 
 // initial login credentials
 const initialValues = {
-  email: "ram@gmail.com",
+  email: "neel@gmail.com",
   password: "dummyPass",
   remember: true,
 };
@@ -73,7 +73,7 @@ const validationSchema = Yup.object().shape({
     .required("Email is required!"),
 });
 
-export default function Doctor() {
+export default function Pharmacy() {
   const theme = useTheme();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);

@@ -63,5 +63,14 @@ export const navigations = [
                 icon: <DescriptionIcon fontSize="small" />,
                 role: authRoles.admin,
               },
+              {
+                name: "Pharmacy",
+                path: "/pharmacy/pharmacy",
+                iconText: "V",
+                accessID: null,
+                icon: <DescriptionIcon fontSize="small" />,
+                role: authRoles.User,
+              },
+           
          
         ]

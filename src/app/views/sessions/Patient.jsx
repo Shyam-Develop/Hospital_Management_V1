@@ -58,16 +58,16 @@ const initialValues = {
   patientname: "",
   phonenumber: "",
   patientdob: "",
-  email:"",
+  email: "",
 };
 
 const validationSchema = Yup.object().shape({
-//   password: Yup.string()
-//     .min(6, "Password must be 6 character length")
-//     .required("Password is required!"),
-//   email: Yup.string()
-//     .email("Invalid Email address")
-//     .required("Email is required!"),
+  //   password: Yup.string()
+  //     .min(6, "Password must be 6 character length")
+  //     .required("Password is required!"),
+  //   email: Yup.string()
+  //     .email("Invalid Email address")
+  //     .required("Email is required!"),
 });
 
 export default function Doctor() {
@@ -92,7 +92,7 @@ export default function Doctor() {
     setLoading(true);
     try {
       console.log("Saving data...");
-      
+
       navigate("/session/patient");
     } catch (error) {
       console.error("Error saving data:", error);
@@ -114,7 +114,7 @@ export default function Doctor() {
               />
               <Typography
                 sx={{
-                  fontSize: { xs: "1.2rem", sm: "1.5rem", md: "1.75rem" }, 
+                  fontSize: { xs: "1.2rem", sm: "1.5rem", md: "1.75rem" },
                   textAlign: "center",
                   color: "#dd2c00",
                   marginTop: 0,
@@ -165,7 +165,7 @@ export default function Doctor() {
                       error={Boolean(errors.patientname && touched.patientname)}
                       sx={{ mb: 1.5 }}
                     />
-                       <TextField
+                    <TextField
                       fullWidth
                       size="small"
                       type="phonenumber"
@@ -179,7 +179,7 @@ export default function Doctor() {
                       error={Boolean(errors.phonenumber && touched.phonenumber)}
                       sx={{ mb: 1.5 }}
                     />
-                    
+
                     <TextField
                       fullWidth
                       size="small"
@@ -195,66 +195,27 @@ export default function Doctor() {
                       sx={{ mb: 1.5 }}
                     />
 
-                    {/* <TextField
-                      fullWidth
-                      size="small"
-                      name="patientdob"
-                      type="patientdob"
-                      label="Patient DOB"
-                      variant="outlined"
-                      onBlur={handleBlur}
-                      value={values.patientdob}
-                      onChange={handleChange}
-                      helperText={touched.patientdob && errors.patientdob}
-                      error={Boolean(errors.patientdob && touched.patientdob)}
-                      sx={{ mb: 1.5 }}
-                    /> */}
-                    <FlexBox style={{ display: 'flex', flexDirection: 'row-reverse', justifyContent:'space-between' }}>
-                      <FlexBox
-                        flexDirection="column"
-                        gap={2}
-                        alignItems="flex-end"
+                    <FlexBox
+                      flexDirection="column"
+                      gap={1}
+                      alignItems="flex-end"
+                    >
+                      <NavLink
+                        to="/session/patient"
+                        style={{ color: theme.palette.primary.main }}
+                        onClick={handleSave}
                       >
-                       
-                        <NavLink
-                          to="/session/signin"
-                          style={{ color: theme.palette.primary.main }}
-                        >
-                          Cancel
-                        </NavLink>
-                      </FlexBox>
-
-                      <FlexBox
-                        flexDirection="column"
-                        gap={2}
-                        alignItems="flex-start"
+                        Save
+                      </NavLink>
+                      <NavLink
+                        to="/session/signin"
+                        style={{ color: theme.palette.primary.main }}
                       >
-                        <NavLink
-                          to="/session/patient"
-                          style={{ color: theme.palette.primary.main }}
-                          onClick={handleSave} 
-                        >
-                          Save
-                        </NavLink>
-                      </FlexBox>
+                        Cancel
+                      </NavLink>
                     </FlexBox>
 
-                    {/* <LoadingButton
-                      type="submit"
-                      sx={{
-                        backgroundColor: "#164D50",
-                        color: "white",
-                        "&:hover": {
-                          backgroundColor: "#164D50", 
-                        },
-                        my: 2,
-                        width: "100%",
-                      }}
-                      loading={loading}
-                      variant="contained"
-                    >
-                      Login
-                    </LoadingButton> */}
+                  
                   </form>
                 )}
               </Formik>

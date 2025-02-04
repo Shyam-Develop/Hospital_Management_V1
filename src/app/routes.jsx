@@ -8,6 +8,7 @@ import UnderDevelopment from "./views/sessions/UnderDevelopment";
 import DoctorRoutes from "./views/Doctor/DoctorRoutes";
 import AdminRoutes from "./views/Admin/AdminRoutes";
 import PatientRoutes from "./views/Patient/PatientRoutes";
+import PharmacyRoutes from "./views/Pharmacy/PharmacyRoutes";
 
 
 
@@ -23,6 +24,7 @@ const routes = [
       ...DoctorRoutes,
       ...AdminRoutes,
       ...PatientRoutes,
+      ...PharmacyRoutes,
       
       
       { path: "*", element: <UnderDevelopment /> },
