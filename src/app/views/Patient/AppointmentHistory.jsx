@@ -41,7 +41,7 @@ const Container = styled("div")(({ theme }) => ({
 const AppointmentHistory = () => {
   // ********************** HOOKS AND CONSTANTS ********************** //
   const theme = useTheme();
-  const naviate = useNavigate();
+  const navigate = useNavigate();
 
   // ********************** LOCAL STATE ********************** //
 
@@ -117,20 +117,11 @@ const AppointmentHistory = () => {
               color="secondary"
               size="small"
               startIcon={<Edit color="primary" size="small" />}
-              onClick={() => {}}
+              onClick={() => {navigate("/patient/book-appointment");}}
             >
               Modify
             </Button>
-            <Button
-              sx={{ height: 25, marginLeft: 1 }}
-              variant="contained"
-              color="secondary"
-              size="small"
-              startIcon={<Add color="primary" size="small" />}
-              onClick={() => {}}
-            >
-              New
-            </Button>
+           
             <Button
               sx={{ height: 25, marginLeft: 1 }}
               variant="contained"

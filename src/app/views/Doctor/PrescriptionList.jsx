@@ -26,6 +26,8 @@ import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
 import CancelIcon from "@mui/icons-material/Cancel";
+import EditIcon from "@mui/icons-material/Edit";
+
 
 // ********************** STYLED COMPONENTS ********************** //
 const Container = styled("div")(({ theme }) => ({
@@ -41,7 +43,7 @@ const Container = styled("div")(({ theme }) => ({
 const PrescriptionList = () => {
   // ********************** HOOKS AND CONSTANTS ********************** //
   const theme = useTheme();
-  const naviate = useNavigate();
+  const navigate = useNavigate();
 
   // ********************** LOCAL STATE ********************** //
 
@@ -70,7 +72,7 @@ const PrescriptionList = () => {
       field: "first_name",
       width: "150",
       align: "right",
-      headerAlign: "left",
+      headerAlign: "center",
       hide: true,
     },
     {
@@ -85,7 +87,7 @@ const PrescriptionList = () => {
       {
         headerName: "Appointment ID",
         field: "appointment_id",
-        width: "170",
+        width: "130",
         align: "left",
         headerAlign: "center",
         hide: true,
@@ -93,81 +95,73 @@ const PrescriptionList = () => {
       {
         headerName: "Appointment date",
         field: "appointment_date",
-        width: "170",
-        align: "left",
+        width: "130",
+        align: "right",
         headerAlign: "center",
         hide: true,
       },
       {
         headerName: "Appointment time",
         field: "appointment_time",
-        width: "170",
-        align: "left",
+        width: "130",
+        align: "right",
         headerAlign: "center",
         hide: true,
       },
       {
         headerName: " Disease",
         field: "disease",
-        width: "170",
-        align: "right",
+        width: "130",
+        align: "left",
         headerAlign: "center",
         hide: true,
       },
       {
         headerName: "Allergy",
         field: "allergy",
-        width: "170",
-        align: "right",
+        width: "150",
+        align: "left",
         headerAlign: "center",
         hide: true,
       },
       {
         headerName: "Prescribe",
         field: "prescribe",
-        width: "170",
-        align: "right",
+        width: "130",
+        align: "left",
         headerAlign: "center",
         hide: true,
       },
-    // {
-    //   field: "Action",
-    //   headerName: "Action",
-    //   minWidth: 400,
-    //   flex: 1,
-    //   sortable: false,
-    //   headerAlign: "center",
-    //   filterable: false,
-    //   disableColumnMenu: true,
-    //   disableExport: true,
-    //   align: "center",
-    //   renderCell: (params) => {
-    //     return (
-    //       <div>
-    //         <Button
-    //           sx={{ height: 25, marginLeft: 1 }}
-    //           variant="contained"
-    //           color="secondary"
-    //           size="small"
-    //           startIcon={<Add color="primary" size="small" />}
-    //           onClick={() => {}}
-    //         >
-    //           Prescribetion
-    //         </Button>
-    //         <Button
-    //           sx={{ height: 25, marginLeft: 1 }}
-    //           variant="contained"
-    //           color="secondary"
-    //           size="small"
-    //           startIcon={<DeleteIcon color="error" size="small" />}
-    //           onClick={() => {}}
-    //         >
-    //           Delete
-    //         </Button>
-    //       </div>
-    //     );
-    //   },
-    // },
+    {
+      field: "Action",
+      headerName: "Action",
+      minWidth: 200,
+      flex: 1,
+      sortable: false,
+      headerAlign: "center",
+      filterable: false,
+      disableColumnMenu: true,
+      disableExport: true,
+      align: "center",
+      renderCell: (params) => {
+        return (
+          <div>
+             <Button
+              sx={{ height: 25, marginLeft: 1 }}
+              variant="contained"
+              color="primary"
+              size="small"
+              startIcon={<EditIcon color="action" size="small" />}
+              onClick={() => {
+                navigate("/doctor/prescriptionedit");
+              }}
+            >
+              Edit
+            </Button>
+          </div>
+        );
+      },
+    },
   ];
 
   const rows = [
@@ -297,6 +291,7 @@ const PrescriptionList = () => {
             columnVisibilityModel={{
                 doctorname: true,
                 rec_id:false,
+                patient_id:false,
 
             }}
             disableColumnFilter

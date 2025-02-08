@@ -13,12 +13,12 @@ const Pharmacy = Loadable(lazy(() => import('./Pharmacy')));
 const JwtRegister = Loadable(lazy(() => import('./JwtRegister')));
 const UnlockPassword = Loadable(lazy(() => import('./UnLockPassword')));
 const Notification = Loadable(lazy(() => import('./Notificaion')));
-
+const LoginUser = Loadable(lazy(() => import('./Login')));
 
 const sessionRoutes = [
-
+{path:'/session/signin' ,element:<LoginUser/>},
   { path: '/session/signup', element: <JwtRegister /> },
-  { path: '/session/signin', element: <JwtLogin /> },
+  { path: '/session/login', element: <JwtLogin /> },
   { path: '/session/patient', element: <Patient /> },
   { path: '/session/doctor', element: <Doctor /> },
   { path: '/session/admin', element: <Admin /> },
