@@ -42,7 +42,7 @@ const Container = styled("div")(({ theme }) => ({
 const Prescriptions = () => {
   // ********************** HOOKS AND CONSTANTS ********************** //
   const theme = useTheme();
-  const naviate = useNavigate();
+  // const navigate = useNavigate();
 
   // ********************** LOCAL STATE ********************** //
 
@@ -75,73 +75,113 @@ const Prescriptions = () => {
       hide: false,
     },
     {
-      headerName: "Appointment Date",
-      field: "date",
+      headerName: "Medicine ",
+      field: "medicine",
       width: "170",
       align: "left",
       headerAlign: "center",
       hide: false,
     },
     {
-      headerName: "Appointment Time",
-      field: "time",
+      headerName: "Comments",
+      field: "comments",
       width: "150",
       align: "left",
       headerAlign: "center",
       hide: false,
     },
     {
-      headerName: "Diseases",
-      field: "diseases",
+      headerName: "Dosage Days",
+      field: "dosagedays",
       width: "150",
       align: "right",
       headerAlign: "center",
       hide: false,
     },
     {
-      headerName: "Allergies",
-      field: "allergies",
+      headerName: "Before Breakfast Qty",
+      field: "beforebreak",
       width: "100",
       align: "right",
       headerAlign: "center",
       hide: false,
     },
     {
-      headerName: "Prescriptions",
-      field: "prescription",
+      headerName: "After Breakfast Qty",
+      field: "afterbreak",
       width: "170",
       align: "right",
       headerAlign: "center",
       hide: false,
     },
     {
-      field: "Action",
-      headerName: "Action",
-      minWidth: 200,
-      flex: 1,
-      sortable: false,
+      headerName: "Before Lunch Qty",
+      field: "beforebreak",
+      width: "170",
+      align: "right",
       headerAlign: "center",
-      filterable: false,
-      disableColumnMenu: true,
-      disableExport: true,
-      align: "center",
-      renderCell: (params) => {
-        return (
-          <div>
-            <Button
-              sx={{ height: 25, marginLeft: 1 }}
-              variant="contained"
-              color="primary"
-              size="small"
-              startIcon={<PaymentIcon color="action" size="small" />}
-              onClick={() => {}}
-            >
-              Pay Bill
-            </Button>
-          </div>
-        );
-      },
+      hide: false,
     },
+    {
+      headerName: "After Lunch Qty",
+      field: "afterlunch",
+      width: "170",
+      align: "right",
+      headerAlign: "center",
+      hide: false,
+    },
+    {
+      headerName: "Before Dinner Qty",
+      field: "beforedinner",
+      width: "170",
+      align: "right",
+      headerAlign: "center",
+      hide: false,
+    },
+    {
+      headerName: "After Dinner Qty",
+      field: "afterdinner",
+      width: "170",
+      align: "right",
+      headerAlign: "center",
+      hide: false,
+    },
+    {
+      headerName: "Total Qty",
+      field: "total",
+      width: "170",
+      align: "right",
+      headerAlign: "center",
+      hide: false,
+    },
+    // {
+    //   field: "Action",
+    //   headerName: "Action",
+    //   minWidth: 200,
+    //   flex: 1,
+    //   sortable: false,
+    //   headerAlign: "center",
+    //   filterable: false,
+    //   disableColumnMenu: true,
+    //   disableExport: true,
+    //   align: "center",
+    //   renderCell: (params) => {
+    //     return (
+    //       <div>
+    //         <Button
+    //           sx={{ height: 25, marginLeft: 1 }}
+    //           variant="contained"
+    //           color="primary"
+    //           size="small"
+    //           startIcon={<PaymentIcon color="action" size="small" />}
+    //           onClick={() => {}}
+    //         >
+    //           Pay Bill
+    //         </Button>
+    //       </div>
+    //     );
+    //   },
+    // },
   ];
 
   const rows = [
@@ -149,34 +189,32 @@ const Prescriptions = () => {
       rec_id: "1",
       doctorname: "Dinesh",
       appointment_id: "16",
-      date: "2024-12-11",
-      time: "14:00:00",
-      diseases: "Fever",
-      allergies: "nill",
-      prescription: "dolo650",
+      medicine: "2024-12-11",
+      comments: "14:00:00",
+      dosagedays: "Fever",
+      beforebreak: "nill",
+      afterbreak: "dolo650",
+      afterlunch: "",
+      beforelunch: "",
+      beforedinner: "",
+      afterdinner: "",
+      total: "",
     },
     {
-      rec_id: "2",
-
-        doctorname: "Henry",
-        appointment_id: "17",
-        date: "2024-12-14",
-        time: "10:00:00",
-        diseases: "Headache",
-        allergies: "nill",
-        prescription: "combiflam plus",
-      },
-      {
-        rec_id: "3",
-
-        doctorname: "Loki",
-        appointment_id: "18",
-        date: "2024-12-27",
-        time: "09:00:00",
-        diseases: "cough",
-        allergies: "nill",
-        prescription: "cofsils",
-      },
+      rec_id: "1",
+      doctorname: "Dinesh",
+      appointment_id: "16",
+      medicine: "2024-12-11",
+      comments: "14:00:00",
+      dosagedays: "Fever",
+      beforebreak: "nill",
+      afterbreak: "dolo650",
+      afterlunch: "",
+      beforelunch: "",
+      beforedinner: "",
+      afterdinner: "",
+      total: "",
+    },
   ];
 
   // ********************** TOOLBAR ********************** //
@@ -262,7 +300,7 @@ const Prescriptions = () => {
             }}
             pageSizeOptions={[5, 10, 20, 25]}
             columnVisibilityModel={{
-              appointment_id: true,
+              rec_id: false,
             }}
             disableColumnFilter
             disableColumnSelector

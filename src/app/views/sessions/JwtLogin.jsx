@@ -204,24 +204,7 @@ export default function JwtLogin() {
                       >
                         Sign Up In To Patient
                       </NavLink>
-                      <NavLink
-                        to='/session/pharmacy'
-                        style={{ color: theme.palette.primary.main }}
-                      >
-                        Sign Up In To Pharmacy
-                      </NavLink>
-                      <NavLink
-                        to='/session/doctor'
-                        style={{ color: theme.palette.primary.main }}
-                      >
-                        Are You a Doctor?
-                      </NavLink>
-                      <NavLink
-                        to='/session/admin'
-                        style={{ color: theme.palette.primary.main }}
-                      >
-                        Are You a Desk Admin?
-                      </NavLink>
+                    
                     </FlexBox>
 
                     </FlexBox>

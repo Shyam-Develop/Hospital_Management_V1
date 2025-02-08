@@ -41,7 +41,7 @@ const Container = styled("div")(({ theme }) => ({
 const Appointments = () => {
   // ********************** HOOKS AND CONSTANTS ********************** //
   const theme = useTheme();
-  const naviate = useNavigate();
+  const navigate = useNavigate();
 
   // ********************** LOCAL STATE ********************** //
 
@@ -77,7 +77,7 @@ const Appointments = () => {
       field: "first_name",
       width: "150",
       align: "right",
-      headerAlign: "left",
+      headerAlign: "center",
       hide: true,
     },
     {
@@ -91,7 +91,7 @@ const Appointments = () => {
     {
       headerName: "Gender",
       field: "gender",
-      width: "170",
+      width: "100",
       align: "right",
       headerAlign: "center",
       hide: true,
@@ -99,15 +99,15 @@ const Appointments = () => {
     {
       headerName: "Email",
       field: "email",
-      width: "170",
-      align: "left",
+      width: "250",
+      align: "right",
       headerAlign: "center",
       hide: true,
     },
     {
         headerName: "Contact",
         field: "contact",
-        width: "170",
+        width: "130",
         align: "left",
         headerAlign: "center",
         hide: true,
@@ -115,7 +115,7 @@ const Appointments = () => {
       {
         headerName: "Appointment Date",
         field: "appointment_date",
-        width: "170",
+        width: "130",
         align: "left",
         headerAlign: "center",
         hide: true,
@@ -123,7 +123,7 @@ const Appointments = () => {
       {
         headerName: "Appointment Time",
         field: "appointment_time",
-        width: "170",
+        width: "130",
         align: "left",
         headerAlign: "center",
         hide: true,
@@ -156,8 +156,8 @@ const Appointments = () => {
               color="secondary"
               size="small"
               startIcon={<Add color="primary" size="small" />}
-              onClick={() => {}}
-            >
+              onClick={() => navigate("/doctor/prescriptionedit")}
+              >
               Prescription
             </Button>
             <Button
@@ -181,9 +181,9 @@ const Appointments = () => {
         rec_id: "1",
         patient_id: "17",
         appointment_id: "16",
-        first_name: "abi",
-        last_name: "kumar",
-        gender: "male",
+        first_name: "Abisek",
+        last_name: "Sharma",
+        gender: "Male",
         email: "mughesh2001@gmail.com",
         contact: "8248517047",
         appointment_date: "2024-12-11",
@@ -194,9 +194,9 @@ const Appointments = () => {
     { rec_id: "2",
         patient_id: "18",
         appointment_id: "17",
-        first_name: "madhan",
-        last_name: "kumar",
-        gender: "male",
+        first_name: "Madhan",
+        last_name: "Kumar",
+        gender: "Male",
         email: "sam2001@gmail.com",
         contact: "8248517049",
         appointment_date: "2024-12-12",
@@ -207,9 +207,9 @@ const Appointments = () => {
         rec_id: "3",
         patient_id: "19",
         appointment_id: "18",
-        first_name: "lokesh",
-        last_name: "kumar",
-        gender: "male",
+        first_name: "Lokesh",
+        last_name: "Kumar",
+        gender: "Male",
         email: "lokesh2001@gmail.com",
         contact: "8248517040",
         appointment_date: "2024-12-27",
@@ -308,6 +308,8 @@ const Appointments = () => {
             columnVisibilityModel={{
                 doctorname: true,
                 rec_id:false,
+                patient_id:false,
+                appointment_id:false,
             }}
             disableColumnFilter
             disableColumnSelector

@@ -49,6 +49,21 @@ export const getLocalListview = createAsyncThunk('page/getLocalListview', async(
 })
 
 
+export const getPatientsListview = createAsyncThunk(
+    'get/getPatientsListview', // action type
+    async (_, { rejectWithValue }) => {
+      try {
+        const URL = "http://127.0.0.1:5000/api/patient";
+        const response = await axios.get(URL); // Removed the Authorization header
+        return response.data; // return the response data
+      } catch (error) {
+        // If the request fails, return a custom error message
+        return rejectWithValue(error.response ? error.response.data : error.message);
+      }
+    }
+  );
+
+
 
 const listviewSlice = createSlice({
     name:'listview',
@@ -88,6 +103,25 @@ const listviewSlice = createSlice({
             state.listviewRowData =  action.payload
         })
         .addCase(getLocalListview.rejected, (state, action) => {
+            state.status = 'failed'
+            state.loading = false
+            state.error = action.error.message
+            state.listviewColumnData = []
+            state.listviewRowData = []
+        })
+        .addCase(getPatientsListview.pending, (state, action) => {
+            state.status = 'loading'
+            state.loading = true
+            state.listviewColumnData = []
+            state.listviewRowData = []
+        })
+        .addCase(getPatientsListview.fulfilled, (state, action) => {
+            state.status = 'succeeded'
+            state.loading = false
+            state.listviewColumnData = []
+            state.listviewRowData =  action.payload
+        })
+        .addCase(getPatientsListview.rejected, (state, action) => {
             state.status = 'failed'
             state.loading = false
             state.error = action.error.message
