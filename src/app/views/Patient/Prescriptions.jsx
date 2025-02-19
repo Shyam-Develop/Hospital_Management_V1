@@ -53,7 +53,7 @@ const Prescriptions = () => {
     {
       headerName: "Rec ID",
       field: "rec_id",
-      width: "170",
+      width: "50",
       align: "right",
       headerAlign: "left",
       hide: true,
@@ -61,7 +61,7 @@ const Prescriptions = () => {
     {
       headerName: "Doctor Name",
       field: "doctorname",
-      width: "170",
+      width: "150",
       align: "right",
       headerAlign: "left",
       hide: false,
@@ -69,7 +69,7 @@ const Prescriptions = () => {
     {
       headerName: "Appointment ID",
       field: "appointment_id",
-      width: "150",
+      width: "70",
       align: "left",
       headerAlign: "left",
       hide: false,
@@ -77,7 +77,7 @@ const Prescriptions = () => {
     {
       headerName: "Medicine ",
       field: "medicine",
-      width: "170",
+      width: "70",
       align: "left",
       headerAlign: "center",
       hide: false,
@@ -85,7 +85,7 @@ const Prescriptions = () => {
     {
       headerName: "Comments",
       field: "comments",
-      width: "150",
+      width: "50",
       align: "left",
       headerAlign: "center",
       hide: false,
@@ -93,7 +93,7 @@ const Prescriptions = () => {
     {
       headerName: "Dosage Days",
       field: "dosagedays",
-      width: "150",
+      width: "50",
       align: "right",
       headerAlign: "center",
       hide: false,
@@ -109,7 +109,7 @@ const Prescriptions = () => {
     {
       headerName: "After Breakfast Qty",
       field: "afterbreak",
-      width: "170",
+      width: "100",
       align: "right",
       headerAlign: "center",
       hide: false,
@@ -117,7 +117,7 @@ const Prescriptions = () => {
     {
       headerName: "Before Lunch Qty",
       field: "beforebreak",
-      width: "170",
+      width: "100",
       align: "right",
       headerAlign: "center",
       hide: false,
@@ -125,7 +125,7 @@ const Prescriptions = () => {
     {
       headerName: "After Lunch Qty",
       field: "afterlunch",
-      width: "170",
+      width: "100",
       align: "right",
       headerAlign: "center",
       hide: false,
@@ -133,7 +133,7 @@ const Prescriptions = () => {
     {
       headerName: "Before Dinner Qty",
       field: "beforedinner",
-      width: "170",
+      width: "100",
       align: "right",
       headerAlign: "center",
       hide: false,
@@ -141,7 +141,7 @@ const Prescriptions = () => {
     {
       headerName: "After Dinner Qty",
       field: "afterdinner",
-      width: "170",
+      width: "100",
       align: "right",
       headerAlign: "center",
       hide: false,
@@ -149,7 +149,7 @@ const Prescriptions = () => {
     {
       headerName: "Total Qty",
       field: "total",
-      width: "170",
+      width: "100",
       align: "right",
       headerAlign: "center",
       hide: false,
@@ -194,26 +194,26 @@ const Prescriptions = () => {
       dosagedays: "Fever",
       beforebreak: "nill",
       afterbreak: "dolo650",
-      afterlunch: "",
-      beforelunch: "",
-      beforedinner: "",
-      afterdinner: "",
-      total: "",
+      afterlunch: "1",
+      beforelunch: "1",
+      beforedinner: "1",
+      afterdinner: "1",
+      total: "4",
     },
     {
-      rec_id: "1",
-      doctorname: "Dinesh",
+      rec_id: "2",
+      doctorname: "Dinesh K",
       appointment_id: "16",
       medicine: "2024-12-11",
       comments: "14:00:00",
       dosagedays: "Fever",
       beforebreak: "nill",
       afterbreak: "dolo650",
-      afterlunch: "",
-      beforelunch: "",
-      beforedinner: "",
-      afterdinner: "",
-      total: "",
+      afterlunch: "1",
+      beforelunch: "1",
+      beforedinner: "1",
+      afterdinner: "1",
+      total: "4",
     },
   ];
 
@@ -286,33 +286,33 @@ const Prescriptions = () => {
             },
           }}
         >
-          <DataGrid
-            slots={{
-              loadingOverlay: LinearProgress,
-              toolbar: CustomToolbar,
-            }}
-            rowHeight={dataGridRowHeight}
-            rows={rows}
-            columns={columns}
-            getRowId={(row) => row.rec_id}
-            initialState={{
-              pagination: { paginationModel: { pageSize: 20 } },
-            }}
-            pageSizeOptions={[5, 10, 20, 25]}
-            columnVisibilityModel={{
-              rec_id: false,
-            }}
-            disableColumnFilter
-            disableColumnSelector
-            disableDensitySelector
-            slotProps={{
-              toolbar: {
-                showQuickFilter: true,
-              },
-            }}
-            disableSelectionOnClick
-            disableRowSelectionOnClick
-          />
+           <DataGrid
+                      slots={{
+                        loadingOverlay: LinearProgress,
+                        toolbar: CustomToolbar,
+                      }}
+                      rowHeight={dataGridRowHeight}
+                      rows={rows}
+                      columns={columns}
+                      getRowId={(row) => row.rec_id}
+                      initialState={{
+                        pagination: { paginationModel: { pageSize: 20 } },
+                      }}
+                      pageSizeOptions={[5, 10, 20, 25]}
+                      columnVisibilityModel={{
+                        doctorname: true,
+                      }}
+                      disableColumnFilter
+                      disableColumnSelector
+                      disableDensitySelector
+                      slotProps={{
+                        toolbar: {
+                          showQuickFilter: true,
+                        },
+                      }}
+                      disableSelectionOnClick
+                      disableRowSelectionOnClick
+                    />
         </Box>
       </Paper>
     </Container>
