@@ -191,7 +191,7 @@ useEffect(() => {
    width: '100',
    align: 'left',
    headerAlign: 'center',
-   hide: false,
+   hide: true,
    maxWidth: 50
  },
     {
@@ -644,7 +644,6 @@ const HandleQueueSave = async(values) => {
   const idata = rows.map((row) => {
     return {
       Q_RECORDID: row.RecordID,
-      // ItemRecordID: row.ItemRecordID,
       Q_UOM: row.uom,
       Q_CUOM: row.cuom,
       Q_EXPIRYDATE: row.expiryDate,
@@ -653,6 +652,7 @@ const HandleQueueSave = async(values) => {
       Q_CGST: row.cgst,
       Q_SGST: row.sgst,
       Q_ITEMNUMBER: row.ItemNumber,
+      Q_ITEMRECORDID:row.ItemRecordID,
       Q_DESCRIPTION: row.Name,
       Q_QUANTITY: row.qty,
       Q_AMOUNT: row.amount, 
@@ -662,6 +662,7 @@ const HandleQueueSave = async(values) => {
       Q_CUSTOMERNAME: customerName || data.customerName,
       Q_HRECORDID:customerRec || selectedCustoreID,
       Q_DATE: queueDate,
+    
       // Q_ADDITIONALDISCOUNT:"",
       // Q_DISCOUNT:"",
       // Q_SUMMARY:"", // Ensure this value is passed correctly
@@ -722,7 +723,7 @@ if(HeaderInsert.payload.status ==="Y"){
     sgst: "",
     cgst: "",
     total: "",
-    queue: "",
+    queue: null,
       }}  
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         HandleSave(values)
@@ -882,6 +883,7 @@ if(HeaderInsert.payload.status ==="Y"){
                       gst:false,
                       sgst:false,
                       cgst:false,
+                      SLNO:false,
 
                     }}
                     processRowUpdate={processRowUpdate}
@@ -911,7 +913,7 @@ if(HeaderInsert.payload.status ==="Y"){
                     mt: -3,
                   }}
                 >
-                  Select Items
+                  Select Items Info
                 </Typography>
                 <Grid container spacing={2}>
   <Grid item xs={12} sm={8}>
@@ -994,6 +996,7 @@ if(HeaderInsert.payload.status ==="Y"){
                 </Typography>
 
                 <Grid container spacing={2}>
+                  
   <Grid item xs={12} sm={8}>
     <TextField
       fullWidth
@@ -1153,18 +1156,18 @@ if(HeaderInsert.payload.status ==="Y"){
     {/* Autocomplete aligned to the start */}
     <Box>
     <FormikOptimizedAutocomplete
-                      sx={{ width:200 }}
+  sx={{ width: 200 }}
+  name="queue"
+  id="queue"
+  value={values.queue}
+  onChange={(event, newValue) => {
+    setFieldValue("queue", newValue);
+    setselectedCustoreID(newValue ? newValue.RecordID : null);
+  }}
+  label="Queue"
+  url={`http://127.0.0.1:5000/api/hms_header/getallheader`}
+/>
 
-                      name="queue"
-                      id="queue"
-                      value={values.queue}
-                      onChange={(event,newValue)=>{
-                        setFieldValue("queue",newValue);
-                        setselectedCustoreID(newValue.RecordID);
-                      }}
-                      label="Queue"
-                      url={`http://127.0.0.1:5000/api/hms_header/getallheader`}
-                    />
     </Box>
 
     {/* Buttons aligned to the end */}
