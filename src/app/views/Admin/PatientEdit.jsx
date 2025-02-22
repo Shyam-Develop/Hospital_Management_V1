@@ -1,7 +1,11 @@
-import React, { useState } from "react";
-import { Grid, Typography, TextField, Button, Box,FormHelperText  } from "@mui/material";
+import React, { useEffect } from "react";
+import { Grid, Typography, TextField, Button, Box, FormHelperText } from "@mui/material";
 import { styled } from "@mui/system";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getPatient } from "app/redux/slice/getSlice";
+import { Formik } from "formik";
+import * as Yup from "yup";
 
 // ********************** STYLED COMPONENTS ********************** //
 const Container = styled("div")(({ theme }) => ({
@@ -14,251 +18,204 @@ const Container = styled("div")(({ theme }) => ({
 }));
 
 const PatientEdit = () => {
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [emailError, setEmailError] = useState(false);
-  const [phoneError, setPhoneError] = useState(false);
-
-  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-  const phoneRegex = /^[0-9]{10}$/;
-
-  const handleEmailChange = (event) => {
-    const value = event.target.value;
-    setEmail(value);
-    setEmailError(!emailRegex.test(value));
-  };
-
-  const handlePhoneChange = (event) => {
-    const value = event.target.value;
-    setPhoneNumber(value);
-    setPhoneError(!phoneRegex.test(value));
-  };
-
-  const [dob, setDob] = useState("");
-  const [dobError, setDobError] = useState(false);
-
-  const handleDobChange = (event) => {
-    const value = event.target.value;
-    setDob(value);
-    const currentDate = new Date().toISOString().split("T")[0];
-    setDobError(value && value > currentDate);
-  };
-
-  const [doj, setDoj] = useState("");
-  const [dojError, setDojError] = useState(false);
-
-  const handleDojChange = (event) => {
-    const value = event.target.value;
-    setDoj(value);
-    const currentDate = new Date().toISOString().split("T")[0];
-    setDojError(value && value > currentDate);
-  };
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [errors, setErrors] = useState({ firstName: '', lastName: '' });
-  
-
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const state = location.state;
 
-  const handleSubmit = (event) => {
-    event.preventDefault(); 
+  const data = useSelector((state) => state.getSlice.getPatientData);
+  
+  useEffect(() => {
+    dispatch(getPatient({ id: state.RecordId }));
+  }, [dispatch, state.RecordId]);
 
-    if (emailError || phoneError || dobError || dojError) {
-      return; 
+  if (!data) return <div>Loading...</div>;
+
+  // Formik validation schema
+  const validationSchema = Yup.object({
+    firstName: Yup.string().required("First Name is required"),
+    lastName: Yup.string().required("Last Name is required"),
+    email: Yup.string().email("Invalid email format").required("Email is required"),
+    phoneNumber: Yup.string().matches(/^[0-9]{10}$/, "Phone number must be 10 digits").required("Phone number is required"),
+    dob: Yup.date().max(new Date(), "Date of birth cannot be in the future").required("Date of birth is required"),
+    doj: Yup.date().max(new Date(), "Date of joining cannot be in the future").required("Date of joining is required"),
+  });
+
+  
+  const savePatientData = async (values) => {
+    const patientdata = {
+      RecordId: data.RecordId,
+      FirstName: values.firstName,
+      LastName: values.lastName,
+      Email: values.email,
+      Phone: values.phoneNumber,
+      AlternatePhone: values.alternatePhone,
+      DateOfBirth: values.dateofbirth,
+      DateOfJoining: values.dateofjoining,
     }
-
-    let newErrors = { firstName: '', lastName: '' };
-
-    if (!firstName) newErrors.firstName = 'First Name is required';
-    if (!lastName) newErrors.lastName = 'Last Name is required';
-
-    setErrors(newErrors);
-
-    if (!newErrors.firstName && !newErrors.lastName) {
-    }
-
-    const formData = {
-      email,
-      phoneNumber,
-      dob,
-      doj,
-    };
-
-    console.log("Form data submitted: ", formData);
-
-    navigate("/admin/patient");
-  };
+    console.log(patientdata)
+  }
 
   return (
     <Container>
-      <Typography
-        variant="h5"
-        sx={{
-          fontSize: "2rem",
-          textAlign: "left",
-          fontWeight: "bold",
-          marginBottom: 3,
-        }}
-      >
+      <Typography variant="h5" sx={{ fontSize: "2rem", textAlign: "left", fontWeight: "bold", marginBottom: 3 }}>
         Patient Form
       </Typography>
+      <Formik
+        initialValues={{
+          firstName: data.FirstName,
+          lastName: data.LastName,
+          email: data.Email,
+          phoneNumber: data.Phone,
+          alternatePhone: data.AlternatePhone,
+          dateofbirth: data.DateOfBirth,
+          dateofjoining: data.DateOfJoining,
+        }}
+        validationSchema={validationSchema}
+        // onSubmit={handleSubmit}
+        onSubmit={(values) => {
+          console.log("Form Values:",values);
+          savePatientData(values)
+        }}
+      >
+        {({ values, errors, touched, handleChange, handleBlur }) => (
+          <form >
+            <Grid container spacing={2} alignItems="center" sx={{ mb: 2 }}>
+              <Grid item xs={12} sm={4}>
+                <Typography sx={{ fontWeight: "bold" }}>First Name:</Typography>
+              </Grid>
+              <Grid item xs={12} sm={8}>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  label="First Name"
+                  value={values.firstName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={touched.firstName && !!errors.firstName}
+                  helperText={touched.firstName && errors.firstName}
+                />
+              </Grid>
 
-      <form>
-        <Grid container spacing={2} alignItems="center" sx={{ mb: 2 }}>
-        <Grid item xs={12} sm={4}>
-          <Typography sx={{ fontWeight: 'bold' }}>First Name:</Typography>
-        </Grid>
-        <Grid item xs={12} sm={8}>
-          <TextField
-            fullWidth
-            variant="outlined"
-            required
-            size="small"
-            label="First Name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            sx={{ textAlign: 'left' }}
-            error={!!errors.firstName}
-          />
-          {errors.firstName && (
-            <FormHelperText error>{errors.firstName}</FormHelperText>
-          )}
-        </Grid>
+              <Grid item xs={12} sm={4}>
+                <Typography sx={{ fontWeight: "bold" }}>Last Name:</Typography>
+              </Grid>
+              <Grid item xs={12} sm={8}>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  label="Last Name"
+                  value={values.lastName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={touched.lastName && !!errors.lastName}
+                  helperText={touched.lastName && errors.lastName}
+                />
+              </Grid>
 
-        <Grid item xs={12} sm={4}>
-          <Typography sx={{ fontWeight: 'bold' }}>Last Name:</Typography>
-        </Grid>
-        <Grid item xs={12} sm={8}>
-          <TextField
-            fullWidth
-            variant="outlined"
-            required
-            size="small"
-            label="Last Name"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            sx={{ textAlign: 'left' }}
-            error={!!errors.lastName}
-          />
-          {errors.lastName && (
-            <FormHelperText error>{errors.lastName}</FormHelperText>
-          )}
-        </Grid>
+              <Grid item xs={12} sm={4}>
+                <Typography sx={{ fontWeight: "bold" }}>Email ID:</Typography>
+              </Grid>
+              <Grid item xs={12} sm={8}>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  label="Email ID"
+                  value={values.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={touched.email && !!errors.email}
+                  helperText={touched.email && errors.email}
+                />
+              </Grid>
 
+              <Grid item xs={12} sm={4}>
+                <Typography sx={{ fontWeight: "bold" }}>Phone Number:</Typography>
+              </Grid>
+              <Grid item xs={12} sm={8}>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  label="Phone Number"
+                  value={values.phoneNumber}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={touched.phoneNumber && !!errors.phoneNumber}
+                  helperText={touched.phoneNumber && errors.phoneNumber}
+                />
+              </Grid>
 
-          <Grid item xs={12} sm={4}>
-            <Typography sx={{ fontWeight: "bold" }}>Email ID:</Typography>
-          </Grid>
-          <Grid item xs={12} sm={8}>
-            <TextField
-              fullWidth
-              variant="outlined"
-              size="small"
-              label="Email ID"
-              value={email}
-              onChange={handleEmailChange}
-              error={emailError}
-              helperText={
-                emailError ? "Please enter a valid email address." : ""
-              }
-              sx={{ textAlign: "left" }}
-            />
-          </Grid>
+              <Grid item xs={12} sm={4}>
+                <Typography sx={{ fontWeight: "bold" }}>Alternate Phone:</Typography>
+              </Grid>
+              <Grid item xs={12} sm={8}>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  label="Alternate Phone"
+                  value={values.alternatePhone}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+              </Grid>
 
-          <Grid item xs={12} sm={4}>
-            <Typography sx={{ fontWeight: "bold" }}>Phone Number:</Typography>
-          </Grid>
-          <Grid item xs={12} sm={8}>
-            <TextField
-              fullWidth
-              variant="outlined"
-              size="small"
-              label="Phone Number"
-              value={phoneNumber}
-              onChange={handlePhoneChange}
-              error={phoneError}
-              helperText={
-                phoneError ? "Please enter a valid 10-digit phone number." : ""
-              }
-              sx={{ textAlign: "left" }}
-            />
-          </Grid>
+              <Grid item xs={12} sm={4}>
+                <Typography sx={{ fontWeight: "bold" }}>Date of Birth:</Typography>
+              </Grid>
+              <Grid item xs={12} sm={8}>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  type="date"
+                  value={values.dateofbirth ? new Date(values.dateofbirth).toISOString().split("T")[0] : ""}                  error={touched.dateofbirth && Boolean(errors.dateofbirth)}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  helperText={touched.dateofbirth && errors.dateofbirth}
+                />
+              </Grid>
 
-          <Grid item xs={12} sm={4}>
-            <Typography sx={{ fontWeight: "bold" }}>Alternate Phone:</Typography>
-          </Grid>
-          <Grid item xs={12} sm={8}>
-            <TextField
-              fullWidth
-              variant="outlined"
-              size="small"
-              label="Alternate Phone"
-              sx={{ textAlign: "left" }}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={4}>
-            <Typography sx={{ fontWeight: "bold" }}>Date of Birth:</Typography>
-          </Grid>
-          <Grid item xs={12} sm={8}>
-            <TextField
-              fullWidth
-              variant="outlined"
-              size="small"
-              type="date"
-              value={dob}
-              onChange={handleDobChange}
-              error={dobError}
-              helperText={dobError ? "Date of birth cannot be in the future." : ""}
-              sx={{ textAlign: "left" }}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={4}>
-            <Typography sx={{ fontWeight: "bold" }}>Date of Joining:</Typography>
-          </Grid>
-          <Grid item xs={12} sm={8}>
-            <TextField
-              fullWidth
-              variant="outlined"
-              size="small"
-              type="date"
-              value={doj}
-              onChange={handleDojChange}
-              error={dojError}
-              helperText={dojError ? "Invalid date format." : ""}
-              sx={{ textAlign: "left" }}
-            />
-          </Grid>
-        </Grid>
-
-        <Box mt={2}>
-          <Grid container justifyContent="flex-end" spacing={1}>
-            <Grid item>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSubmit}
-              >
-                Save
-              </Button>
+              <Grid item xs={12} sm={4}>
+                <Typography sx={{ fontWeight: "bold" }}>Date of Joining:</Typography>
+              </Grid>
+              <Grid item xs={12} sm={8}>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  type="date"
+                  value={values.dateofjoining ? new Date(values.dateofjoining).toISOString().split("T")[0] : ""}                  error={touched.dateofbirth && Boolean(errors.dateofbirth)}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  helperText={touched.dateofjoining && errors.dateofjoining}
+                />
+              </Grid>
             </Grid>
 
-            <Grid item>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => navigate("/admin/patient")}
-              >
-                Cancel
-              </Button>
-            </Grid>
-          </Grid>
-        </Box>
-      </form>
+            <Box mt={2}>
+              <Grid container justifyContent="flex-end" spacing={1}>
+                <Grid item>
+                  <Button variant="contained" color="primary" type="submit">
+                    Save
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button variant="contained" color="primary" onClick={() => navigate("/admin/patient")}>
+                    Cancel
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
+          </form>
+        )}
+      </Formik>
     </Container>
   );
 };
 
 export default PatientEdit;
-

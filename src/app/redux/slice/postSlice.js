@@ -53,6 +53,42 @@ export const HeaderPost = createAsyncThunk(
     }
   }
 );
+export const PostDoctor = createAsyncThunk(
+  "PostDoctor/POST",
+  async ({ doctorData }, { rejectWithValue }) => {
+    try {
+      const URL = `http://127.0.0.1:5000/doctor/postdoctor`;
+      const response = await axios.post(URL, doctorData, {
+        headers: {
+          "Content-Type":"application/json",
+          Authorization: process.env.REACT_APP_API_TOKEN,
+        },
+      });      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response ? error.response.data : error.message
+      );
+    }
+  }
+);
+export const PutDoctor = createAsyncThunk(
+  "PutDoctor/PUT",
+  async ({ Id,doctorData }, { rejectWithValue }) => {
+    try {
+      const URL = `http://127.0.0.1:5000/doctor/updatedoctor/${Id}`;
+      const response = await axios.put(URL, doctorData, {
+        headers: {
+          "Content-Type":"application/json",
+          Authorization: process.env.REACT_APP_API_TOKEN,
+        },
+      });      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response ? error.response.data : error.message
+      );
+    }
+  }
+);
 const postSlice = createSlice({
   name: "postSlice",
   initialState,

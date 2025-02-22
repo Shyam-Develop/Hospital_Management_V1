@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   LinearProgress,
   Paper,
@@ -19,6 +19,8 @@ import { dataGridHeight, dataGridRowHeight } from "app/utils/constant";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
+import { useDispatch, useSelector } from "react-redux";
+import { getDoctorListData } from "app/redux/slice/getSlice";
 
 
 // ********************** STYLED COMPONENTS ********************** //
@@ -36,16 +38,29 @@ const Doctor = () => {
   // ********************** HOOKS AND CONSTANTS ********************** //
   const theme = useTheme();
   const navigate = useNavigate();
-
+  const dispatch= useDispatch();
   // ********************** LOCAL STATE ********************** //
 
   // ********************** REDUX STATE ********************** //
-
+  const doctorRows=useSelector((state)=>state.getSlice.getDoctorList)
+  console.log(doctorRows,'==DoctorRows')
+  useEffect
+  (()=>{
+  dispatch(getDoctorListData())
+  },[dispatch])
   // ********************** COLUMN AND ROWS ********************** //
   const columns = [
     {
+      headerName: "RECID",
+      field: "RecordId",
+      width: "150",
+      align: "left",
+      headerAlign: "left",
+      hide: false,
+    },
+    {
       headerName: "First Name",
-      field: "firstname",
+      field: "FirstName",
       width: "150",
       align: "left",
       headerAlign: "left",
@@ -53,7 +68,7 @@ const Doctor = () => {
     },
     {
       headerName: "Last Name",
-      field: "lastname",
+      field: "LastName",
       width: "150",
       align: "left",
       headerAlign: "left",
@@ -61,7 +76,7 @@ const Doctor = () => {
     },
     {
       headerName: "Global ID",
-      field: "globalid",
+      field: "GlobalID",
       width: "100",
       align: "right",
       headerAlign: "left",
@@ -69,7 +84,7 @@ const Doctor = () => {
     },
     {
       headerName: "Email",
-      field: "email",
+      field: "Email",
       width: "170",
       align: "left",
       headerAlign: "center",
@@ -77,7 +92,7 @@ const Doctor = () => {
     },
     {
       headerName: "Phone",
-      field: "phone",
+      field: "PhoneNumber",
       width: "170",
       align: "right",
       headerAlign: "center",
@@ -85,7 +100,7 @@ const Doctor = () => {
     },
     {
       headerName: "Alternate Phone",
-      field: "alternatephone",
+      field: "AlternatePhone",
       width: "170",
       align: "right",
       headerAlign: "center",
@@ -93,7 +108,7 @@ const Doctor = () => {
     },
     {
       headerName: "Qualification",
-      field: "qualification",
+      field: "Qualification",
       width: "150",
       align: "left",
       headerAlign: "center",
@@ -101,7 +116,7 @@ const Doctor = () => {
     },
     {
       headerName: "Special Qualification",
-      field: "splqualification",
+      field: "SpecialQualification",
       width: "170",
       align: "left",
       headerAlign: "center",
@@ -109,7 +124,7 @@ const Doctor = () => {
     },
     {
       headerName: "DOB",
-      field: "dateofbirth",
+      field: "DateOfBirth",
       width: "170",
       align: "right",
       headerAlign: "center",
@@ -117,7 +132,7 @@ const Doctor = () => {
     },
     {
       headerName: "DOJ",
-      field: "dateofjoining",
+      field: "DateOfJoining",
       width: "170",
       align: "right",
       headerAlign: "center",
@@ -144,7 +159,7 @@ const Doctor = () => {
               size="small"
               startIcon={<EditIcon color="action" size="small" />}
               onClick={() => {
-                navigate("/admin/doctor-edit");
+                navigate("/admin/doctor-edit",{state:{RecordId:params.row.RecordId}});
               }}
             >
               Edit
@@ -155,44 +170,7 @@ const Doctor = () => {
     },
   ];
 
-  const rows = [
-    {
-      firstname: "Dinesh",
-      lastname: "Kumar",
-      globalid: "0098",
-      email: "dinesh@gmail.com",
-      phone: "8907654321",
-      alternatephone: "7890654321",
-      qualification: "MBBS",
-      splqualification: "Pediatrics",
-      dateofbirth: "19-04-1992",
-      dateofjoining: "12-03-2001",
-    },
-    {
-      firstname: "Mathew",
-      lastname: "Henry",
-      globalid: "0099",
-      email: "henry@gmail.com",
-      phone: "9807654312",
-      alternatephone: "9900876543",
-      qualification: "MBBS",
-      splqualification: "Pathology",
-      dateofbirth: "20-08-1993",
-      dateofjoining: "25-07-2000",
-    },
-    {
-      firstname: "Kevin",
-      lastname: "Rick",
-      globalid: "0097",
-      email: "kevin@gmail.com",
-      phone: "8899007654",
-      alternatephone: "9087654321",
-      qualification: "MBBS",
-      splqualification: "Cardiology",
-      dateofbirth: "09-06-1990",
-      dateofjoining: "20-09-2000",
-    },
-  ];
+ 
 
   // ********************** TOOLBAR ********************** //
   // ********************** TOOLBAR ********************** //
@@ -224,7 +202,7 @@ const Doctor = () => {
             size="small"
             startIcon={<AddIcon color="action" size="small" />}
             onClick={() => {
-              navigate("/admin/doctor-edit");
+              navigate("/admin/doctor-edit",{state:{RecordId:0}});
             }}
           >
             Add
@@ -282,15 +260,16 @@ const Doctor = () => {
               toolbar: CustomToolbar,
             }}
             rowHeight={dataGridRowHeight}
-            rows={rows}
+            rows={doctorRows}
             columns={columns}
-            getRowId={(row) => row.firstname}
+            getRowId={(row) => row.RecordId}
             initialState={{
               pagination: { paginationModel: { pageSize: 20 } },
             }}
             pageSizeOptions={[5, 10, 20, 25]}
             columnVisibilityModel={{
               doctorname: true,
+              RecordId: false,
             }}
             disableColumnFilter
             disableColumnSelector

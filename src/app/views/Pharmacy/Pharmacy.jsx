@@ -87,7 +87,8 @@ console.log(data,'-----getQueueList--')
 
 
 
-
+ 
+ 
 
 useEffect(()=>{
  dispatch(getQueueListData({id:selectedCustoreID}));
