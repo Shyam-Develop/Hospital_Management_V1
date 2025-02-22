@@ -297,4 +297,92 @@ export const FormikOptimizedAutocomplete = ({
     );
   }
 
+  export function FormikCustomAutocompleteTabletsID({
+    value = null,
+    onChange,
+    url,
+    label = "Select Options",
+    // multiple = true,
+    height= 30,
+    // filterData = [],
+    ...props
+  }) {
+    const [options, setOptions] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false);
+    
   
+    
+    useEffect(() => {
+      const fetchData = async () => {
+        setLoading(true);
+        try {
+          const response= await axios.get(url, 
+            {
+          //   headers: { Authorization: process.env.REACT_APP_API_TOKEN },
+          }
+        );
+        setOptions(response.data.data || []);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          setOptions([]);
+        } finally {
+          setLoading(false);
+        }
+      };
+    
+      const timeout = setTimeout(fetchData, 500); // Debounce API call
+    
+      return () => clearTimeout(timeout); // Cleanup timeout
+    }, [url]);
+  
+    return (
+      <Autocomplete
+        sx={{
+          "& .MuiAutocomplete-tag": { maxWidth: "90px" },
+        }}
+        size="small"
+        // multiple={multiple}
+        limitTags={2}
+        open={open}
+        onOpen={() => setOpen(true)}
+        onClose={() => setOpen(false)}
+        value={value}
+        onChange={onChange}
+        options={options}
+        isOptionEqualToValue={(option, value) => `${option.ItemNumber}||${option.Name}` ===`${value.ItemNumber}||${value.Name}`}
+        getOptionLabel={(option) =>`${option.ItemNumber}||${option.Name}`}
+        disableCloseOnSelect
+        disableListWrap
+        loading={loading}
+        ListboxComponent={ListboxComponent1}
+        // renderOption={(props, option, { selected }) => (
+        //   <li {...props} style={{ display: "flex", gap: 2, height: 40 }}>
+        //     <Checkbox
+        //       size="small"
+        //       sx={{ marginLeft: -1 }}
+        //       checked={selected}
+        //     />
+        //     {`${option.Name}`}
+        //   </li>
+        // )}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label={label}
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: (
+                <>
+ {loading ? (
+                    <CircularProgress color="inherit" size={20} />
+                  ) : null}                  {params.InputProps.endAdornment}
+                </>
+              ),
+            }}
+          />
+        )}
+        {...props}
+      />
+    );
+  }

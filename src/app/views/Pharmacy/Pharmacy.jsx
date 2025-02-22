@@ -30,12 +30,13 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Formik } from "formik";
-import { FormikCustomAutocompleteSingle, FormikOptimizedAutocomplete } from "app/components/Autyocomplete";
+import { FormikCustomAutocompleteSingle, FormikCustomAutocompleteTabletsID, FormikOptimizedAutocomplete } from "app/components/Autyocomplete";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { getPharmacyListData, getQueueListData } from "app/redux/slice/getSlice";
 import { values } from "lodash";
 import { HeaderPost, QueuePost } from "app/redux/slice/postSlice";
+import { number } from "yup";
 
 // ******************** STYLED COMPONENTS ******************** //
 const Container = styled("div")(({ theme }) => ({
@@ -76,6 +77,7 @@ const [mrp, setMrp] = useState("");
 const [Gst, setGst] = useState("");
 const [Sgst, setSgst] = useState("");
 const [Cgst, setCgst] = useState("");
+const [Disc, setDisc] = useState("");
  const[seletcedCategoryID,setseletcedCategoryID]=useState(null);
  const[selectedCustoreID,setselectedCustoreID]=useState(null);
 
@@ -162,6 +164,14 @@ useEffect(() => {
  hide: true,
 },
 {
+  headerName: 'Discount',
+ field: 'discount',
+ width: 100,
+ align: 'left',
+ headerAlign: 'center',
+ hide: true,
+},
+{
   headerName: 'GST',
  field: 'gst',
  width: 100,
@@ -185,6 +195,30 @@ useEffect(() => {
  headerAlign: 'center',
  hide: true,
 },
+{
+  headerName: 'GST AMT',
+ field: 'gstAmount',
+ width: 100,
+ align: 'left',
+ headerAlign: 'center',
+ hide: true,
+},
+{
+  headerName: 'SGST AMT',
+ field: 'sgstAmount',
+ width: 100,
+ align: 'left',
+ headerAlign: 'center',
+ hide: true,
+},
+{
+  headerName: 'CGST AMT',
+ field: 'cgstAmount',
+ width: 100,
+ align: 'left',
+ headerAlign: 'center',
+ hide: true,
+},
  {
    headerName: 'SL#',
    field: 'SLNO',
@@ -197,6 +231,15 @@ useEffect(() => {
     {
       headerName: "Item Number",
       field: "ItemNumber",
+      width: 200,
+      align: "left",
+      headerAlign: "center",
+      hide: true,
+      editable: false, // Making it editable
+    },
+    {
+      headerName: "Item",
+      field: "Item",
       width: 200,
       align: "left",
       headerAlign: "center",
@@ -240,6 +283,15 @@ useEffect(() => {
       editable: false,
     },
     {
+      headerName: "DiscountAmount",
+      field: "discountAmount",
+      width: 150,
+      align: "right",
+      headerAlign: "center",
+      hide: true,
+      editable: false,
+    },
+    {
       field: "actions",
       type: "actions",
       headerName: "Actions",
@@ -270,7 +322,8 @@ useEffect(() => {
                 setMrp("");
                 setGst("");
                 setSgst("");
-                setCgst("")
+                setCgst("");
+                setDisc("");
               }
               }
               color="inherit"
@@ -321,7 +374,8 @@ if(response.payload.status === "Y"){
   setMrp(response.payload.data.MRP);
   setGst(response.payload.data.GST);
   setSgst(response.payload.data.SGST);
-  setCgst(response.payload.data.CGST)
+  setCgst(response.payload.data.CGST);
+  setDisc(response.payload.data.Discount);
   console.log(expiryDate,'====expiryDate')
 }else{
   toast.error("ERROR")
@@ -354,19 +408,25 @@ if(response.payload.status === "Y"){
         const newRow = {
           RecordID: newId, // Temporary ID, replaced after backend save
           SLNO: nextSLNO,
-          ItemRecordID:tabletsData?.RecordID || "",
-          ItemNumber: tabletsData?.ItemNumber || "", // Insert selected item number
-          Name: tabletsData?.Name || "", // Insert selected item name
+          ItemRecordID:tabletsData?.item_id || "",
+          ItemNumber: tabletsData?.itemNumber || "", // Insert selected item number
+          Name: tabletsData?.item_name || "", // Insert selected item name
+          Item:`${tabletsData.itemNumber}||${tabletsData.item_name}`,
           qty: quantity, // Default to 1
-          price: tabletsData?.Price || "", // Insert selected price if available
+          price: tabletsData?.price || "", // Insert selected price if available
           amount:0, // Calculate amount
-          uom:tabletsData?.UOM ||"",
-          cuom:tabletsData?.CUOM || "",
-          expiryDate:tabletsData?.ExpiryDate || "",
-          mrp:tabletsData?.MRP || "",
-          gst:tabletsData?.GST || "",
-          cgst:tabletsData?.CGST || "",
-          sgst:tabletsData?.SGST || "",
+          uom:tabletsData?.uom ||"",
+          cuom:tabletsData?.cuom || "",
+          expiryDate:tabletsData?.expirydate || "",
+          mrp:tabletsData?.mrp || "",
+          gst:tabletsData?.gst || "",
+          cgst:tabletsData?.cgst || "",
+          sgst:tabletsData?.sgst || "",
+          discount:tabletsData?.DISCOUNT || "",
+          discountAmount:0, 
+          gstAmount:0, 
+          sgstAmount:0, 
+          cgstAmount:0, 
           isNew: true,
         };
     
@@ -418,7 +478,8 @@ if(response.payload.status === "Y"){
     setMrp("");
     setGst("");
     setSgst("");
-    setCgst("")
+    setCgst("");
+    setDisc("")
   };
 
   //=====================================================HANDLEEDIT========================================================================//
@@ -465,51 +526,131 @@ if(response.payload.status === "Y"){
  
   };
   //==================================================================processRowUpdate=========================================================================//
-  const processRowUpdate = (newRow, oldRow) => {
-    console.log("------inside processrowupdate");
-    console.log(newRow, "--find newRow");
+//   const processRowUpdate = (newRow, oldRow) => {
+//     console.log("------inside processrowupdate");
+//     console.log(newRow, "--find newRow");
   
-    const isNew = !oldRow?.RecordID; // Check if this is a new row
-    const updatedRow = { ...newRow, isNew }; // Add `isNew` flag to row data
+//     const isNew = !oldRow?.RecordID; // Check if this is a new row
+//     const updatedRow = { ...newRow, isNew }; // Add `isNew` flag to row data
     
-    const amount=Number(updatedRow?.price * updatedRow.qty)
 
-    console.log(amount,'==================amount')
-    const totalAmount = Number(amount * updatedRow?.gst)/100;
+// const priceMount=Number(updatedRow?.price -Number(updatedRow?.price * updatedRow?.discount/100))
 
-const NetTotal=Number(amount+totalAmount);
-    console.log(totalAmount,'==================totalAmount')
-    updatedRow.amount=NetTotal;
+// console.log(priceMount,'==================priceMount')
 
+
+
+//     const amount=Number(updatedRow?.price * updatedRow.qty)
+
+//     console.log(amount,'==================amount')
+// //     const totalAmount = Number(amount * updatedRow?.gst)/100;
+
+// const NetTotal=Number(amount+totalAmount);
+//     console.log(totalAmount,'==================totalAmount')
    
+//     const TotalDiscount = Number(NetTotal - ((updatedRow?.discount * NetTotal) / 100));
 
-  
-    // Ensure you can see the updated row before setRows is called
-    console.log(updatedRow, "--find updatedRow before setRows");
-  
-    setRows((prev) => {
-      const index = prev.findIndex((row) => row.RecordID === updatedRow.RecordID);
-      if (index !== -1) {
-        const newData = [...prev];
-        newData[index] = updatedRow; // Update the row in the array
-        return newData;
-      }
-      return [...prev, updatedRow]; // If not found, add a new row
-    });
-  
-    const params = { row: updatedRow }; // Reassign the updated row to params
-    handleSave(updatedRow.RecordID, params); // Call handleSave with updated params
-  
-    return updatedRow; // Return the updated row to reflect changes in the DataGrid
-  };
-  
+//     console.log(TotalDiscount,'==================TotalDiscount');
+
+
  
 
+//     const sgstAmt=Number(amount * updatedRow.sgst/100);
+//     const cgstAmt=Number(Number(updatedRow.amount * updatedRow.cgst)/100);
 
+//     console.log(sgstAmt,'=====================sgstAmount');
+//     updatedRow.price=priceMount
+//     updatedRow.amount=amount;
+//     updatedRow.discountAmount=TotalDiscount;
+//     updatedRow.sgstAmount=sgstAmt;
+//     updatedRow.cgstAmount=sgstAmt;
+//     updatedRow.gstAmount=Number(sgstAmt + sgstAmt);
+//     // Ensure you can see the updated row before setRows is called
+//     console.log(updatedRow, "--find updatedRow before setRows");
+  
+//     setRows((prev) => {
+//       const index = prev.findIndex((row) => row.RecordID === updatedRow.RecordID);
+//       if (index !== -1) {
+//         const newData = [...prev];
+//         newData[index] = updatedRow; // Update the row in the array
+//         return newData;
+//       }
+//       return [...prev, updatedRow]; // If not found, add a new row
+//     });
+  
+//     const params = { row: updatedRow }; // Reassign the updated row to params
+//     handleSave(updatedRow.RecordID, params); // Call handleSave with updated params
+  
+//     return updatedRow; // Return the updated row to reflect changes in the DataGrid
+//   };
+  
+const processRowUpdate = (newRow, oldRow) => {
+  console.log("------inside processRowUpdate");
+  console.log(newRow, "--find newRow");
 
+  const isNew = !oldRow?.RecordID; // Check if this is a new row
+  const updatedRow = { ...newRow, isNew }; // Add `isNew` flag to row data
 
+  // Calculate discounted price
+  const priceMount = Number(updatedRow?.price) * (1 - Number(updatedRow?.discount) / 100);
+  console.log(priceMount, "================== priceMount");
+
+  // Calculate amount before taxes
+  const amount = Number(priceMount * updatedRow.qty);
+  console.log(amount, "================== amount");
+
+  // Ensure totalAmount is defined before using it in NetTotal
+  const totalAmount = Number(amount * updatedRow?.gst) / 100;
+  console.log(totalAmount, "================== totalAmount");
+
+  // Calculate NetTotal (amount + GST)
+  const NetTotal = Number(amount + totalAmount);
+
+  // Calculate total discount amount
+  const TotalDiscount = Number(NetTotal - (updatedRow?.discount * NetTotal) / 100);
+  console.log(TotalDiscount, "================== TotalDiscount");
+
+  // Calculate SGST and CGST amounts
+  const sgstAmt = Number((amount * updatedRow.sgst) / 100);
+  const cgstAmt = Number((amount * updatedRow.cgst) / 100);
+  console.log(sgstAmt, "===================== SGST Amount");
+  console.log(cgstAmt, "===================== CGST Amount");
+
+  // Assign calculated values to updatedRow
+  updatedRow.price = priceMount;
+  updatedRow.amount = amount;
+  updatedRow.discountAmount = TotalDiscount;
+  updatedRow.sgstAmount = sgstAmt;
+  updatedRow.cgstAmount = cgstAmt;
+  updatedRow.gstAmount = Number(sgstAmt + cgstAmt); // Fix GST total calculation
+
+  console.log(updatedRow, "--find updatedRow before setRows");
+
+  // Update the rows state
+  setRows((prev) => {
+    const index = prev.findIndex((row) => row.RecordID === updatedRow.RecordID);
+    if (index !== -1) {
+      const newData = [...prev];
+      newData[index] = updatedRow; // Update the row in the array
+      return newData;
+    }
+    return [...prev, updatedRow]; // If not found, add a new row
+  });
+
+  // Save the updated row
+  const params = { row: updatedRow };
+  handleSave(updatedRow.RecordID, params);
+
+  return updatedRow; // Return the updated row to reflect changes in the DataGrid
+};
+//==========================================================FILTER-ITEMS============================================================================================//
+
+const items=medicalItems.filter((item)=>item.category_id === seletcedCategoryID)
+
+console.log(items,"==============items")
   // ********************** TOOLBAR ********************** //\
   const[categoryName,setscategoryName]=useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [tabletsData, settabletsData] = useState(null);
   const handleSelectiontabletsData = (e, newValue) => {
     settabletsData(newValue);
@@ -528,7 +669,19 @@ const NetTotal=Number(amount+totalAmount);
           padding: 0.5,
         }}
       >
-           <FormikCustomAutocompleteSingle
+        <Autocomplete
+    sx={{ width: 200 }}
+    size="small"
+    options={categories}
+    getOptionLabel={(option) => option.name}
+    value={selectedCategory} // Ensure the selected value is displayed
+    onChange={(event, newValue) => {
+        setSelectedCategory(newValue);
+        setseletcedCategoryID(newValue ? newValue.RecordID : null); // Avoid null errors
+    }}
+    renderInput={(params) => <TextField {...params} label="Select Category" />}
+/>
+           {/* <FormikCustomAutocompleteSingle
                       sx={{ width:200 }}
 
                       name="category"
@@ -537,9 +690,22 @@ const NetTotal=Number(amount+totalAmount);
                       onChange={handleSelectioncategoryName}
                       label="Category"
                       url={`http://127.0.0.1:5000/api/medical-items`}
-                    />
+                    /> */}
         {/* Autocomplete at the Start */}
-        <FormikCustomAutocompleteSingle
+        <Autocomplete
+         sx={{ width:200 }}
+         size="small"
+      options={items}
+      value={tabletsData}
+      getOptionLabel={(option) => `${option.itemNumber}||${option.item_name}`}
+      onChange={(event, newValue) => {
+        settabletsData(newValue);
+        // setseletcedCategoryID(newValue.RecordID);
+    }}
+    
+      renderInput={(params) => <TextField {...params} label="Select MedicalItems" />}
+    />
+        {/* <FormikCustomAutocompleteTabletsID
           sx={{ width: 300 }}
           name="Tablets"
           id="Tablets"
@@ -547,7 +713,7 @@ const NetTotal=Number(amount+totalAmount);
           onChange={handleSelectiontabletsData}
           label="Barcode/Enter Material Name - SSDD"
           url={`http://127.0.0.1:5000/api/related-items/${seletcedCategoryID}`}
-        />
+        /> */}
   
         {/* Quantity TextField in the Center */}
         <TextField
@@ -622,25 +788,55 @@ const NetTotal=Number(amount+totalAmount);
   //     </GridToolbarContainer>
   //   );
   // }
+const[adValue,setADValue]=useState(0);
+ const handleadditionalDiscountChange=(event)=>{
+  setADValue(event.target.value);
+ }
+ const[roundOff,setRoundOff]=useState(0);
+ const handleroundOffChange=(event)=>{
+  setRoundOff(event.target.value);
+ }
+
+
+//==========================================CALCULATION=============================================================//
   const totalAmount = useMemo(() => {
     return rows.reduce((sum, row) => sum + (Number(row.amount) || 0), 0);
   }, [rows]);
-const totalGSTAmount = rows.reduce((acc, row) => acc + (Number(row.amount) * Number(row.gst)) / 100, 0).toFixed(2);
 
-  console.log(totalGSTAmount, '============================totalGstAmount');
-const HandleSaveQueue = () => {
-  const pureArray = Object.values(rows); // Extract only the values (objects)
+const netTotalDiscountAmount = useMemo(() => {
+  return rows.reduce((sum, row) => sum + (Number(row.discountAmount) || 0), 0);
+}, [rows]);
 
-  console.log(pureArray, '===========PURE ARRAY');
+const netTotalCGSTAmount = useMemo(() => {
+  return rows.reduce((sum, row) => sum + (Number(row.cgstAmount) || 0), 0);
+}, [rows]);
 
-  // If you need to send it as an API payload:
-  const data = { Rows: pureArray };
-  console.log(data, '============================DATA');
-};
+const netTotalSGSTAmount = useMemo(() => {
+  return rows.reduce((sum, row) => sum + (Number(row.sgstAmount) || 0), 0);
+}, [rows]);
+const netTotalGSTAmount = useMemo(() => {
+  return rows.reduce((sum, row) => sum + (Number(row.gstAmount) || 0), 0);
+}, [rows]);
 
+const totalGSTAmount = Number(netTotalCGSTAmount + netTotalSGSTAmount + netTotalGSTAmount);
+console.log(netTotalCGSTAmount,'=========================netTotalCGSTAmount');
+const netTotalADDDiscountAmount = useMemo(() => {
+  return rows.reduce((sum, row) => sum + (Number(row.discountAmount) || 0), 0) - (Number(adValue) || 0 ) +(Number(roundOff) || 0);
+}, [rows, adValue,roundOff]);
+
+// console.log(netTotalADDDiscountAmount,'=========================netTotalADDDiscountAmount');
+
+// console.log(netTotalDiscountAmount,'=========================netTotalDiscountAmount');
+//   console.log(totalGSTAmount, '============================totalGstAmount');
+//===============================================================================================================================================================//
 const queueDate=new window.Date().toISOString().split('T')[0];
 console.log(queueDate)
 const HandleQueueSave = async(values) => {
+
+  if (!customerRec && !selectedCustoreID) {
+    toast.error("Customer Record ID is required!"); // Show an error message
+    return; // Prevent execution if the required value is missing
+  }
   const idata = rows.map((row) => {
     return {
       Q_RECORDID: row.RecordID,
@@ -657,25 +853,77 @@ const HandleQueueSave = async(values) => {
       Q_QUANTITY: row.qty,
       Q_AMOUNT: row.amount, 
       Q_PRICE: row.price,
+      Q_DISCOUNT:row.discount,
+      Q_DiscountAmount:row.discountAmount, 
+      Q_ITEM:row.Item,
       Q_NETTOTAL: totalAmount, // Ensure this value is passed correctly
       Q_GSTTOTALAMOUNT: totalGSTAmount,
       Q_CUSTOMERNAME: customerName || data.customerName,
       Q_HRECORDID:customerRec || selectedCustoreID,
       Q_DATE: queueDate,
+      Q_STATUS:"Q",
+      Q_ADDITIONALDISCOUNT:adValue,
+     
+       
     
       // Q_ADDITIONALDISCOUNT:"",
-      // Q_DISCOUNT:"",
+    
       // Q_SUMMARY:"", // Ensure this value is passed correctly
     };
   });
   console.log(idata, '============================idata');
+  return;
 const response=await dispatch(QueuePost({idata}));
 console.log(response, '============================response');
 
-// if(response.type==="QueuePost/POST/fulfilled"){
-//   const deleteCustomer=await dispatch(QueueDelete({customer:customer}));
-//   console.log(deleteCustomer, '============================deleteCustomer');
-// }
+if(response.payload.status==="Y"){
+toast.success(response.payload.message)
+}else{
+  toast.error(response.payload.message)
+}
+};
+
+
+const HandlePaySave = async(values) => {
+  const idata = rows.map((row) => {
+    return {
+      Q_RECORDID: row.RecordID,
+      Q_UOM: row.uom,
+      Q_CUOM: row.cuom,
+      Q_EXPIRYDATE: row.expiryDate,
+      Q_MRP: row.mrp,
+      Q_GST: row.gst,
+      Q_CGST: row.cgst,
+      Q_SGST: row.sgst,
+      Q_ITEMNUMBER: row.ItemNumber,
+      Q_ITEMRECORDID:row.ItemRecordID,
+      Q_DESCRIPTION: row.Name,
+      Q_QUANTITY: row.qty,
+      Q_AMOUNT: row.amount, 
+      Q_PRICE: row.price,
+      Q_DISCOUNT:row.discount,
+      Q_ITEM:row.Item,
+      Q_NETTOTAL: totalAmount, // Ensure this value is passed correctly
+      Q_GSTTOTALAMOUNT: totalGSTAmount,
+      Q_CUSTOMERNAME: customerName || data.customerName,
+      Q_HRECORDID:customerRec || selectedCustoreID,
+      Q_DATE: queueDate,
+      Q_STATUS:"P",
+      Q_ADDITIONALDISCOUNT:adValue,
+    
+      // Q_SUMMARY:"", // Ensure this value is passed correctly
+    };
+  });
+  console.log(idata, '============================idata');
+  // return;
+const response=await dispatch(QueuePost({idata}));
+console.log(response, '============================response');
+
+if(response.payload.status==="Y"){
+toast.success(response.payload.message)
+}else{
+  toast.error(response.payload.message)
+}
 };
 // var d = new window.Date();
 const dateTime=new window.Date().toISOString();
@@ -884,7 +1132,13 @@ if(HeaderInsert.payload.status ==="Y"){
                       sgst:false,
                       cgst:false,
                       SLNO:false,
-
+                      discount:false,
+                      ItemNumber:false,
+                      Name:false,
+                      discountAmount:false,
+                      sgstAmount:false,
+                      cgstAmount:false,
+                      gstAmount:false
                     }}
                     processRowUpdate={processRowUpdate}
                     // onProcessRowUpdateError={handleProcessRowUpdateError}
@@ -996,7 +1250,21 @@ if(HeaderInsert.payload.status ==="Y"){
                 </Typography>
 
                 <Grid container spacing={2}>
-                  
+                <Grid item xs={12} sm={8}>
+    <TextField
+      fullWidth
+      variant="outlined"
+      size="small"
+      id="netTotal"
+      name="netTotal"
+      label="Net Total"
+      type="text"
+      value={totalAmount}
+      onChange={handleChange}
+      onBlur={handleBlur}
+      disabled
+    />
+  </Grid>
   <Grid item xs={12} sm={8}>
     <TextField
       fullWidth
@@ -1006,9 +1274,10 @@ if(HeaderInsert.payload.status ==="Y"){
       name="discount"
       label="Discount"
       type="text"
-      value={values.discount}
+      value={Disc}
       onChange={handleChange}
       onBlur={handleBlur}
+      disabled
     />
   </Grid>
 
@@ -1021,8 +1290,8 @@ if(HeaderInsert.payload.status ==="Y"){
       name="additionalDiscount"
       label="Additional Discount"
       type="text"
-      value={values.additionalDiscount}
-      onChange={handleChange}
+      value={adValue}
+      onChange={handleadditionalDiscountChange}
       onBlur={handleBlur}
     />
   </Grid>
@@ -1036,9 +1305,10 @@ if(HeaderInsert.payload.status ==="Y"){
       name="roundOff"
       label="Round Off"
       type="text"
-      value={values.roundOff}
-      onChange={handleChange}
+      value={roundOff}
+      onChange={handleroundOffChange}
       onBlur={handleBlur}
+      // disabled
     />
   </Grid>
 
@@ -1049,11 +1319,12 @@ if(HeaderInsert.payload.status ==="Y"){
       size="small"
       id="netTotal"
       name="netTotal"
-      label="Net Total"
+      label="Total"
       type="text"
-      value={totalAmount}
+      value={netTotalADDDiscountAmount}
       onChange={handleChange}
       onBlur={handleBlur}
+      disabled
     />
   </Grid>
 </Grid>
@@ -1182,6 +1453,7 @@ if(HeaderInsert.payload.status ==="Y"){
       <Button
         variant="outlined"
         sx={{ width: "100px", backgroundColor: "#FFEB3B", color: "black" }}
+        onClick={() => HandlePaySave()}
       >
         Pay now
       </Button>
@@ -1204,15 +1476,1672 @@ if(HeaderInsert.payload.status ==="Y"){
 export default Pharmacy;
 
 const autoComplete = [{ ContactName: "NK" }, { ContactName: "Safin" }];
-
-const autoComplete1 = [
-  { ContactName: "Tablets" },
-  { ContactName: "Syrups" },
-  { ContactName: "Medicine" },
-  { ContactName: "Stitching Material" },
-  { ContactName: "Injection" },
-  { ContactName: "Others" },
+const categories = [
+  { RecordID: 1, name: "Tablets" },
+  { RecordID: 2, name: "Syrups" },
+  { RecordID: 3, name: "Injections" },
+  { RecordID: 4, name: "Capsules" },
+  { RecordID: 5, name: "Ointments" },
+  { RecordID: 6, name: "Drops" },
+  { RecordID: 7, name: "Powders" },
+  { RecordID: 8, name: "Suppositories" },
+  { RecordID: 9, name: "Patches" },
+  { RecordID: 10, name: "Inhalers" }
 ];
+
+const medicalItems=[
+  {
+    "item_id": 114,
+    "category_id": 1,
+    "item_name": "Paracetamol",
+    "itemNumber": "TAB-001",
+    "price": 50.00,
+    "uom": "Box",
+    "cuom": "Tablet",
+    "expirydate": "2025-12-31",
+    "mrp": 55.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 5.00
+  },
+  {
+    "item_id": 115,
+    "category_id": 1,
+    "item_name": "Ibuprofen",
+    "itemNumber": "TAB-002",
+    "price": 60.00,
+    "uom": "Box",
+    "cuom": "Tablet",
+    "expirydate": "2026-06-30",
+    "mrp": 65.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 5.00
+  },
+  {
+    "item_id": 116,
+    "category_id": 1,
+    "item_name": "Aspirin",
+    "itemNumber": "TAB-003",
+    "price": 40.00,
+    "uom": "Box",
+    "cuom": "Tablet",
+    "expirydate": "2025-09-15",
+    "mrp": 45.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 5.00
+  },
+  {
+    "item_id": 117,
+    "category_id": 1,
+    "item_name": "Cetirizine",
+    "itemNumber": "TAB-004",
+    "price": 30.00,
+    "uom": "Box",
+    "cuom": "Tablet",
+    "expirydate": "2026-01-20",
+    "mrp": 35.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 5.00
+  },
+  {
+    "item_id": 118,
+    "category_id": 1,
+    "item_name": "Amoxicillin",
+    "itemNumber": "TAB-005",
+    "price": 100.00,
+    "uom": "Box",
+    "cuom": "Tablet",
+    "expirydate": "2025-07-10",
+    "mrp": 110.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 10.00
+  },
+  {
+    "item_id": 119,
+    "category_id": 1,
+    "item_name": "Azithromycin",
+    "itemNumber": "TAB-006",
+    "price": 120.00,
+    "uom": "Box",
+    "cuom": "Tablet",
+    "expirydate": "2025-11-05",
+    "mrp": 130.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 10.00
+  },
+  {
+    "item_id": 120,
+    "category_id": 1,
+    "item_name": "Metformin",
+    "itemNumber": "TAB-007",
+    "price": 80.00,
+    "uom": "Box",
+    "cuom": "Tablet",
+    "expirydate": "2026-03-18",
+    "mrp": 90.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 10.00
+  },
+  {
+    "item_id": 121,
+    "category_id": 1,
+    "item_name": "Atorvastatin",
+    "itemNumber": "TAB-008",
+    "price": 90.00,
+    "uom": "Box",
+    "cuom": "Tablet",
+    "expirydate": "2026-02-28",
+    "mrp": 100.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 10.00
+  },
+  {
+    "item_id": 122,
+    "category_id": 1,
+    "item_name": "Levothyroxine",
+    "itemNumber": "TAB-009",
+    "price": 70.00,
+    "uom": "Box",
+    "cuom": "Tablet",
+    "expirydate": "2025-10-12",
+    "mrp": 75.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 5.00
+  },
+  {
+    "item_id": 123,
+    "category_id": 1,
+    "item_name": "Losartan",
+    "itemNumber": "TAB-010",
+    "price": 85.00,
+    "uom": "Box",
+    "cuom": "Tablet",
+    "expirydate": "2026-04-22",
+    "mrp": 95.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 10.00
+  },
+  {
+    "item_id": 201,
+    "category_id": 2,
+    "item_name": "Paracetamol Syrup",
+    "itemNumber": "SYP-001",
+    "price": 80.00,
+    "uom": "Bottle",
+    "cuom": "ml",
+    "expirydate": "2025-12-31",
+    "mrp": 90.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 5.00
+  },
+  {
+    "item_id": 202,
+    "category_id": 2,
+    "item_name": "Ibuprofen Syrup",
+    "itemNumber": "SYP-002",
+    "price": 85.00,
+    "uom": "Bottle",
+    "cuom": "ml",
+    "expirydate": "2026-06-30",
+    "mrp": 95.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 5.00
+  },
+  {
+    "item_id": 203,
+    "category_id": 2,
+    "item_name": "Ambroxol Syrup",
+    "itemNumber": "SYP-003",
+    "price": 70.00,
+    "uom": "Bottle",
+    "cuom": "ml",
+    "expirydate": "2025-09-15",
+    "mrp": 80.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 5.00
+  },
+  {
+    "item_id": 204,
+    "category_id": 2,
+    "item_name": "Cetirizine Syrup",
+    "itemNumber": "SYP-004",
+    "price": 65.00,
+    "uom": "Bottle",
+    "cuom": "ml",
+    "expirydate": "2026-01-20",
+    "mrp": 75.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 5.00
+  },
+  {
+    "item_id": 205,
+    "category_id": 2,
+    "item_name": "Amoxicillin Syrup",
+    "itemNumber": "SYP-005",
+    "price": 120.00,
+    "uom": "Bottle",
+    "cuom": "ml",
+    "expirydate": "2025-07-10",
+    "mrp": 130.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 10.00
+  },
+  {
+    "item_id": 206,
+    "category_id": 2,
+    "item_name": "Azithromycin Syrup",
+    "itemNumber": "SYP-006",
+    "price": 130.00,
+    "uom": "Bottle",
+    "cuom": "ml",
+    "expirydate": "2025-11-05",
+    "mrp": 140.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 10.00
+  },
+  {
+    "item_id": 207,
+    "category_id": 2,
+    "item_name": "Salbutamol Syrup",
+    "itemNumber": "SYP-007",
+    "price": 90.00,
+    "uom": "Bottle",
+    "cuom": "ml",
+    "expirydate": "2026-03-18",
+    "mrp": 100.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 10.00
+  },
+  {
+    "item_id": 208,
+    "category_id": 2,
+    "item_name": "Dextromethorphan Syrup",
+    "itemNumber": "SYP-008",
+    "price": 95.00,
+    "uom": "Bottle",
+    "cuom": "ml",
+    "expirydate": "2026-02-28",
+    "mrp": 105.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 10.00
+  },
+  {
+    "item_id": 209,
+    "category_id": 2,
+    "item_name": "Chlorpheniramine Syrup",
+    "itemNumber": "SYP-009",
+    "price": 75.00,
+    "uom": "Bottle",
+    "cuom": "ml",
+    "expirydate": "2025-10-12",
+    "mrp": 85.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 5.00
+  },
+  {
+    "item_id": 210,
+    "category_id": 2,
+    "item_name": "Diphenhydramine Syrup",
+    "itemNumber": "SYP-010",
+    "price": 88.00,
+    "uom": "Bottle",
+    "cuom": "ml",
+    "expirydate": "2026-04-22",
+    "mrp": 98.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 10.00
+  },
+  {
+    "item_id": 301,
+    "category_id": 3,
+    "item_name": "Ceftriaxone Injection",
+    "itemNumber": "INJ-001",
+    "price": 150.00,
+    "uom": "Vial",
+    "cuom": "ml",
+    "expirydate": "2025-12-31",
+    "mrp": 165.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 10.00
+  },
+  {
+    "item_id": 302,
+    "category_id": 3,
+    "item_name": "Amikacin Injection",
+    "itemNumber": "INJ-002",
+    "price": 180.00,
+    "uom": "Vial",
+    "cuom": "ml",
+    "expirydate": "2026-06-30",
+    "mrp": 200.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 15.00
+  },
+  {
+    "item_id": 303,
+    "category_id": 3,
+    "item_name": "Gentamicin Injection",
+    "itemNumber": "INJ-003",
+    "price": 120.00,
+    "uom": "Vial",
+    "cuom": "ml",
+    "expirydate": "2025-09-15",
+    "mrp": 135.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 10.00
+  },
+  {
+    "item_id": 304,
+    "category_id": 3,
+    "item_name": "Diclofenac Injection",
+    "itemNumber": "INJ-004",
+    "price": 90.00,
+    "uom": "Ampoule",
+    "cuom": "ml",
+    "expirydate": "2026-01-20",
+    "mrp": 105.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 10.00
+  },
+  {
+    "item_id": 305,
+    "category_id": 3,
+    "item_name": "Ondansetron Injection",
+    "itemNumber": "INJ-005",
+    "price": 110.00,
+    "uom": "Ampoule",
+    "cuom": "ml",
+    "expirydate": "2025-07-10",
+    "mrp": 125.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 10.00
+  },
+  {
+    "item_id": 306,
+    "category_id": 3,
+    "item_name": "Pantoprazole Injection",
+    "itemNumber": "INJ-006",
+    "price": 200.00,
+    "uom": "Vial",
+    "cuom": "ml",
+    "expirydate": "2025-11-05",
+    "mrp": 220.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 15.00
+  },
+  {
+    "item_id": 307,
+    "category_id": 3,
+    "item_name": "Insulin Injection",
+    "itemNumber": "INJ-007",
+    "price": 250.00,
+    "uom": "Pen",
+    "cuom": "ml",
+    "expirydate": "2026-03-18",
+    "mrp": 280.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 20.00
+  },
+  {
+    "item_id": 308,
+    "category_id": 3,
+    "item_name": "Heparin Injection",
+    "itemNumber": "INJ-008",
+    "price": 300.00,
+    "uom": "Vial",
+    "cuom": "ml",
+    "expirydate": "2026-02-28",
+    "mrp": 330.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 25.00
+  },
+  {
+    "item_id": 309,
+    "category_id": 3,
+    "item_name": "Adrenaline Injection",
+    "itemNumber": "INJ-009",
+    "price": 140.00,
+    "uom": "Ampoule",
+    "cuom": "ml",
+    "expirydate": "2025-10-12",
+    "mrp": 155.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 10.00
+  },
+  {
+    "item_id": 310,
+    "category_id": 3,
+    "item_name": "Vitamin B12 Injection",
+    "itemNumber": "INJ-010",
+    "price": 160.00,
+    "uom": "Ampoule",
+    "cuom": "ml",
+    "expirydate": "2026-04-22",
+    "mrp": 180.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 15.00
+  },
+  {
+    "item_id": 201,
+    "category_id": 4,
+    "item_name": "Amoxicillin Capsule",
+    "itemNumber": "CAP-001",
+    "price": 100.00,
+    "uom": "Box",
+    "cuom": "Capsule",
+    "expirydate": "2025-12-31",
+    "mrp": 115.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 10.00
+  },
+  {
+    "item_id": 202,
+    "category_id": 4,
+    "item_name": "Doxycycline Capsule",
+    "itemNumber": "CAP-002",
+    "price": 120.00,
+    "uom": "Box",
+    "cuom": "Capsule",
+    "expirydate": "2026-06-30",
+    "mrp": 135.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 12.00
+  },
+  {
+    "item_id": 203,
+    "category_id": 4,
+    "item_name": "Omeprazole Capsule",
+    "itemNumber": "CAP-003",
+    "price": 80.00,
+    "uom": "Box",
+    "cuom": "Capsule",
+    "expirydate": "2025-09-15",
+    "mrp": 95.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 8.00
+  },
+  {
+    "item_id": 204,
+    "category_id": 4,
+    "item_name": "Vitamin D3 Capsule",
+    "itemNumber": "CAP-004",
+    "price": 90.00,
+    "uom": "Box",
+    "cuom": "Capsule",
+    "expirydate": "2026-01-20",
+    "mrp": 105.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 9.00
+  },
+  {
+    "item_id": 205,
+    "category_id": 4,
+    "item_name": "Fish Oil Capsule",
+    "itemNumber": "CAP-005",
+    "price": 150.00,
+    "uom": "Box",
+    "cuom": "Capsule",
+    "expirydate": "2025-07-10",
+    "mrp": 170.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 15.00
+  },
+  {
+    "item_id": 206,
+    "category_id": 4,
+    "item_name": "B-Complex Capsule",
+    "itemNumber": "CAP-006",
+    "price": 130.00,
+    "uom": "Box",
+    "cuom": "Capsule",
+    "expirydate": "2025-11-05",
+    "mrp": 145.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 12.00
+  },
+  {
+    "item_id": 207,
+    "category_id": 4,
+    "item_name": "Iron Capsule",
+    "itemNumber": "CAP-007",
+    "price": 110.00,
+    "uom": "Box",
+    "cuom": "Capsule",
+    "expirydate": "2026-03-18",
+    "mrp": 125.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 10.00
+  },
+  {
+    "item_id": 208,
+    "category_id": 4,
+    "item_name": "Calcium Capsule",
+    "itemNumber": "CAP-008",
+    "price": 160.00,
+    "uom": "Box",
+    "cuom": "Capsule",
+    "expirydate": "2026-02-28",
+    "mrp": 180.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 15.00
+  },
+  {
+    "item_id": 209,
+    "category_id": 4,
+    "item_name": "Probiotic Capsule",
+    "itemNumber": "CAP-009",
+    "price": 140.00,
+    "uom": "Box",
+    "cuom": "Capsule",
+    "expirydate": "2025-10-12",
+    "mrp": 155.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 12.00
+  },
+  {
+    "item_id": 210,
+    "category_id": 4,
+    "item_name": "Collagen Capsule",
+    "itemNumber": "CAP-010",
+    "price": 180.00,
+    "uom": "Box",
+    "cuom": "Capsule",
+    "expirydate": "2026-04-22",
+    "mrp": 200.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 18.00
+  },
+  {
+    "item_id": 301,
+    "category_id": 5,
+    "item_name": "Neomycin Ointment",
+    "itemNumber": "OINT-001",
+    "price": 75.00,
+    "uom": "Tube",
+    "cuom": "Gram",
+    "expirydate": "2025-12-31",
+    "mrp": 85.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 7.50
+  },
+  {
+    "item_id": 302,
+    "category_id": 5,
+    "item_name": "Betamethasone Ointment",
+    "itemNumber": "OINT-002",
+    "price": 90.00,
+    "uom": "Tube",
+    "cuom": "Gram",
+    "expirydate": "2026-06-30",
+    "mrp": 105.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 9.00
+  },
+  {
+    "item_id": 303,
+    "category_id": 5,
+    "item_name": "Mupirocin Ointment",
+    "itemNumber": "OINT-003",
+    "price": 120.00,
+    "uom": "Tube",
+    "cuom": "Gram",
+    "expirydate": "2025-09-15",
+    "mrp": 135.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 12.00
+  },
+  {
+    "item_id": 304,
+    "category_id": 5,
+    "item_name": "Clotrimazole Ointment",
+    "itemNumber": "OINT-004",
+    "price": 85.00,
+    "uom": "Tube",
+    "cuom": "Gram",
+    "expirydate": "2026-01-20",
+    "mrp": 95.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 8.50
+  },
+  {
+    "item_id": 305,
+    "category_id": 5,
+    "item_name": "Diclofenac Gel",
+    "itemNumber": "OINT-005",
+    "price": 110.00,
+    "uom": "Tube",
+    "cuom": "Gram",
+    "expirydate": "2025-07-10",
+    "mrp": 125.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 11.00
+  },
+  {
+    "item_id": 306,
+    "category_id": 5,
+    "item_name": "Hydrocortisone Ointment",
+    "itemNumber": "OINT-006",
+    "price": 95.00,
+    "uom": "Tube",
+    "cuom": "Gram",
+    "expirydate": "2025-11-05",
+    "mrp": 110.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 9.50
+  },
+  {
+    "item_id": 307,
+    "category_id": 5,
+    "item_name": "Tacrolimus Ointment",
+    "itemNumber": "OINT-007",
+    "price": 180.00,
+    "uom": "Tube",
+    "cuom": "Gram",
+    "expirydate": "2026-03-18",
+    "mrp": 200.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 18.00
+  },
+  {
+    "item_id": 308,
+    "category_id": 5,
+    "item_name": "Salicylic Acid Ointment",
+    "itemNumber": "OINT-008",
+    "price": 70.00,
+    "uom": "Tube",
+    "cuom": "Gram",
+    "expirydate": "2026-02-28",
+    "mrp": 85.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 7.00
+  },
+  {
+    "item_id": 309,
+    "category_id": 5,
+    "item_name": "Lidocaine Ointment",
+    "itemNumber": "OINT-009",
+    "price": 130.00,
+    "uom": "Tube",
+    "cuom": "Gram",
+    "expirydate": "2025-10-12",
+    "mrp": 145.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 13.00
+  },
+  {
+    "item_id": 310,
+    "category_id": 5,
+    "item_name": "Zinc Oxide Ointment",
+    "itemNumber": "OINT-010",
+    "price": 60.00,
+    "uom": "Tube",
+    "cuom": "Gram",
+    "expirydate": "2026-04-22",
+    "mrp": 75.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 6.00
+  },
+  {
+    "item_id": 401,
+    "category_id": 6,
+    "item_name": "Tobramycin Eye Drops",
+    "itemNumber": "DROP-001",
+    "price": 120.00,
+    "uom": "Bottle",
+    "cuom": "mL",
+    "expirydate": "2025-12-31",
+    "mrp": 135.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 12.00
+  },
+  {
+    "item_id": 402,
+    "category_id": 6,
+    "item_name": "Ciprofloxacin Ear Drops",
+    "itemNumber": "DROP-002",
+    "price": 95.00,
+    "uom": "Bottle",
+    "cuom": "mL",
+    "expirydate": "2026-06-30",
+    "mrp": 110.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 9.50
+  },
+  {
+    "item_id": 403,
+    "category_id": 6,
+    "item_name": "Carboxymethylcellulose Eye Drops",
+    "itemNumber": "DROP-003",
+    "price": 150.00,
+    "uom": "Bottle",
+    "cuom": "mL",
+    "expirydate": "2025-09-15",
+    "mrp": 165.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 15.00
+  },
+  {
+    "item_id": 404,
+    "category_id": 6,
+    "item_name": "Olopatadine Eye Drops",
+    "itemNumber": "DROP-004",
+    "price": 110.00,
+    "uom": "Bottle",
+    "cuom": "mL",
+    "expirydate": "2026-01-20",
+    "mrp": 125.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 11.00
+  },
+  {
+    "item_id": 405,
+    "category_id": 6,
+    "item_name": "Ofloxacin Ear Drops",
+    "itemNumber": "DROP-005",
+    "price": 130.00,
+    "uom": "Bottle",
+    "cuom": "mL",
+    "expirydate": "2025-07-10",
+    "mrp": 145.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 13.00
+  },
+  {
+    "item_id": 406,
+    "category_id": 6,
+    "item_name": "Moxifloxacin Eye Drops",
+    "itemNumber": "DROP-006",
+    "price": 140.00,
+    "uom": "Bottle",
+    "cuom": "mL",
+    "expirydate": "2025-11-05",
+    "mrp": 155.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 14.00
+  },
+  {
+    "item_id": 407,
+    "category_id": 6,
+    "item_name": "Dexamethasone Eye Drops",
+    "itemNumber": "DROP-007",
+    "price": 160.00,
+    "uom": "Bottle",
+    "cuom": "mL",
+    "expirydate": "2026-03-18",
+    "mrp": 175.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 16.00
+  },
+  {
+    "item_id": 408,
+    "category_id": 6,
+    "item_name": "Ketorolac Eye Drops",
+    "itemNumber": "DROP-008",
+    "price": 125.00,
+    "uom": "Bottle",
+    "cuom": "mL",
+    "expirydate": "2026-02-28",
+    "mrp": 140.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 12.50
+  },
+  {
+    "item_id": 409,
+    "category_id": 6,
+    "item_name": "Fluorometholone Eye Drops",
+    "itemNumber": "DROP-009",
+    "price": 135.00,
+    "uom": "Bottle",
+    "cuom": "mL",
+    "expirydate": "2025-10-12",
+    "mrp": 150.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 13.50
+  },
+  {
+    "item_id": 410,
+    "category_id": 6,
+    "item_name": "Gentamicin Eye Drops",
+    "itemNumber": "DROP-010",
+    "price": 100.00,
+    "uom": "Bottle",
+    "cuom": "mL",
+    "expirydate": "2026-04-22",
+    "mrp": 115.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 10.00
+  },
+  {
+    "item_id": 501,
+    "category_id": 7,
+    "item_name": "Brimonidine Eye Drops",
+    "itemNumber": "DROP-011",
+    "price": 140.00,
+    "uom": "Bottle",
+    "cuom": "mL",
+    "expirydate": "2025-12-31",
+    "mrp": 155.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 14.00
+  },
+  {
+    "item_id": 502,
+    "category_id": 7,
+    "item_name": "Bimatoprost Eye Drops",
+    "itemNumber": "DROP-012",
+    "price": 160.00,
+    "uom": "Bottle",
+    "cuom": "mL",
+    "expirydate": "2026-06-30",
+    "mrp": 175.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 16.00
+  },
+  {
+    "item_id": 503,
+    "category_id": 7,
+    "item_name": "Dorzolamide Eye Drops",
+    "itemNumber": "DROP-013",
+    "price": 130.00,
+    "uom": "Bottle",
+    "cuom": "mL",
+    "expirydate": "2025-09-15",
+    "mrp": 145.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 13.00
+  },
+  {
+    "item_id": 504,
+    "category_id": 7,
+    "item_name": "Travoprost Eye Drops",
+    "itemNumber": "DROP-014",
+    "price": 170.00,
+    "uom": "Bottle",
+    "cuom": "mL",
+    "expirydate": "2026-01-20",
+    "mrp": 185.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 17.00
+  },
+  {
+    "item_id": 505,
+    "category_id": 7,
+    "item_name": "Pilocarpine Eye Drops",
+    "itemNumber": "DROP-015",
+    "price": 120.00,
+    "uom": "Bottle",
+    "cuom": "mL",
+    "expirydate": "2025-07-10",
+    "mrp": 135.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 12.00
+  },
+  {
+    "item_id": 506,
+    "category_id": 7,
+    "item_name": "Latanoprost Eye Drops",
+    "itemNumber": "DROP-016",
+    "price": 190.00,
+    "uom": "Bottle",
+    "cuom": "mL",
+    "expirydate": "2025-11-05",
+    "mrp": 205.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 19.00
+  },
+  {
+    "item_id": 507,
+    "category_id": 7,
+    "item_name": "Nepafenac Eye Drops",
+    "itemNumber": "DROP-017",
+    "price": 145.00,
+    "uom": "Bottle",
+    "cuom": "mL",
+    "expirydate": "2026-03-18",
+    "mrp": 160.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 14.50
+  },
+  {
+    "item_id": 508,
+    "category_id": 7,
+    "item_name": "Ketotifen Eye Drops",
+    "itemNumber": "DROP-018",
+    "price": 135.00,
+    "uom": "Bottle",
+    "cuom": "mL",
+    "expirydate": "2026-02-28",
+    "mrp": 150.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 13.50
+  },
+  {
+    "item_id": 509,
+    "category_id": 7,
+    "item_name": "Fluorometholone Eye Drops",
+    "itemNumber": "DROP-019",
+    "price": 125.00,
+    "uom": "Bottle",
+    "cuom": "mL",
+    "expirydate": "2025-10-12",
+    "mrp": 140.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 12.50
+  },
+  {
+    "item_id": 510,
+    "category_id": 7,
+    "item_name": "Apraclonidine Eye Drops",
+    "itemNumber": "DROP-020",
+    "price": 155.00,
+    "uom": "Bottle",
+    "cuom": "mL",
+    "expirydate": "2026-04-22",
+    "mrp": 170.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 15.50
+  },
+  {
+    "item_id": 601,
+    "category_id": 8,
+    "item_name": "Protein Powder",
+    "itemNumber": "POW-001",
+    "price": 450.00,
+    "uom": "Jar",
+    "cuom": "Gram",
+    "expirydate": "2026-12-31",
+    "mrp": 500.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 50.00
+  },
+  {
+    "item_id": 602,
+    "category_id": 8,
+    "item_name": "ORS Powder",
+    "itemNumber": "POW-002",
+    "price": 30.00,
+    "uom": "Sachet",
+    "cuom": "Gram",
+    "expirydate": "2025-06-30",
+    "mrp": 35.00,
+    "gst": 5,
+    "cgst": 2.5,
+    "sgst": 2.5,
+    "DISCOUNT": 3.00
+  },
+  {
+    "item_id": 603,
+    "category_id": 8,
+    "item_name": "Glucose Powder",
+    "itemNumber": "POW-003",
+    "price": 150.00,
+    "uom": "Box",
+    "cuom": "Gram",
+    "expirydate": "2026-09-15",
+    "mrp": 170.00,
+    "gst": 5,
+    "cgst": 2.5,
+    "sgst": 2.5,
+    "DISCOUNT": 15.00
+  },
+  {
+    "item_id": 604,
+    "category_id": 8,
+    "item_name": "Electrolyte Powder",
+    "itemNumber": "POW-004",
+    "price": 180.00,
+    "uom": "Box",
+    "cuom": "Gram",
+    "expirydate": "2026-01-20",
+    "mrp": 200.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 18.00
+  },
+  {
+    "item_id": 605,
+    "category_id": 8,
+    "item_name": "Collagen Powder",
+    "itemNumber": "POW-005",
+    "price": 600.00,
+    "uom": "Jar",
+    "cuom": "Gram",
+    "expirydate": "2025-07-10",
+    "mrp": 650.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 60.00
+  },
+  {
+    "item_id": 606,
+    "category_id": 8,
+    "item_name": "Lactose Powder",
+    "itemNumber": "POW-006",
+    "price": 200.00,
+    "uom": "Packet",
+    "cuom": "Gram",
+    "expirydate": "2025-11-05",
+    "mrp": 220.00,
+    "gst": 5,
+    "cgst": 2.5,
+    "sgst": 2.5,
+    "DISCOUNT": 20.00
+  },
+  {
+    "item_id": 607,
+    "category_id": 8,
+    "item_name": "Creatine Powder",
+    "itemNumber": "POW-007",
+    "price": 750.00,
+    "uom": "Jar",
+    "cuom": "Gram",
+    "expirydate": "2026-03-18",
+    "mrp": 800.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 75.00
+  },
+  {
+    "item_id": 608,
+    "category_id": 8,
+    "item_name": "Vitamin C Powder",
+    "itemNumber": "POW-008",
+    "price": 250.00,
+    "uom": "Box",
+    "cuom": "Gram",
+    "expirydate": "2026-02-28",
+    "mrp": 275.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 25.00
+  },
+  {
+    "item_id": 609,
+    "category_id": 8,
+    "item_name": "Ayurvedic Herbal Powder",
+    "itemNumber": "POW-009",
+    "price": 350.00,
+    "uom": "Box",
+    "cuom": "Gram",
+    "expirydate": "2025-10-12",
+    "mrp": 380.00,
+    "gst": 5,
+    "cgst": 2.5,
+    "sgst": 2.5,
+    "DISCOUNT": 35.00
+  },
+  {
+    "item_id": 610,
+    "category_id": 8,
+    "item_name": "Baby Powder",
+    "itemNumber": "POW-010",
+    "price": 180.00,
+    "uom": "Bottle",
+    "cuom": "Gram",
+    "expirydate": "2026-04-22",
+    "mrp": 200.00,
+    "gst": 5,
+    "cgst": 2.5,
+    "sgst": 2.5,
+    "DISCOUNT": 18.00
+  },
+  {
+    "item_id": 701,
+    "category_id": 9,
+    "item_name": "Pain Relief Patch",
+    "itemNumber": "PAT-001",
+    "price": 120.00,
+    "uom": "Pack",
+    "cuom": "Patch",
+    "expirydate": "2026-12-31",
+    "mrp": 140.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 12.00
+  },
+  {
+    "item_id": 702,
+    "category_id": 9,
+    "item_name": "Nicotine Patch",
+    "itemNumber": "PAT-002",
+    "price": 350.00,
+    "uom": "Box",
+    "cuom": "Patch",
+    "expirydate": "2025-06-30",
+    "mrp": 400.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 35.00
+  },
+  {
+    "item_id": 703,
+    "category_id": 9,
+    "item_name": "Cooling Gel Patch",
+    "itemNumber": "PAT-003",
+    "price": 80.00,
+    "uom": "Pack",
+    "cuom": "Patch",
+    "expirydate": "2026-09-15",
+    "mrp": 90.00,
+    "gst": 5,
+    "cgst": 2.5,
+    "sgst": 2.5,
+    "DISCOUNT": 8.00
+  },
+  {
+    "item_id": 704,
+    "category_id": 9,
+    "item_name": "Fever Cooling Patch",
+    "itemNumber": "PAT-004",
+    "price": 100.00,
+    "uom": "Pack",
+    "cuom": "Patch",
+    "expirydate": "2026-01-20",
+    "mrp": 120.00,
+    "gst": 5,
+    "cgst": 2.5,
+    "sgst": 2.5,
+    "DISCOUNT": 10.00
+  },
+  {
+    "item_id": 705,
+    "category_id": 9,
+    "item_name": "Motion Sickness Patch",
+    "itemNumber": "PAT-005",
+    "price": 250.00,
+    "uom": "Box",
+    "cuom": "Patch",
+    "expirydate": "2025-07-10",
+    "mrp": 275.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 25.00
+  },
+  {
+    "item_id": 706,
+    "category_id": 9,
+    "item_name": "Herbal Pain Patch",
+    "itemNumber": "PAT-006",
+    "price": 150.00,
+    "uom": "Pack",
+    "cuom": "Patch",
+    "expirydate": "2025-11-05",
+    "mrp": 170.00,
+    "gst": 5,
+    "cgst": 2.5,
+    "sgst": 2.5,
+    "DISCOUNT": 15.00
+  },
+  {
+    "item_id": 707,
+    "category_id": 9,
+    "item_name": "Heat Therapy Patch",
+    "itemNumber": "PAT-007",
+    "price": 300.00,
+    "uom": "Box",
+    "cuom": "Patch",
+    "expirydate": "2026-03-18",
+    "mrp": 330.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 30.00
+  },
+  {
+    "item_id": 708,
+    "category_id": 9,
+    "item_name": "Detox Foot Patch",
+    "itemNumber": "PAT-008",
+    "price": 200.00,
+    "uom": "Pack",
+    "cuom": "Patch",
+    "expirydate": "2026-02-28",
+    "mrp": 220.00,
+    "gst": 5,
+    "cgst": 2.5,
+    "sgst": 2.5,
+    "DISCOUNT": 20.00
+  },
+  {
+    "item_id": 709,
+    "category_id": 9,
+    "item_name": "Anti-Stress Patch",
+    "itemNumber": "PAT-009",
+    "price": 275.00,
+    "uom": "Box",
+    "cuom": "Patch",
+    "expirydate": "2025-10-12",
+    "mrp": 300.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 27.00
+  },
+  {
+    "item_id": 710,
+    "category_id": 9,
+    "item_name": "Skin Care Patch",
+    "itemNumber": "PAT-010",
+    "price": 180.00,
+    "uom": "Pack",
+    "cuom": "Patch",
+    "expirydate": "2026-04-22",
+    "mrp": 200.00,
+    "gst": 5,
+    "cgst": 2.5,
+    "sgst": 2.5,
+    "DISCOUNT": 18.00
+  },
+  {
+    "item_id": 801,
+    "category_id": 10,
+    "item_name": "Salbutamol Inhaler",
+    "itemNumber": "INH-001",
+    "price": 250.00,
+    "uom": "Box",
+    "cuom": "Inhaler",
+    "expirydate": "2026-12-31",
+    "mrp": 280.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 25.00
+  },
+  {
+    "item_id": 802,
+    "category_id": 10,
+    "item_name": "Budesonide Inhaler",
+    "itemNumber": "INH-002",
+    "price": 300.00,
+    "uom": "Box",
+    "cuom": "Inhaler",
+    "expirydate": "2025-06-30",
+    "mrp": 340.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 30.00
+  },
+  {
+    "item_id": 803,
+    "category_id": 10,
+    "item_name": "Fluticasone Inhaler",
+    "itemNumber": "INH-003",
+    "price": 350.00,
+    "uom": "Box",
+    "cuom": "Inhaler",
+    "expirydate": "2026-09-15",
+    "mrp": 400.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 35.00
+  },
+  {
+    "item_id": 804,
+    "category_id": 10,
+    "item_name": "Ipratropium Bromide Inhaler",
+    "itemNumber": "INH-004",
+    "price": 280.00,
+    "uom": "Box",
+    "cuom": "Inhaler",
+    "expirydate": "2026-01-20",
+    "mrp": 310.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 28.00
+  },
+  {
+    "item_id": 805,
+    "category_id": 10,
+    "item_name": "Tiotropium Inhaler",
+    "itemNumber": "INH-005",
+    "price": 320.00,
+    "uom": "Box",
+    "cuom": "Inhaler",
+    "expirydate": "2025-07-10",
+    "mrp": 350.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 32.00
+  },
+  {
+    "item_id": 806,
+    "category_id": 10,
+    "item_name": "Formoterol Inhaler",
+    "itemNumber": "INH-006",
+    "price": 400.00,
+    "uom": "Box",
+    "cuom": "Inhaler",
+    "expirydate": "2025-11-05",
+    "mrp": 450.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 40.00
+  },
+  {
+    "item_id": 807,
+    "category_id": 10,
+    "item_name": "Ciclesonide Inhaler",
+    "itemNumber": "INH-007",
+    "price": 270.00,
+    "uom": "Box",
+    "cuom": "Inhaler",
+    "expirydate": "2026-03-18",
+    "mrp": 300.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 27.00
+  },
+  {
+    "item_id": 808,
+    "category_id": 10,
+    "item_name": "Beclomethasone Inhaler",
+    "itemNumber": "INH-008",
+    "price": 330.00,
+    "uom": "Box",
+    "cuom": "Inhaler",
+    "expirydate": "2026-02-28",
+    "mrp": 360.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 33.00
+  },
+  {
+    "item_id": 809,
+    "category_id": 10,
+    "item_name": "Levosalbutamol Inhaler",
+    "itemNumber": "INH-009",
+    "price": 290.00,
+    "uom": "Box",
+    "cuom": "Inhaler",
+    "expirydate": "2025-10-12",
+    "mrp": 320.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 29.00
+  },
+  {
+    "item_id": 810,
+    "category_id": 10,
+    "item_name": "Aclidinium Inhaler",
+    "itemNumber": "INH-010",
+    "price": 370.00,
+    "uom": "Box",
+    "cuom": "Inhaler",
+    "expirydate": "2026-04-22",
+    "mrp": 400.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 37.00
+  },
+  {
+    "item_id": 901,
+    "category_id": 11,
+    "item_name": "Glycerin Suppository",
+    "itemNumber": "SUP-001",
+    "price": 150.00,
+    "uom": "Box",
+    "cuom": "Suppository",
+    "expirydate": "2026-12-31",
+    "mrp": 180.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 15.00
+  },
+  {
+    "item_id": 902,
+    "category_id": 11,
+    "item_name": "Bisacodyl Suppository",
+    "itemNumber": "SUP-002",
+    "price": 200.00,
+    "uom": "Box",
+    "cuom": "Suppository",
+    "expirydate": "2025-06-30",
+    "mrp": 220.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 20.00
+  },
+  {
+    "item_id": 903,
+    "category_id": 11,
+    "item_name": "Paracetamol Suppository",
+    "itemNumber": "SUP-003",
+    "price": 250.00,
+    "uom": "Box",
+    "cuom": "Suppository",
+    "expirydate": "2026-09-15",
+    "mrp": 280.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 25.00
+  },
+  {
+    "item_id": 904,
+    "category_id": 11,
+    "item_name": "Ibuprofen Suppository",
+    "itemNumber": "SUP-004",
+    "price": 180.00,
+    "uom": "Box",
+    "cuom": "Suppository",
+    "expirydate": "2026-01-20",
+    "mrp": 200.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 18.00
+  },
+  {
+    "item_id": 905,
+    "category_id": 11,
+    "item_name": "Dulcolax Suppository",
+    "itemNumber": "SUP-005",
+    "price": 220.00,
+    "uom": "Box",
+    "cuom": "Suppository",
+    "expirydate": "2025-07-10",
+    "mrp": 250.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 22.00
+  },
+  {
+    "item_id": 906,
+    "category_id": 11,
+    "item_name": "Acetaminophen Suppository",
+    "itemNumber": "SUP-006",
+    "price": 270.00,
+    "uom": "Box",
+    "cuom": "Suppository",
+    "expirydate": "2025-11-05",
+    "mrp": 300.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 27.00
+  },
+  {
+    "item_id": 907,
+    "category_id": 11,
+    "item_name": "Hydrocortisone Suppository",
+    "itemNumber": "SUP-007",
+    "price": 190.00,
+    "uom": "Box",
+    "cuom": "Suppository",
+    "expirydate": "2026-03-18",
+    "mrp": 220.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 19.00
+  },
+  {
+    "item_id": 908,
+    "category_id": 11,
+    "item_name": "Indomethacin Suppository",
+    "itemNumber": "SUP-008",
+    "price": 230.00,
+    "uom": "Box",
+    "cuom": "Suppository",
+    "expirydate": "2026-02-28",
+    "mrp": 260.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 23.00
+  },
+  {
+    "item_id": 909,
+    "category_id": 11,
+    "item_name": "Metronidazole Suppository",
+    "itemNumber": "SUP-009",
+    "price": 210.00,
+    "uom": "Box",
+    "cuom": "Suppository",
+    "expirydate": "2025-10-12",
+    "mrp": 240.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 21.00
+  },
+  {
+    "item_id": 910,
+    "category_id": 11,
+    "item_name": "Chloral Hydrate Suppository",
+    "itemNumber": "SUP-010",
+    "price": 260.00,
+    "uom": "Box",
+    "cuom": "Suppository",
+    "expirydate": "2026-04-22",
+    "mrp": 290.00,
+    "gst": 12,
+    "cgst": 6,
+    "sgst": 6,
+    "DISCOUNT": 26.00
+  }
+];
+
 const autoComplete3 = [{ ContactName: "Patient" }];
 
 
