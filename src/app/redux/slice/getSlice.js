@@ -8,7 +8,27 @@ const initialState = {
    getQueueList:{},
    getQueueListLoading:false,
    getQueueListError:null,
-   getQueueListStatus:'idle'
+   getQueueListStatus:'idle',
+   getDoctorList:[],
+   getDoctorStatus:'idle',
+   getDoctorLoading:false,
+   getDoctorError:null,
+   getPatientList:[],
+   getPatientStatus:'idle',
+   getPatientLoading:false,
+   getPatientError:null,
+   getDoctorData:{},
+   getDoctorDataStatus:'idle',
+   getDoctorDataLoading:false,
+   getDoctorDataError:null,
+   getPatientData:{},
+   getPatientDataStatus:'idle',
+   getPatientDataLoading:false,
+   getPatientDataError:null,
+  
+
+
+   
 }
 export const getPharmacyListData = createAsyncThunk(
     'get/getPharmacyList', // action type
@@ -28,6 +48,58 @@ export const getPharmacyListData = createAsyncThunk(
     async ({id}, { rejectWithValue }) => {
       try {
         const URL = `http://127.0.0.1:5000/api/HMS_QUEUE/getqueue/${id}`;
+        const response = await axios.get(URL); // Removed the Authorization header
+        return response.data; // return the response data
+      } catch (error) {
+        // If the request fails, return a custom error message
+        return rejectWithValue(error.response ? error.response.data : error.message);
+      }
+    }
+  );
+  export const getDoctorListData = createAsyncThunk(
+    'get/getDoctorList', // action type
+    async ( _,{ rejectWithValue }) => {
+      try {
+        const URL = `http://127.0.0.1:5000/api/doctor`;
+        const response = await axios.get(URL); // Removed the Authorization header
+        return response.data; // return the response data
+      } catch (error) {
+        // If the request fails, return a custom error message
+        return rejectWithValue(error.response ? error.response.data : error.message);
+      }
+    }
+  );
+  export const getPatientListData = createAsyncThunk(
+    'get/getPatientList', // action type
+    async ( _,{ rejectWithValue }) => {
+      try {
+        const URL = `http://127.0.0.1:5000/api/patient`;
+        const response = await axios.get(URL); // Removed the Authorization header
+        return response.data; // return the response data
+      } catch (error) {
+        // If the request fails, return a custom error message
+        return rejectWithValue(error.response ? error.response.data : error.message);
+      }
+    }
+  );
+  export const getDoctor = createAsyncThunk(
+    'get/getDoctor', // action type
+    async ( {id},{ rejectWithValue }) => {
+      try {
+        const URL = `http://127.0.0.1:5000/api/getdoctor/${id}`;
+        const response = await axios.get(URL); // Removed the Authorization header
+        return response.data; // return the response data
+      } catch (error) {
+        // If the request fails, return a custom error message
+        return rejectWithValue(error.response ? error.response.data : error.message);
+      }
+    }
+  );
+  export const getPatient = createAsyncThunk(
+    'get/getPatient', // action type
+    async ( {id},{ rejectWithValue }) => {
+      try {
+        const URL = `http://127.0.0.1:5000/api/getpatient/${id}`;
         const response = await axios.get(URL); // Removed the Authorization header
         return response.data; // return the response data
       } catch (error) {
@@ -79,6 +151,78 @@ const getSlice = createSlice({
           state.error = action.error.message
           state.getQueueList = {}
       })
+      .addCase(getDoctorListData.pending, (state, action) => {
+        state.getDoctorStatus = 'loading'
+        state.getDoctorLoading = true
+        state.getDoctorList = []
+    
+    })
+    .addCase(getDoctorListData.fulfilled, (state, action) => {
+        state.getDoctorStatus = 'succeeded'
+        state.getDoctorLoading = false
+        state.getDoctorList = action.payload.data
+       
+    })
+    .addCase(getDoctorListData.rejected, (state, action) => {
+        state.getDoctorStatus = 'failed'
+        state.getDoctorLoading = false
+        state.getDoctorError = action.error.message
+        state.getDoctorList = []
+    })
+    .addCase(getPatientListData.pending, (state, action) => {
+      state.getPatientStatus = 'loading'
+      state.getPatientLoading = true
+      state.getPatientList = []
+  
+  })
+  .addCase(getPatientListData.fulfilled, (state, action) => {
+      state.getPatientStatus = 'succeeded'
+      state.getPatientLoading = false
+      state.getPatientList = action.payload.data
+     
+  })
+  .addCase(getPatientListData.rejected, (state, action) => {
+      state.getPatientStatus = 'failed'
+      state.getPatientLoading = false
+      state.getPatientError = action.error.message
+      state.getPatientList = []
+  })
+  .addCase(getDoctor.pending, (state, action) => {
+    state.getDoctorDataStatus = 'loading'
+    state.getDoctorDataLoading = true
+    state.getDoctorData = {}
+
+})
+.addCase(getDoctor.fulfilled, (state, action) => {
+    state.getDoctorDataStatus = 'succeeded'
+    state.getDoctorDataLoading = false
+    state.getDoctorData = action.payload.data
+   
+})
+.addCase(getDoctor.rejected, (state, action) => {
+    state.getDoctorDataStatus = 'failed'
+    state.getDoctorDataLoading = false
+    state.getPatientError = action.error.message
+    state.getDoctorData = {}
+})
+.addCase(getPatient.pending, (state, action) => {
+  state.getPatientDataStatus = 'loading'
+  state.getPatientDataLoading = true
+  state.getPatientData = {}
+
+})
+.addCase(getPatient.fulfilled, (state, action) => {
+  state.getPatientDataStatus = 'succeeded'
+  state.getPatientDataLoading = false
+  state.getPatientData = action.payload.data
+ 
+})
+.addCase(getPatient.rejected, (state, action) => {
+  state.getPatientDataStatus = 'failed'
+  state.getPatientDataLoading = false
+  state.getPatientError = action.error.message
+  state.getPatientData = {}
+})
     }
 })
 export default getSlice.reducer

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   LinearProgress,
   Paper,
@@ -19,6 +19,8 @@ import { dataGridHeight, dataGridRowHeight } from "app/utils/constant";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
+import { getPatientListData } from "app/redux/slice/getSlice";
+import { useDispatch, useSelector } from "react-redux";
 // ********************** STYLED COMPONENTS ********************** //
 const Container = styled("div")(({ theme }) => ({
   margin: "15px",
@@ -34,16 +36,31 @@ const Patient = () => {
   // ********************** HOOKS AND CONSTANTS ********************** //
   const theme = useTheme();
   const navigate = useNavigate();
+  const dispatch= useDispatch();
+  
 
   // ********************** LOCAL STATE ********************** //
 
   // ********************** REDUX STATE ********************** //
-
+  const patientRows=useSelector((state)=>state.getSlice.getPatientList)
+  console.log(patientRows,'==patientRows')
+  useEffect
+  (()=>{
+  dispatch(getPatientListData())
+  },[dispatch])
   // ********************** COLUMN AND ROWS ********************** //
   const columns = [
     {
+      headerName: "RecordID",
+      field: "RecordId",
+      width: "150",
+      align: "left",
+      headerAlign: "left",
+      hide: false,
+    },
+    {
       headerName: "First Name",
-      field: "firstname",
+      field: "FirstName",
       width: "150",
       align: "left",
       headerAlign: "left",
@@ -51,7 +68,7 @@ const Patient = () => {
     },
     {
       headerName: "Last Name",
-      field: "lastname",
+      field: "LastName",
       width: "150",
       align: "left",
       headerAlign: "left",
@@ -60,7 +77,7 @@ const Patient = () => {
 
     {
       headerName: "Email",
-      field: "email",
+      field: "Email",
       width: "170",
       align: "left",
       headerAlign: "center",
@@ -68,7 +85,7 @@ const Patient = () => {
     },
     {
       headerName: "Phone",
-      field: "phone",
+      field: "PhoneNumber",
       width: "170",
       align: "right",
       headerAlign: "center",
@@ -76,7 +93,7 @@ const Patient = () => {
     },
     {
       headerName: "Alternate Phone",
-      field: "alternatephone",
+      field: "AlternatePhone",
       width: "170",
       align: "right",
       headerAlign: "center",
@@ -84,7 +101,7 @@ const Patient = () => {
     },
     {
       headerName: "DOB",
-      field: "dateofbirth",
+      field: "DateOfBirth",
       width: "170",
       align: "right",
       headerAlign: "center",
@@ -92,7 +109,7 @@ const Patient = () => {
     },
     {
       headerName: "DOJ",
-      field: "dateofjoining",
+      field: "DateOfJoining",
       width: "170",
       align: "right",
       headerAlign: "center",
@@ -119,7 +136,7 @@ const Patient = () => {
               size="small"
               startIcon={<EditIcon color="action" size="small" />}
               onClick={() => {
-                navigate("/admin/patient-edit");
+                navigate("/admin/patient-edit",{state:{RecordId:params.row.RecordId}});
               }}
             >
               Edit
@@ -130,38 +147,7 @@ const Patient = () => {
     },
   ];
 
-  const rows = [
-    {
-      firstname: "Madhesh",
-      lastname: "Kumar",
-      globalid: "0098",
-      email: "madhesh@gmail.com",
-      phone: "8907655566",
-      alternatephone: "9878985432",
-      dateofbirth: "19-04-1999",
-      dateofjoining: "12-01-2025",
-    },
-    {
-      firstname: "Lokesh",
-      lastname: "Paul",
-      globalid: "0099",
-      email: "lokesh@gmail.com",
-      phone: "7765489023",
-      alternatephone: "8890763452",
-      dateofbirth: "20-08-1998",
-      dateofjoining: "05-01-2025",
-    },
-    {
-      firstname: "Dharma",
-      lastname: "Durai",
-      globalid: "0097",
-      email: "durai@gmail.com",
-      phone: "9089024561",
-      alternatephone: "7612345676",
-      dateofbirth: "09-06-1995",
-      dateofjoining: "02-01-2025",
-    },
-  ];
+
 
   // ********************** TOOLBAR ********************** //
   function CustomToolbar() {
@@ -192,7 +178,7 @@ const Patient = () => {
             size="small"
             startIcon={<AddIcon color="action" size="small" />}
             onClick={() => {
-              navigate("/admin/patient-edit");
+              navigate("/admin/patient-edit",{state:{RecordId:0}});
             }}
           >
             Add
@@ -249,9 +235,9 @@ const Patient = () => {
               toolbar: CustomToolbar,
             }}
             rowHeight={dataGridRowHeight}
-            rows={rows}
+            rows={patientRows}
             columns={columns}
-            getRowId={(row) => row.firstname}
+            getRowId={(row) => row.RecordId}
             initialState={{
               pagination: { paginationModel: { pageSize: 20 } },
             }}
