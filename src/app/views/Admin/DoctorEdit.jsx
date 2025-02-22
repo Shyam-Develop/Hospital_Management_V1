@@ -74,17 +74,16 @@ const DoctorEdit = () => {
 
 
     const doctorData = {
-      RecordId: data.RecordId,
-      FirstName: values.firstName,
-      LastName: values.lastName,
-      GlobalID: values.globalId,
-      Email: values.email,
-      PhoneNumber: values.phoneNumber,
-      AlternatePhone: values.alternatePhone,
-      Qualification: values.qualification,
-      SpecialQualification: values.specialQualification,
-      DateOfBirth: values.dateofbirth,
-      DateOfJoining: values.dateofjoining,
+      DR_FIRSTNAME: values.firstName,
+      DR_LASTNAME: values.lastName,
+      DR_GLOBALID: values.globalId,
+      DR_EMAILID: values.email,
+      DR_PHONENUMBER: values.phoneNumber,
+      DR_ALTERNATEPHONE: values.alternatePhone,
+      DR_QUALIFICATION: values.qualification,
+      DR_SPECIALQUALIFICATION: values.specialQualification,
+      DR_DATEOFBIRTH: values.dateofbirth,
+      DR_DateOfJoining: values.dateofjoining,
     }
     console.log(doctorData);
     if(state.RecordId === 0){
@@ -95,7 +94,7 @@ const DoctorEdit = () => {
     } else {
       toast.error(response.payload.message)
     }}else{
-      const response = await dispatch(PutDoctor({Id:data.RecordId, doctorData }))
+      const response = await dispatch(PutDoctor({Id:state.RecordId, doctorData }))
       console.log(response,'==========================================UPDATE--RESPONSE');
       if (response.payload.status === "Y") {
         toast.success(response.payload.message)
@@ -371,3 +370,7 @@ const DoctorEdit = () => {
 };
 
 export default DoctorEdit;
+// DR_FIRSTNAME = %s, DR_LASTNAME = %s, DR_GLOBALID = %s, 
+// DR_EMAILID = %s, DR_PHONENUMBER = %s, DR_ALTERNATEPHONE = %s, 
+// DR_QUALIFICATION = %s, DR_SPECIALQUALIFICATION = %s, 
+// DR_DATEOFBIRTH = %s, DR_DateOfJoining
