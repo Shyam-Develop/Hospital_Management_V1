@@ -7,11 +7,11 @@ import { getDoctor } from "app/redux/slice/getSlice";
 import { Formik, Field, Form } from "formik";
 import { PostDoctor, PutDoctor } from "app/redux/slice/postSlice";
 import toast from "react-hot-toast";
-import * as Yup from "yup";  
+import * as Yup from "yup";
 
 
 
-// ********************** STYLED COMPONENTS ********************** //
+// ********************* STYLED COMPONENTS ********************* //
 const Container = styled("div")(({ theme }) => ({
   margin: "15px",
   [theme.breakpoints.down("sm")]: { margin: "16px" },
@@ -74,31 +74,33 @@ const DoctorEdit = () => {
 
 
     const doctorData = {
-      DR_FIRSTNAME: values.firstName,
-      DR_LASTNAME: values.lastName,
-      DR_GLOBALID: values.globalId,
-      DR_EMAILID: values.email,
-      DR_PHONENUMBER: values.phoneNumber,
-      DR_ALTERNATEPHONE: values.alternatePhone,
-      DR_QUALIFICATION: values.qualification,
-      DR_SPECIALQUALIFICATION: values.specialQualification,
-      DR_DATEOFBIRTH: values.dateofbirth,
-      DR_DateOfJoining: values.dateofjoining,
+      FirstName: values.firstName,
+      LastName: values.lastName,
+      GlobalId: values.globalId,
+      EmailId: values.email,
+      PhoneNumber: values.phoneNumber,
+      AlernatePhone: values.alternatePhone,
+      Qualification: values.qualification,
+      SpecialQualification: values.specialQualification,
+      DateOfBirth: values.dateofbirth,
+      DateOfJoining: values.dateofjoining,
     }
     console.log(doctorData);
-    if(state.RecordId === 0){
-    const response = await dispatch(PostDoctor({ doctorData }))
-    if (response.payload.status === "Y") {
-      toast.success(response.payload.message)
 
-    } else {
-      toast.error(response.payload.message)
-    }}else{
-      const response = await dispatch(PutDoctor({Id:state.RecordId, doctorData }))
-      console.log(response,'==========================================UPDATE--RESPONSE');
+    if (state.RecordId === 0) {
+      const response = await dispatch(PostDoctor({ doctorData }))
       if (response.payload.status === "Y") {
         toast.success(response.payload.message)
-  
+
+      } else {
+        toast.error(response.payload.message)
+      }
+    } else {
+      const response = await dispatch(PutDoctor({ Id: state.RecordId, doctorData }))
+      console.log(response, '==========================================UPDATE--RESPONSE');
+      if (response.payload.status === "Y") {
+        toast.success(response.payload.message)
+
       } else {
         toast.error(response.payload.message)
       }
@@ -132,7 +134,7 @@ const DoctorEdit = () => {
           dateofbirth: data.DateOfBirth,
           dateofjoining: data.DateOfJoining,
         }}
-        validationSchema={validationSchema} 
+        validationSchema={validationSchema}
         onSubmit={(values) => {
           console.log("Form Values:", values);  // Log all the form values here
           saveDoctorData(values)
@@ -314,9 +316,15 @@ const DoctorEdit = () => {
                   type="date"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  value={values.dateofbirth ? new Date(values.dateofbirth).toISOString().split("T")[0] : ""} error={touched.dateofbirth && Boolean(errors.dateofbirth)}
+                  value={
+                    values.dateofbirth
+                      ? new Date(values.dateofbirth).toISOString().slice(0, 10) // Formats as YYYY-MM-DD
+                      : ""
+                  }
+                  error={touched.dateofbirth && Boolean(errors.dateofbirth)}
                   helperText={touched.dateofbirth && errors.dateofbirth}
                 />
+
               </Grid>
 
               <Grid item xs={12} sm={4}>
@@ -333,7 +341,13 @@ const DoctorEdit = () => {
                   type="date"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  value={values.dateofjoining ? new Date(values.dateofjoining).toISOString().split("T")[0] : ""} error={touched.dateofbirth && Boolean(errors.dateofbirth)}
+
+                  value={
+                    values.dateofjoining
+                      ? new Date(values.dateofjoining).toISOString().slice(0, 10) // Formats as YYYY-MM-DD
+                      : ""
+                  }
+                  error={touched.dateofjoining && Boolean(errors.dateofjoining)}
                   helperText={touched.dateofjoining && errors.dateofjoining}
                 />
               </Grid>
@@ -370,7 +384,7 @@ const DoctorEdit = () => {
 };
 
 export default DoctorEdit;
-// DR_FIRSTNAME = %s, DR_LASTNAME = %s, DR_GLOBALID = %s, 
-// DR_EMAILID = %s, DR_PHONENUMBER = %s, DR_ALTERNATEPHONE = %s, 
-// DR_QUALIFICATION = %s, DR_SPECIALQUALIFICATION = %s, 
+// DR_FIRSTNAME = %s, DR_LASTNAME = %s, DR_GLOBALID = %s,
+// DR_EMAILID = %s, DR_PHONENUMBER = %s, DR_ALTERNATEPHONE = %s,
+// DR_QUALIFICATION = %s, DR_SPECIALQUALIFICATION = %s,
 // DR_DATEOFBIRTH = %s, DR_DateOfJoining

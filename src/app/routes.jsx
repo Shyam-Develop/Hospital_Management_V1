@@ -9,8 +9,11 @@ import DoctorRoutes from "./views/Doctor/DoctorRoutes";
 import AdminRoutes from "./views/Admin/AdminRoutes";
 import PatientRoutes from "./views/Patient/PatientRoutes";
 import PharmacyRoutes from "./views/Pharmacy/PharmacyRoutes";
-
-
+import BillInvoiceRoutes from "./views/Bill&Invoice/BillInvoiceRoutes";
+import PharmacyandManagementRoutes from "./views/Pharmacy&Management/PharmacyandManagementRoutes";
+import LaboratoryandTestManagementRoutes from "./views/Laboratory&TestManagement/LaboratoryAndTestrManagementRoutes";
+import ElectronicHealthRecordsRoutes from "./views/ElectronicHealthRecords/ElectronicHealthRecordsRoutes";
+import UserRolesAndAccessConTrolRoutes from "./views/UserRoles&AccessControl/UserRolesAndAccessControlRoutes";
 
 const routes = [
   {
@@ -25,6 +28,11 @@ const routes = [
       ...AdminRoutes,
       ...PatientRoutes,
       ...PharmacyRoutes,
+      ...BillInvoiceRoutes,
+      ...PharmacyandManagementRoutes,
+      ...LaboratoryandTestManagementRoutes,
+      ...ElectronicHealthRecordsRoutes,
+      ...UserRolesAndAccessConTrolRoutes,
       
       
       { path: "*", element: <UnderDevelopment /> },
