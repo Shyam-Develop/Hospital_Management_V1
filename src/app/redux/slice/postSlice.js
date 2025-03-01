@@ -89,6 +89,44 @@ export const PutDoctor = createAsyncThunk(
     }
   }
 );
+export const PostPatient = createAsyncThunk(
+  "PostPatient/POST",
+  async ({ patientData }, { rejectWithValue }) => {
+    try {
+      const URL = `http://127.0.0.1:5000/patient/postpatient`;
+      const response = await axios.post(URL, patientData, {
+        headers: {
+          "Content-Type":"application/json",
+          Authorization: process.env.REACT_APP_API_TOKEN,
+        },
+      });     
+       return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response ? error.response.data : error.message
+      );
+    }
+  }
+);
+export const PutPatient = createAsyncThunk(
+  "PutPatient/PUT",
+  async ({ Id,patientData }, { rejectWithValue }) => {
+    try {
+      const URL = `http://127.0.0.1:5000/patient/updatepatient/${Id}`;
+      const response = await axios.put(URL, patientData, {
+        headers: {
+          "Content-Type":"application/json",
+          Authorization: process.env.REACT_APP_API_TOKEN,
+        },
+      });      
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response ? error.response.data : error.message
+      );
+    }
+  }
+);
 export const PutHeader = createAsyncThunk(
   "PutDoctor/PUT",
   async ({ Id,hData }, { rejectWithValue }) => {

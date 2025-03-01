@@ -7,7 +7,10 @@ export const authRoles = {
        patient:['PATIENT'],  // Only USER & Admin has access
        doctor:[ 'DOCTOR' ],
        User:[ 'PHARMACY'
-       ]
-
-
+       ],
+       billinvoice:['BillingInvoice'],
+       pharmacyandmanagement:['Pharmacy'],
+       laboratoryandtestmanagement:['Lab'],
+       electtrnichealthrecords:['ERecords'],
+       userrolesandaccesscontrol:['UAAM']
 }

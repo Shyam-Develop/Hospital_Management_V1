@@ -6,8 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPatient } from "app/redux/slice/getSlice";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { PostPatient, PutPatient } from "app/redux/slice/postSlice";
+import toast from "react-hot-toast";
 
-// ********************** STYLED COMPONENTS ********************** //
+// ********************* STYLED COMPONENTS ********************* //
 const Container = styled("div")(({ theme }) => ({
   margin: "15px",
   [theme.breakpoints.down("sm")]: { margin: "16px" },
@@ -56,7 +58,36 @@ const PatientEdit = () => {
   //   }
   //   console.log(patientdata)
   // }
+  const savePatientData = async (values) => {
+    const patientData = {
+      FirstName: values.firstName,
+      LastName: values.lastName,
+      EmailId: values.email,
+      PhoneNumber: values.phoneNumber,
+      AlternatePhone: values.alternatePhone,
+      DateOfBirth: values.dateofbirth,
+      DateOfJoining: values.dateofjoining,
+    }
+    console.log(patientData)
+    if (state.RecordId === 0) {
+      const response = await dispatch(PostPatient({ patientData }))
+      if (response.payload.status === "Y") {
+        toast.success(response.payload.message)
 
+      } else {
+        toast.error(response.payload.message)
+      }
+    } else {
+      const response = await dispatch(PutPatient({ Id: state.RecordId, patientData }))
+      console.log(response, '==========================================UPDATE--RESPONSE');
+      if (response.payload.status === "Y") {
+        toast.success(response.payload.message)
+
+      } else {
+        toast.error(response.payload.message)
+      }
+    }
+  }
   return (
     <Container>
        {status === "succeeded" && !error ? (

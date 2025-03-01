@@ -44,10 +44,7 @@ export const navigations = [
             icon: <DescriptionIcon fontSize="small" />,
             role: authRoles.doctor,
           },
-      
- 
-        
-              {
+                        {
                 name: "Doctor",
                 path: "/admin/doctor",
                 iconText: "V",
@@ -71,6 +68,53 @@ export const navigations = [
                 icon: <DescriptionIcon fontSize="small" />,
                 role: authRoles.User,
               },
-           
-         
+              {
+                name: "Billing & Invoice",
+                path: "/BillingInvoice/bill-invoice",
+                iconText: "V",
+                accessID: null,
+                icon: <DescriptionIcon fontSize="small" />,
+                role: authRoles.billinvoice,
+              },
+              {
+                name: "Pharmacy & Management",
+                path: "/Pharmacy/pharmacy-and-management",
+                iconText: "V",
+                accessID: null,
+                icon: <DescriptionIcon fontSize="small" />,
+                role: authRoles.pharmacyandmanagement,
+              },
+              {
+                name: "Lab & TestManagement",
+                path: "/Lab/laboratory-and-test-management",
+                iconText: "V",
+                accessID: null,
+                icon: <DescriptionIcon fontSize="small" />,
+                role: authRoles.laboratoryandtestmanagement,
+              },
+              {
+                name: "ElectronicHealthRecords",
+                path: "/ERecords/electronic-health-records",
+                iconText: "V",
+                accessID: null,
+                icon: <DescriptionIcon fontSize="small" />,
+                role: authRoles.electtrnichealthrecords,
+              },
+              {
+                name: "Users",
+                path: "/UAAM/users",
+                iconText: "V",
+                accessID: null,
+                icon: <DescriptionIcon fontSize="small" />,
+                role: authRoles.userrolesandaccesscontrol,
+              },
+              {
+                name: "User Portals",
+                path: "/UAAM/user-list",
+                iconText: "V",
+                accessID: null,
+                icon: <DescriptionIcon fontSize="small" />,
+                role: authRoles.userrolesandaccesscontrol,
+              },
+              
         ]

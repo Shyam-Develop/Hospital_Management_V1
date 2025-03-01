@@ -8,10 +8,10 @@ import { Formik, Field, Form } from "formik";
 import { PostDoctor, PutDoctor } from "app/redux/slice/postSlice";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
-import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 
 
-// ********************** STYLED COMPONENTS ********************** //
+
+// ********************* STYLED COMPONENTS ********************* //
 const Container = styled("div")(({ theme }) => ({
   margin: "15px",
   [theme.breakpoints.down("sm")]: { margin: "16px" },
@@ -78,6 +78,16 @@ const DoctorEdit = () => {
 
 
     const doctorData = {
+      FirstName: values.firstName,
+      LastName: values.lastName,
+      GlobalId: values.globalId,
+      EmailId: values.email,
+      PhoneNumber: values.phoneNumber,
+      AlernatePhone: values.alternatePhone,
+      Qualification: values.qualification,
+      SpecialQualification: values.specialQualification,
+      DateOfBirth: values.dateofbirth,
+      DateOfJoining: values.dateofjoining,
       FirstName: values.firstName,
       LastName: values.lastName,
       GlobalId: values.globalId,
