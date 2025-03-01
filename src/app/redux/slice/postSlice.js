@@ -89,6 +89,24 @@ export const PutDoctor = createAsyncThunk(
     }
   }
 );
+export const PutHeader = createAsyncThunk(
+  "PutDoctor/PUT",
+  async ({ Id,hData }, { rejectWithValue }) => {
+    try {
+      const URL = `http://127.0.0.1:5000/hms_header/updateheader/${Id}`;
+      const response = await axios.put(URL, hData, {
+        headers: {
+          "Content-Type":"application/json",
+          Authorization: process.env.REACT_APP_API_TOKEN,
+        },
+      });      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response ? error.response.data : error.message
+      );
+    }
+  }
+);
 const postSlice = createSlice({
   name: "postSlice",
   initialState,

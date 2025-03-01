@@ -25,6 +25,10 @@ const initialState = {
    getPatientDataStatus:'idle',
    getPatientDataLoading:false,
    getPatientDataError:null,
+   getPaymentData:{},
+   getPaymentDataStatus:'idle',
+   getPaymentDataLoading:false,
+   getPaymentDataError:null,
   
 
 
@@ -100,6 +104,19 @@ export const getPharmacyListData = createAsyncThunk(
     async ( {id},{ rejectWithValue }) => {
       try {
         const URL = `http://127.0.0.1:5000/api/getpatient/${id}`;
+        const response = await axios.get(URL); // Removed the Authorization header
+        return response.data; // return the response data
+      } catch (error) {
+        // If the request fails, return a custom error message
+        return rejectWithValue(error.response ? error.response.data : error.message);
+      }
+    }
+  );
+  export const getPayment= createAsyncThunk(
+    'get/getPayment', // action type
+    async ( {id},{ rejectWithValue }) => {
+      try {
+        const URL = `http://127.0.0.1:5000/header/getheader/P/${id}`;
         const response = await axios.get(URL); // Removed the Authorization header
         return response.data; // return the response data
       } catch (error) {
@@ -202,7 +219,7 @@ const getSlice = createSlice({
 .addCase(getDoctor.rejected, (state, action) => {
     state.getDoctorDataStatus = 'failed'
     state.getDoctorDataLoading = false
-    state.getPatientError = action.error.message
+    state.getDoctorDataError = action.error.message
     state.getDoctorData = {}
 })
 .addCase(getPatient.pending, (state, action) => {
@@ -220,10 +237,32 @@ const getSlice = createSlice({
 .addCase(getPatient.rejected, (state, action) => {
   state.getPatientDataStatus = 'failed'
   state.getPatientDataLoading = false
-  state.getPatientError = action.error.message
+  state.getPatientDataError = action.error.message
   state.getPatientData = {}
 })
-    }
+.addCase(getPayment.pending, (state, action) => {
+  state.getPaymentDataStatus = 'loading'
+  state.getPaymentDataLoading = true
+  state.getPaymentData = {}
+
+})
+.addCase(getPayment.fulfilled, (state, action) => {
+  state.getPaymentDataStatus = 'succeeded'
+  state.getPaymentDataLoading = false
+  state.getPaymentData = action.payload.data
+ 
+})
+.addCase(getPayment.rejected, (state, action) => {
+  state.getPaymentDataStatus = 'failed'
+  state.getPaymentDataLoading = false
+  state.getPaymentError = action.error.message
+  state.getPaymentData = {}
+})
+    
+
+
+
+}
 })
 export default getSlice.reducer
 

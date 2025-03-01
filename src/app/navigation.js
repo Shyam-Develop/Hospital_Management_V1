@@ -65,7 +65,7 @@ export const navigations = [
               },
               {
                 name: "Pharmacy",
-                path: "/pharmacy/pharmacy",
+                path: "/pharmacy/pharmacy-edit",
                 iconText: "V",
                 accessID: null,
                 icon: <DescriptionIcon fontSize="small" />,
