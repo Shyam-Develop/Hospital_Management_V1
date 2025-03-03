@@ -16,11 +16,13 @@ import { Breadcrumb } from "app/components";
 import { dataGridHeight, dataGridRowHeight } from "app/utils/constant";
 
 // ********************** ICONS ********************** //
+import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
-import AddIcon from "@mui/icons-material/Add";
+import { getPatientListData } from "app/redux/slice/getSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { getDoctorListData } from "app/redux/slice/getSlice";
+import SearchIcon from '@mui/icons-material/Search';
+import PaymentIcon from '@mui/icons-material/Payment'; // Import the payment icon
 
 
 // ********************** STYLED COMPONENTS ********************** //
@@ -38,187 +40,171 @@ const BillingInvoice = () => {
   // ********************** HOOKS AND CONSTANTS ********************** //
   const theme = useTheme();
   const navigate = useNavigate();
-  const dispatch= useDispatch();
+  const dispatch = useDispatch();
+
+
   // ********************** LOCAL STATE ********************** //
 
   // ********************** REDUX STATE ********************** //
-  const doctorRows=useSelector((state)=>state.getSlice.getDoctorList)
-  console.log(doctorRows,'==DoctorRows')
-  useEffect
-  (()=>{
-  dispatch(getDoctorListData())
-  },[dispatch])
+  
   // ********************** COLUMN AND ROWS ********************** //
+  const rows = [
+    {
+      RecordId: "1",
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      alternatePhone: "",
+      dateOfBirth: "",
+      dateOfJoining: "",
+
+    }
+  ]
   const columns = [
-    // {
-    //   headerName: "RECID",
-    //   field: "RecordId",
-    //   width: "150",
-    //   align: "left",
-    //   headerAlign: "left",
-    //   hide: false,
-    // },
-    // {
-    //   headerName: "First Name",
-    //   field: "FirstName",
-    //   width: "150",
-    //   align: "left",
-    //   headerAlign: "left",
-    //   hide: true,
-    // },
-    // {
-    //   headerName: "Last Name",
-    //   field: "LastName",
-    //   width: "150",
-    //   align: "left",
-    //   headerAlign: "left",
-    //   hide: false,
-    // },
-    // {
-    //   headerName: "Global ID",
-    //   field: "GlobalID",
-    //   width: "100",
-    //   align: "right",
-    //   headerAlign: "left",
-    //   hide: false,
-    // },
-    // {
-    //   headerName: "Email",
-    //   field: "Email",
-    //   width: "170",
-    //   align: "left",
-    //   headerAlign: "center",
-    //   hide: false,
-    // },
-    // {
-    //   headerName: "Phone",
-    //   field: "PhoneNumber",
-    //   width: "170",
-    //   align: "right",
-    //   headerAlign: "center",
-    //   hide: false,
-    // },
-    // {
-    //   headerName: "Alternate Phone",
-    //   field: "AlternatePhone",
-    //   width: "170",
-    //   align: "right",
-    //   headerAlign: "center",
-    //   hide: false,
-    // },
-    // {
-    //   headerName: "Qualification",
-    //   field: "Qualification",
-    //   width: "150",
-    //   align: "left",
-    //   headerAlign: "center",
-    //   hide: false,
-    // },
-    // {
-    //   headerName: "Special Qualification",
-    //   field: "SpecialQualification",
-    //   width: "170",
-    //   align: "left",
-    //   headerAlign: "center",
-    //   hide: false,
-    // },
-    // {
-    //   headerName: "DOB",
-    //   field: "DateOfBirth",
-    //   width: "170",
-    //   align: "right",
-    //   headerAlign: "center",
-    //   hide: false,
-    // },
-    // {
-    //   headerName: "DOJ",
-    //   field: "DateOfJoining",
-    //   width: "170",
-    //   align: "right",
-    //   headerAlign: "center",
-    //   hide: false,
-    // },
-    // {
-    //   field: "Action",
-    //   headerName: "Action",
-    //   minWidth: 300,
-    //   flex: 1,
-    //   sortable: false,
-    //   headerAlign: "center",
-    //   filterable: false,
-    //   disableColumnMenu: true,
-    //   disableExport: true,
-    //   align: "center",
-    //   renderCell: (params) => {
-    //     return (
-    //       <div>
-    //         <Button
-    //           sx={{ height: 25, marginLeft: 1 }}
-    //           variant="contained"
-    //           color="primary"
-    //           size="small"
-    //           startIcon={<EditIcon color="action" size="small" />}
-    //           onClick={() => {
-    //             navigate("/admin/doctor-edit",{state:{RecordId:params.row.RecordId}});
-    //           }}
-    //         >
-    //           Edit
-    //         </Button>
-    //       </div>
-    //     );
-    //   },
-    // },
+    {
+      headerName: "RecordID",
+      field: "RecordId",
+      width: "150",
+      align: "left",
+      headerAlign: "left",
+      hide: false,
+    },
+    {
+      headerName: "First Name",
+      field: "firstName",
+      width: "150",
+      align: "left",
+      headerAlign: "left",
+      hide: true,
+    },
+    {
+      headerName: "Last Name",
+      field: "lastName",
+      width: "150",
+      align: "left",
+      headerAlign: "left",
+      hide: false,
+    },
+
+    {
+      headerName: "Email",
+      field: "email",
+      width: "170",
+      align: "left",
+      headerAlign: "center",
+      hide: false,
+    },
+    {
+      headerName: "Phone",
+      field: "phoneNumber",
+      width: "170",
+      align: "right",
+      headerAlign: "center",
+      hide: false,
+    },
+    {
+      headerName: "Alternate Phone",
+      field: "alternatePhone",
+      width: "170",
+      align: "right",
+      headerAlign: "center",
+      hide: false,
+    },
+    {
+      headerName: "DOB",
+      field: "dateOfBirth",
+      width: "170",
+      align: "right",
+      headerAlign: "center",
+      hide: false,
+    },
+    {
+      headerName: "DOJ",
+      field: "dateOfJoining",
+      width: "170",
+      align: "right",
+      headerAlign: "center",
+      hide: false,
+    },
+    {
+      field: "Action",
+      headerName: "Action",
+      minWidth: 300,
+      flex: 1,
+      sortable: false,
+      headerAlign: "center",
+      filterable: false,
+      disableColumnMenu: true,
+      disableExport: true,
+      align: "center",
+      renderCell: (params) => {
+        return (
+          <div>
+
+            <Button
+              sx={{ height: 25, marginLeft: 1 }}
+              variant="contained"
+              color="primary"
+              size="small"
+              onClick={() => {
+                navigate("/BillingInvoice/bill-and-invoice-edit");
+              }}
+            >
+              Edit
+            </Button>
+
+          </div>
+        );
+      },
+    },
   ];
 
- 
+
 
   // ********************** TOOLBAR ********************** //
-  // ********************** TOOLBAR ********************** //
   function CustomToolbar() {
-    // return (
-    //   <GridToolbarContainer
-    //     sx={{
-    //       display: "flex",
-    //       flexDirection: "row",
-    //       justifyContent: "flex-end", // Align everything to the right
-    //       width: "100%",
-    //       padding: 0.5,
-    //     }}
-    //   >
-    //     <Box
-    //       sx={{
-    //         display: "flex",
-    //         flexDirection: "row",
-    //         alignItems: "center",
-    //         gap: 1,
-    //       }}
-    //     >
-    //       <GridToolbarQuickFilter />
-    //       {/* Add Button next to the search box */}
-    //       <Button
-    //         sx={{ height: 25, marginLeft: 1 }}
-    //         variant="contained"
-    //         color="primary"
-    //         size="small"
-    //         startIcon={<AddIcon color="action" size="small" />}
-    //         onClick={() => {
-    //           navigate("/admin/doctor-edit",{state:{RecordId:0}});
-    //         }}
-    //       >
-    //         Add
-    //       </Button>
-    //     </Box>
-    //   </GridToolbarContainer>
-    // );
+    return (
+      <GridToolbarContainer
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-end", // Align everything to the right
+          width: "100%",
+          padding: 0.5,
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <GridToolbarQuickFilter />
+          <Button
+            sx={{ height: 25, marginLeft: 1 }}
+            variant="contained"
+            color="primary"
+            size="small"
+            onClick={() => {
+            }}
+          >
+            Search
+          </Button>
+        </Box>
+      </GridToolbarContainer>
+    );
   }
 
   return (
     <Container>
       <div className="breadcrumb">
-        <Breadcrumb routeSegments={[{ name: " " }]} />
+        <Breadcrumb routeSegments={[{ name: "BillingInvoice" }]} />
       </div>
 
-      {/* <Paper sx={{ width: "100%", mb: 2 }}>
+      <Paper sx={{ width: "100%", mb: 2 }}>
         <Box
           sx={{
             height: dataGridHeight,
@@ -236,7 +222,6 @@ const BillingInvoice = () => {
               color: theme.palette.info.contrastText,
               fontWeight: "bold",
               fontSize: theme.typography.subtitle2.fontSize,
-              
             },
             "& .MuiDataGrid-virtualScroller": {
               backgroundColor: theme.palette.info.light,
@@ -260,15 +245,14 @@ const BillingInvoice = () => {
               toolbar: CustomToolbar,
             }}
             rowHeight={dataGridRowHeight}
-            rows={doctorRows}
+            rows={rows}
             columns={columns}
-            getRowId={(row) => row.RecordId}
+            getRowId={(row) => row.firstName}
             initialState={{
               pagination: { paginationModel: { pageSize: 20 } },
             }}
             pageSizeOptions={[5, 10, 20, 25]}
             columnVisibilityModel={{
-              doctorname: true,
               RecordId: false,
             }}
             disableColumnFilter
@@ -283,7 +267,7 @@ const BillingInvoice = () => {
             disableRowSelectionOnClick
           />
         </Box>
-      </Paper> */}
+      </Paper>
     </Container>
   );
 };

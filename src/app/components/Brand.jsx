@@ -9,11 +9,11 @@ const BrandRoot = styled(Box)(() => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  padding: '20px 18px 20px 59px',
+  padding: '5px 18px 20px 59px',
 }));
 
 const StyledSpan = styled(Span)(({ mode }) => ({
-  fontSize: 32,
+  fontSize: 20,
   marginLeft: '0rem',
   display: mode === 'compact' ? 'none' : 'block',
 }));
@@ -24,6 +24,7 @@ const Heading = styled('h')({
   fontWeight: 'bold',
   color: '#333', // You can change the color as needed
   marginTop: '1px', // Reduced marginTop to decrease space below the heading
+  marginRight: '-5PX'
 });
 
 const Brand = ({ children }) => {
@@ -36,7 +37,7 @@ const Brand = ({ children }) => {
     <BrandRoot>
       <Link to={"/home"}>
         <Box display="flex" alignItems="center" flexDirection="column" textAlign="center">
-          <img src={"/assets/images/lo.png"} height={80} style={{ objectFit: "cover" }} />
+          <img src={"/assets/images/lo.png"} height={50} style={{ objectFit: "cover" }} />
           <StyledSpan mode={mode} className="sidenavHoverShow">
             HMS
           </StyledSpan>
@@ -46,9 +47,17 @@ const Brand = ({ children }) => {
         </Box>
       </Link>
 
-      <Box className="sidenavHoverShow" sx={{ display: mode === 'compact' ? 'none' : 'block' }}>
-        {children || null}
-      </Box>
+      <Box 
+  className="sidenavHoverShow" 
+  sx={{ 
+    display: mode === 'compact' ? 'none' : 'block', 
+    position: 'relative',
+    top: '10px' 
+  }}
+>
+  {children || null}
+</Box>
+
     </BrandRoot>
   );
 };

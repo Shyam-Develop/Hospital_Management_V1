@@ -1,15 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Grid, Typography, TextField, Button, Box } from "@mui/material";
+import React from "react";
+import { Grid, Typography, TextField, Button, Box, Checkbox, FormControlLabel } from "@mui/material";
 import { styled } from "@mui/system";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getDoctor } from "app/redux/slice/getSlice";
+import { useDispatch } from "react-redux";
 import { Formik, Field, Form } from "formik";
-import { PostDoctor, PutDoctor } from "app/redux/slice/postSlice";
-import toast from "react-hot-toast";
-import * as Yup from "yup";
-
-
 
 // ********************* STYLED COMPONENTS ********************* //
 const Container = styled("div")(({ theme }) => ({
@@ -20,9 +14,6 @@ const Container = styled("div")(({ theme }) => ({
     [theme.breakpoints.down("sm")]: { marginBottom: "16px" },
   },
 }));
-
-
-
 
 const UserEdit = () => {
   const dispatch = useDispatch();
@@ -48,16 +39,17 @@ const UserEdit = () => {
 
       <Formik
         initialValues={{
-     
+          name: "",
+          userPortal: "",
+          password: "",
+          confirmPassword: "",
+          email: "",
         }}
         onSubmit={(values) => {
+          // Handle form submission logic here
         }}
       >
-        {({ errors,
-          touched,
-          handleChange,
-          handleBlur,
-          values }) => (
+        {({ errors, touched, handleChange, handleBlur, values }) => (
           <Form>
             <Grid container spacing={2} alignItems="center" sx={{ mb: 2 }}>
               <Grid item xs={12} sm={4}>
@@ -75,9 +67,6 @@ const UserEdit = () => {
                   onBlur={handleBlur}
                 />
               </Grid>
-
-
-
 
               <Grid item xs={12} sm={4}>
                 <Typography sx={{ fontWeight: "bold" }}>User Portal:</Typography>
@@ -141,17 +130,91 @@ const UserEdit = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-              </Grid>    
+              </Grid>
+
+              {/* Add the new MODULES heading below the Email field */}
+              <Grid item xs={12} sm={4}>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    fontSize: "2rem",
+                    textAlign: "left",
+                    fontWeight: "bold",
+                    marginBottom: 2,
+                    marginTop: 2,
+                  }}
+                >
+                  Modules
+                </Typography>
+              </Grid>
+
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, marginLeft: 4 }}>
+  {/* First row */}
+  <Box sx={{ flexBasis: '26%' }}>
+    <FormControlLabel
+      control={<Checkbox size="large" />}
+      label="Patient"
+    />
+  </Box>
+
+  <Box sx={{ flexBasis: '26%' }}>
+    <FormControlLabel
+      control={<Checkbox size="large" />}
+      label="Doctor"
+    />
+  </Box>
+
+  <Box sx={{ flexBasis: '26%' }}>
+    <FormControlLabel
+      control={<Checkbox size="large" />}
+      label="Pharmacy"
+    />
+  </Box>
+
+  {/* Second row */}
+  <Box sx={{ flexBasis: '26%' }}>
+    <FormControlLabel
+      control={<Checkbox size="large" />}
+      label="Admin"
+    />
+  </Box>
+
+  <Box sx={{ flexBasis: '26%' }}>
+    <FormControlLabel
+      control={<Checkbox size="large" />}
+      label="Bill&Invoice"
+    />
+  </Box>
+
+  <Box sx={{ flexBasis: '26%' }}>
+    <FormControlLabel
+      control={<Checkbox size="large" />}
+      label="Lab&TestManagement"
+    />
+  </Box>
+
+  {/* Third row */}
+  <Box sx={{ flexBasis: '26%' }}>
+    <FormControlLabel
+      control={<Checkbox size="large" />}
+      label="ElectricHealthRecord"
+    />
+  </Box>
+
+  <Box sx={{ flexBasis: '26%' }}>
+    <FormControlLabel
+      control={<Checkbox size="large" />}
+      label="UAAM"
+    />
+  </Box>
+</Box>
+
             </Grid>
 
             <Box mt={2}>
               <Grid container justifyContent="flex-end" spacing={1}>
                 <Grid item>
-                  <Button variant="contained"
-                    color="primary"
-                    type="submit">
-
-
+                  <Button variant="contained" color="primary" type="submit">
                     Save
                   </Button>
                 </Grid>
@@ -175,7 +238,3 @@ const UserEdit = () => {
 };
 
 export default UserEdit;
-// DR_FIRSTNAME = %s, DR_LASTNAME = %s, DR_GLOBALID = %s,
-// DR_EMAILID = %s, DR_PHONENUMBER = %s, DR_ALTERNATEPHONE = %s,
-// DR_QUALIFICATION = %s, DR_SPECIALQUALIFICATION = %s,
-// DR_DATEOFBIRTH = %s, DR_DateOfJoining

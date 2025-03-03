@@ -84,7 +84,7 @@ export default function BillingandInvoice() {
     setLoading(true);
     try {
       await login(values.email, values.password);
-      navigate("/BillingInvoice/bill-invoice");
+      navigate("/home");
     } catch (e) {
       alert(e);
       setLoading(false);

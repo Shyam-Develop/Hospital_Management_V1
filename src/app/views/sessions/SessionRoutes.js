@@ -15,7 +15,6 @@ const UnlockPassword = Loadable(lazy(() => import('./UnLockPassword')));
 const Notification = Loadable(lazy(() => import('./Notificaion')));
 const LoginUser = Loadable(lazy(() => import('./Login')));
 const BillandInvoice = Loadable(lazy(() => import('./BillandInvoice')));
-const Pharmacyandmanagement = Loadable(lazy(() => import('./Pharmacyandmanagement')));
 const LaboratoryandTestManagement = Loadable(lazy(() => import('./LaboratoryandTestManagement')));
 const ElectronicHealthRecords = Loadable(lazy(() => import('./ElectronicHealthRecords')));
 const UserRolesandAccessControl = Loadable(lazy(() => import('./UserRolesandAccessControl')));
@@ -34,7 +33,6 @@ const sessionRoutes = [
   { path: '/session/unlock-password/:notificationName', element: <Notification/> },
   { path: '/session/404', element: <NotFound /> },
   { path: '/session/billing-and-invoice', element: <BillandInvoice /> },
-  { path: '/session/pharmacy-and-management', element: <Pharmacyandmanagement /> },
   { path: '/session/laboratory-and-test-management', element: <LaboratoryandTestManagement /> },
   { path: '/session/electronic-health-records', element: <ElectronicHealthRecords /> },
   { path: '/session/user-roles-and-access-control', element: <UserRolesandAccessControl /> },
