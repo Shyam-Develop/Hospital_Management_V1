@@ -108,13 +108,6 @@ export const navigations = [
                 icon: <DescriptionIcon fontSize="small" />,
                 role: authRoles.userrolesandaccesscontrol,
               },
-              {
-                name: "User Portals",
-                path: "/UAAM/user-list",
-                iconText: "V",
-                accessID: null,
-                icon: <DescriptionIcon fontSize="small" />,
-                role: authRoles.userrolesandaccesscontrol,
-              },
+             
               
         ]

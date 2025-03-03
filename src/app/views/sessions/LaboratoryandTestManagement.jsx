@@ -84,7 +84,7 @@ export default function LaboratoryandTestManagement() {
     setLoading(true);
     try {
       await login(values.email, values.password);
-      navigate("/Lab/laboratory-and-test-management");
+      navigate("/home");
     } catch (e) {
       alert(e);
       setLoading(false);

@@ -57,11 +57,7 @@ export default function LoginPortal() {
       path: "/session/billing-and-invoice",
       icon: <AttachMoneyIcon color="primary" /> // Use the new icon
     },
-    {
-      label: "Pharmacy and Management",
-      path: "/session/pharmacy-and-management",
-      icon: <SupervisorAccountIcon color="primary" />  // Change icon to SupervisorAccountIcon for management
-    },
+    
     { label: "Laboratory and Test Management", path: "/session/laboratory-and-test-management", icon: <ScienceIcon color="primary" /> },
     {
       label: "Electronic Health Records",
