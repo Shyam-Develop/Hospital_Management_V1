@@ -158,7 +158,7 @@ export const FormikOptimizedAutocomplete = ({
         } catch (error) {
           // console.error("Error fetching data:", error);
           setOptions([]);
-          setError(error.response ? error.response.data.message: error.message);
+          // setError(error.response ? error.response.data.message: error.message);
           // setError("Failed to load. Please try again.");
         } finally {
           setLoading(false);

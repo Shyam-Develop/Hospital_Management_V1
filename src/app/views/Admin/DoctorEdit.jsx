@@ -63,17 +63,31 @@ const DoctorEdit = () => {
 
   // Get doctor data from Redux store
   const data = useSelector((state) => state.getSlice.getDoctorData);
+  const status = useSelector((state) => state.getSlice.getDoctorDataStatus);
+
+  console.log(status, "status");
+  const error = useSelector((state) => state.getSlice.getDoctorDataError);
   console.log(data, "==DoctorData");
 
   useEffect(() => {
     dispatch(getDoctor({ id: state.RecordId }));
-  }, [dispatch, state.RecordId]);
+  }, []);
 
 
   const saveDoctorData = async (values) => {
 
 
     const doctorData = {
+      FirstName: values.firstName,
+      LastName: values.lastName,
+      GlobalId: values.globalId,
+      EmailId: values.email,
+      PhoneNumber: values.phoneNumber,
+      AlernatePhone: values.alternatePhone,
+      Qualification: values.qualification,
+      SpecialQualification: values.specialQualification,
+      DateOfBirth: values.dateofbirth,
+      DateOfJoining: values.dateofjoining,
       FirstName: values.firstName,
       LastName: values.lastName,
       GlobalId: values.globalId,
@@ -98,7 +112,7 @@ const DoctorEdit = () => {
     } else {
       const response = await dispatch(PutDoctor({ Id: state.RecordId, doctorData }))
       console.log(response, '==========================================UPDATE--RESPONSE');
-      if (response.payload.status === "Y") {
+      if (response.payload.status === "y") {
         toast.success(response.payload.message)
 
       } else {
@@ -107,8 +121,59 @@ const DoctorEdit = () => {
     }
   }
 
+
+
+  //======================================================================================================================//
+  // const CHARACTER_LIMIT = 100;
+
+  // const [numberEmptyError, setNumberEmptyError] = useState(false);
+  // const [messageEmptyError, setMessageEmptyError] = useState(false);
+
+  // const [formData, setFormData] = useState({
+  //   mobileNumber: "",
+  //   message: "",
+  // });
+
+  // const { mobileNumber, message } = formData;
+
+  // const onChange = (e) => {
+  //   e.preventDefault();
+  //   setFormData({
+  //     ...formData,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
+
+  // const onSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (mobileNumber.length < 1) {
+  //     setNumberEmptyError(true);
+  //     setTimeout(() => setNumberEmptyError(false), 3000);
+  //   } else if (message.length < 1) {
+  //     setMessageEmptyError(true);
+  //     setTimeout(() => setMessageEmptyError(false), 3000);
+  //   } else {
+
+  //     // Regex expression to remove all characters which are NOT alphanumeric 
+  //     let number = mobileNumber.replace(/[^\w\s]/gi, "").replace(/ /g, "");
+
+  //     // Appending the phone number to the URL
+  //     let url = `https://web.whatsapp.com/send?phone=${number}`;
+
+  //     // Appending the message to the URL by encoding it
+  //     url += `&text=${encodeURI(message)}&app_absent=0`;
+
+  //     // Open our newly created URL in a new tab to send the message
+  //     window.open(url);
+
+  //   }
+  // };
   return (
+
+
     <Container>
+    {status === "succeeded" && !error ? (
+      <>
       <Typography
         variant="h5"
         sx={{
@@ -375,11 +440,23 @@ const DoctorEdit = () => {
                   </Button>
                 </Grid>
               </Grid>
+
             </Box>
           </Form>
         )}
       </Formik>
+
+
+</>
+  ) : (
+      false
+    )}
     </Container>
+  
+
+
+
+
   );
 };
 

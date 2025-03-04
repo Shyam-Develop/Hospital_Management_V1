@@ -26,7 +26,8 @@ const PatientEdit = () => {
   const state = location.state;
 
   const data = useSelector((state) => state.getSlice.getPatientData);
-  
+  const status= useSelector((state) => state.getSlice.getPatientDataStatus);
+    const error= useSelector((state) => state.getSlice.getPatientDataError);
   useEffect(() => {
     dispatch(getPatient({ id: state.RecordId }));
   }, [dispatch, state.RecordId]);
@@ -88,32 +89,21 @@ const PatientEdit = () => {
     }
   }
   return (
-     <Container>
-          <Typography
-            variant="h5"
-            sx={{
-              fontSize: "2rem",
-              textAlign: "left",
-              fontWeight: "bold",
-              marginBottom: 3,
-            }}
-          >
-            Patient Form
-          </Typography>
+    <Container>
+       {status === "succeeded" && !error ? (
+<>
     <Formik
     initialValues={{
       firstName: data?.FirstName || "",
       lastName: data?.LastName || "",
-      email: data?.Email|| "",
+      email: data?.Email || "",
       phoneNumber: data?.Phone || "",
       alternatePhone: data?.AlternatePhone || "",
       dateofbirth: data?.DateOfBirth || "",
       dateofjoining: data?.DateOfJoining || "",
     }}
-
     onSubmit={(values) => {
       console.log("Form Values:", values);
-      savePatientData(values)
     }}
   >
     {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
@@ -125,10 +115,11 @@ const PatientEdit = () => {
           <Grid item xs={12} sm={8}>
             <TextField
               fullWidth
-              variant="standard"
+              variant="outlined"
               id="firstName"
               name="firstName"
               size="small"
+              label="First Name"
               value={values.firstName}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -143,8 +134,9 @@ const PatientEdit = () => {
           <Grid item xs={12} sm={8}>
             <TextField
               fullWidth
-              variant="standard"
+              variant="outlined"
               size="small"
+              label="Last Name"
               id="lastName"
               name="lastName"
               value={values.lastName}
@@ -161,10 +153,11 @@ const PatientEdit = () => {
           <Grid item xs={12} sm={8}>
             <TextField
               fullWidth
-              variant="standard"
+              variant="outlined"
               size="small"
               id="email"
               name="email"
+              label="Email ID"
               value={values.email}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -179,10 +172,11 @@ const PatientEdit = () => {
           <Grid item xs={12} sm={8}>
             <TextField
               fullWidth
-              variant="standard"
+              variant="outlined"
               size="small"
               id="phoneNumber"
               name="phoneNumber"
+              label="Phone Number"
               value={values.phoneNumber}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -197,8 +191,9 @@ const PatientEdit = () => {
           <Grid item xs={12} sm={8}>
             <TextField
               fullWidth
-              variant="standard"
+              variant="outlined"
               size="small"
+              label="Alternate Phone"
               id="alternatePhone"
               name="alternatePhone"
               value={values.alternatePhone}
@@ -215,7 +210,7 @@ const PatientEdit = () => {
               fullWidth
               name="dateofbirth"
               id="dateofbirth"
-              variant="standard"
+              variant="outlined"
               size="small"
               type="date"
               value={values.dateofbirth ? new Date(values.dateofbirth).toISOString().split("T")[0] : ""} 
@@ -234,7 +229,7 @@ const PatientEdit = () => {
               fullWidth
               name="dateofjoining"
               id="dateofjoining"
-              variant="standard"
+              variant="outlined"
               size="small"
               type="date"
               value={values.dateofjoining ? new Date(values.dateofjoining).toISOString().split("T")[0] : ""} 
@@ -262,9 +257,11 @@ const PatientEdit = () => {
       </form>
     )}
   </Formik>
+  </>
+    ) : (
+      false
+    )}
       </Container>
-
-  
   );
 };
 

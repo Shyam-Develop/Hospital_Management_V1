@@ -80,7 +80,7 @@ const [Cgst, setCgst] = useState("");
 const [Disc, setDisc] = useState("");
  const[seletcedCategoryID,setseletcedCategoryID]=useState(null);
  const[selectedCustoreID,setselectedCustoreID]=useState(null);
-
+const[buttonEnable ,setButtonEnable]=useState(false)
 console.log(selectedCustoreID,'===============selectedCustoreID')
  // ******************** REDUX STATE ******************** //
 const data=useSelector((state)=>state.getSlice.getQueueList);
@@ -527,63 +527,7 @@ if(response.payload.status === "Y"){
  
   };
   //==================================================================processRowUpdate=========================================================================//
-//   const processRowUpdate = (newRow, oldRow) => {
-//     console.log("------inside processrowupdate");
-//     console.log(newRow, "--find newRow");
-  
-//     const isNew = !oldRow?.RecordID; // Check if this is a new row
-//     const updatedRow = { ...newRow, isNew }; // Add `isNew` flag to row data
-    
 
-// const priceMount=Number(updatedRow?.price -Number(updatedRow?.price * updatedRow?.discount/100))
-
-// console.log(priceMount,'==================priceMount')
-
-
-
-//     const amount=Number(updatedRow?.price * updatedRow.qty)
-
-//     console.log(amount,'==================amount')
-// //     const totalAmount = Number(amount * updatedRow?.gst)/100;
-
-// const NetTotal=Number(amount+totalAmount);
-//     console.log(totalAmount,'==================totalAmount')
-   
-//     const TotalDiscount = Number(NetTotal - ((updatedRow?.discount * NetTotal) / 100));
-
-//     console.log(TotalDiscount,'==================TotalDiscount');
-
-
- 
-
-//     const sgstAmt=Number(amount * updatedRow.sgst/100);
-//     const cgstAmt=Number(Number(updatedRow.amount * updatedRow.cgst)/100);
-
-//     console.log(sgstAmt,'=====================sgstAmount');
-//     updatedRow.price=priceMount
-//     updatedRow.amount=amount;
-//     updatedRow.discountAmount=TotalDiscount;
-//     updatedRow.sgstAmount=sgstAmt;
-//     updatedRow.cgstAmount=sgstAmt;
-//     updatedRow.gstAmount=Number(sgstAmt + sgstAmt);
-//     // Ensure you can see the updated row before setRows is called
-//     console.log(updatedRow, "--find updatedRow before setRows");
-  
-//     setRows((prev) => {
-//       const index = prev.findIndex((row) => row.RecordID === updatedRow.RecordID);
-//       if (index !== -1) {
-//         const newData = [...prev];
-//         newData[index] = updatedRow; // Update the row in the array
-//         return newData;
-//       }
-//       return [...prev, updatedRow]; // If not found, add a new row
-//     });
-  
-//     const params = { row: updatedRow }; // Reassign the updated row to params
-//     handleSave(updatedRow.RecordID, params); // Call handleSave with updated params
-  
-//     return updatedRow; // Return the updated row to reflect changes in the DataGrid
-//   };
   
 const processRowUpdate = (newRow, oldRow) => {
   console.log("------inside processRowUpdate");
@@ -612,8 +556,8 @@ const processRowUpdate = (newRow, oldRow) => {
   console.log(TotalDiscount, "================== TotalDiscount");
 
   // Calculate SGST and CGST amounts
-  const sgstAmt = Number((amount * updatedRow.sgst) / 100);
-  const cgstAmt = Number((amount * updatedRow.cgst) / 100);
+  const sgstAmt = Number((amount * updatedRow?.sgst) / 100);
+  const cgstAmt = Number((amount * updatedRow?.cgst) / 100);
   console.log(sgstAmt, "===================== SGST Amount");
   console.log(cgstAmt, "===================== CGST Amount");
 
@@ -663,87 +607,162 @@ console.log(items,"==============items")
   function CustomToolbar() {
     return (
       <GridToolbarContainer
-        sx={{
-          display: "flex",
-          justifyContent: "space-between", // Distributes elements across the row
-          width: "100%",
-          padding: 0.5,
-        }}
-      >
-        <Autocomplete
-    sx={{ width: 200 }}
-    size="small"
-    options={categories}
-    getOptionLabel={(option) => option.name}
-    value={selectedCategory} // Ensure the selected value is displayed
-    onChange={(event, newValue) => {
+  sx={{
+    display: "flex",
+    alignItems: "center", // Align items vertically
+    flexWrap: "nowrap", // Ensure single row layout
+    width: "100%",
+    padding: 0.5,
+    gap: 2,
+  }}
+>
+  {/* Left side: Category and Medical Items selection */}
+  <Box sx={{ display: "flex", gap: 2, flexGrow: 1 }}>
+    <Autocomplete
+      sx={{ minWidth: 230 }}
+      size="small"
+      options={categories}
+      getOptionLabel={(option) => option.name}
+      value={selectedCategory}
+      onChange={(event, newValue) => {
         setSelectedCategory(newValue);
-        setseletcedCategoryID(newValue ? newValue.RecordID : null); // Avoid null errors
-    }}
-    renderInput={(params) => <TextField {...params} label="Select Category" />}
-/>
-           {/* <FormikCustomAutocompleteSingle
-                      sx={{ width:200 }}
+        setseletcedCategoryID(newValue ? newValue.RecordID : null);
+      }}
+      renderInput={(params) => <TextField {...params} label="Select Category" />}
+    disabled={!buttonEnable}
+    />
 
-                      name="category"
-                      id="category"
-                      value={categoryName}
-                      onChange={handleSelectioncategoryName}
-                      label="Category"
-                      url={`http://127.0.0.1:5000/api/medical-items`}
-                    /> */}
-        {/* Autocomplete at the Start */}
-        <Autocomplete
-         sx={{ width:200 }}
-         size="small"
+    <Autocomplete
+      sx={{ minWidth: 400 }}
+      size="small"
       options={items}
       value={tabletsData}
-      getOptionLabel={(option) => `${option.itemNumber}||${option.item_name}`}
+      getOptionLabel={(option) => `${option.itemNumber} || ${option.item_name}`}
       onChange={(event, newValue) => {
         settabletsData(newValue);
-        // setseletcedCategoryID(newValue.RecordID);
+      }}
+      renderInput={(params) => <TextField {...params} label="Select Medical Items" />}
+      disabled={!buttonEnable}
+   />
+  </Box>
+
+  {/* Quantity Input */}
+  <TextField
+    sx={{ width: 100 }}
+    size="small"
+    type="number"
+    label="Quantity"
+    variant="outlined"
+    value={quantity}
+    onChange={handleQuantityChange}
+    disabled={!buttonEnable}
+  />
+
+  {/* Add Button */}
+  <Button
+    variant="contained"
+    sx={{
+      width: "100px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
     }}
-    
-      renderInput={(params) => <TextField {...params} label="Select MedicalItems" />}
-    />
-        {/* <FormikCustomAutocompleteTabletsID
-          sx={{ width: 300 }}
-          name="Tablets"
-          id="Tablets"
-          value={tabletsData}
-          onChange={handleSelectiontabletsData}
-          label="Barcode/Enter Material Name - SSDD"
-          url={`http://127.0.0.1:5000/api/related-items/${seletcedCategoryID}`}
-        /> */}
-  
-        {/* Quantity TextField in the Center */}
-        <TextField
-        sx={{ width: 100 }}
-        size="small"
-        type="number"
-        label="Quantity"
-        variant="outlined"
-        value={quantity} // Controlled value
-        onChange={handleQuantityChange} // Handle change
-      />
-  
-        {/* Add Button at the End */}
-        <Button
-          variant="contained"
-          sx={{
-            width: "100px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          startIcon={<AddIcon />}
-          onClick={handleInsert}
-        >
-          Add
-        </Button>
-      </GridToolbarContainer>
+    startIcon={<AddIcon />}
+    onClick={handleInsert}
+  >
+    Add
+  </Button>
+</GridToolbarContainer>
+
     );
   }
+  
+//   function CustomToolbar() {
+//     return (
+//       <GridToolbarContainer
+//         sx={{
+//           display: "flex",
+//           // justifyContent: "space-between", // Distributes elements across the row
+//           width: "100%",
+//           padding: 0.5,
+//           gap:2
+//         }}
+//       >
+//         <Autocomplete
+//     sx={{ minWidth: 230 }}
+//     size="small"
+//     options={categories}
+//     getOptionLabel={(option) => option.name}
+//     value={selectedCategory} // Ensure the selected value is displayed
+//     onChange={(event, newValue) => {
+//         setSelectedCategory(newValue);
+//         setseletcedCategoryID(newValue ? newValue.RecordID : null); // Avoid null errors
+//     }}
+//     renderInput={(params) => <TextField {...params} label="Select Category" />}
+// />
+//            {/* <FormikCustomAutocompleteSingle
+//                       sx={{ width:200 }}
+
+//                       name="category"
+//                       id="category"
+//                       value={categoryName}
+//                       onChange={handleSelectioncategoryName}
+//                       label="Category"
+//                       url={`http://127.0.0.1:5000/api/medical-items`}
+//                     /> */}
+//         {/* Autocomplete at the Start */}
+//         <Autocomplete
+//          sx={{ minWidth: 230 }}
+//          size="small"
+//       options={items}
+//       value={tabletsData}
+//       getOptionLabel={(option) => `${option.itemNumber}||${option.item_name}`}
+//       onChange={(event, newValue) => {
+//         settabletsData(newValue);
+//         // setseletcedCategoryID(newValue.RecordID);
+//     }}
+    
+//       renderInput={(params) => <TextField {...params} label="Select MedicalItems" />}
+//     />
+//         {/* <FormikCustomAutocompleteTabletsID
+//           sx={{ width: 300 }}
+//           name="Tablets"
+//           id="Tablets"
+//           value={tabletsData}
+//           onChange={handleSelectiontabletsData}
+//           label="Barcode/Enter Material Name - SSDD"
+//           url={`http://127.0.0.1:5000/api/related-items/${seletcedCategoryID}`}
+//         /> */}
+  
+//         {/* Quantity TextField in the Center */}
+//         <TextField
+//         sx={{ width: 100 }}
+//         size="small"
+//         type="number"
+//         label="Quantity"
+//         variant="outlined"
+//         value={quantity} // Controlled value
+//         onChange={handleQuantityChange} // Handle change
+//       />
+  
+//         {/* Add Button at the End */}
+//         <Button
+//           variant="contained"
+//           sx={{
+//             width: "100px",
+//             display: "flex",
+//             justifyContent: "center",
+//             alignItems: "center",
+//           }}
+//           startIcon={<AddIcon />}
+//           onClick={handleInsert}
+//           // disabled={!buttonEnable}
+//         >
+//           Add
+//         </Button>
+//       </GridToolbarContainer>
+//     );
+//   }
   
   // function CustomToolbar() {
   //   return (
@@ -804,9 +823,13 @@ const[adValue,setADValue]=useState(0);
     return rows.reduce((sum, row) => sum + (Number(row.amount) || 0), 0);
   }, [rows]);
 
-const netTotalDiscountAmount = useMemo(() => {
-  return rows.reduce((sum, row) => sum + (Number(row.discountAmount) || 0), 0);
-}, [rows]);
+  const netTotalDiscountAmount = useMemo(() => {
+    return rows.reduce((sum, row) => 
+      sum + ((Number(row.discountAmount) || 0) - (Number(row.amount) || 0)), 
+      0
+    ).toFixed(2);
+  }, [rows]);
+  
 
 const netTotalCGSTAmount = useMemo(() => {
   return rows.reduce((sum, row) => sum + (Number(row.cgstAmount) || 0), 0);
@@ -822,7 +845,7 @@ const netTotalGSTAmount = useMemo(() => {
 const totalGSTAmount = Number(netTotalCGSTAmount + netTotalSGSTAmount + netTotalGSTAmount);
 console.log(netTotalCGSTAmount,'=========================netTotalCGSTAmount');
 const netTotalADDDiscountAmount = useMemo(() => {
-  return rows.reduce((sum, row) => sum + (Number(row.discountAmount) || 0), 0) - (Number(adValue) || 0 ) +(Number(roundOff) || 0);
+  return rows.reduce((sum, row) =>(Number(totalAmount) || 0), 0) - (Number(adValue) || 0 ) +(Number(roundOff) || 0);
 }, [rows, adValue,roundOff]);
 
 // console.log(netTotalADDDiscountAmount,'=========================netTotalADDDiscountAmount');
@@ -831,7 +854,9 @@ const netTotalADDDiscountAmount = useMemo(() => {
 //   console.log(totalGSTAmount, '============================totalGstAmount');
 //===============================================================================================================================================================//
 const queueDate=new window.Date().toISOString().split('T')[0];
-console.log(queueDate)
+
+
+const [refreshKey, setRefreshKey] = useState(false);
 const HandleQueueSave = async(values) => {
 
   if (!customerRec && !selectedCustoreID) {
@@ -856,8 +881,11 @@ const HandleQueueSave = async(values) => {
       Q_PRICE: row.price,
       Q_DISCOUNT:row.discount,
       Q_DiscountAmount:row.discountAmount, 
+      Q_GSTAMOUNT:row.gstAmount,
+      Q_CGSTAMOUNT:row.sgstAmount,
+      Q_SGSTAMOUNT:row.cgstAmount,
       Q_ITEM:row.Item,
-      Q_NETTOTAL: totalAmount, // Ensure this value is passed correctly
+      Q_NETTOTAL: netTotalADDDiscountAmount, // Ensure this value is passed correctly
       Q_GSTTOTALAMOUNT: totalGSTAmount,
       Q_CUSTOMERNAME: customerName || data.customerName,
       Q_HRECORDID:customerRec || selectedCustoreID,
@@ -873,12 +901,16 @@ const HandleQueueSave = async(values) => {
     };
   });
   console.log(idata, '============================idata');
-  return;
+
 const response=await dispatch(QueuePost({idata}));
 console.log(response, '============================response');
 
 if(response.payload.status==="Y"){
-toast.success(response.payload.message)
+toast.success(response.payload.message);
+setCustomerName("")
+setRefreshKey(!refreshKey);
+setButtonEnable(false);
+setRows([]);
 }else{
   toast.error(response.payload.message)
 }
@@ -903,14 +935,20 @@ const HandlePaySave = async(values) => {
       Q_AMOUNT: row.amount, 
       Q_PRICE: row.price,
       Q_DISCOUNT:row.discount,
+      Q_DiscountAmount:row.discountAmount, 
+      Q_GSTAMOUNT:row.gstAmount,
+      Q_CGSTAMOUNT:row.sgstAmount,
+      Q_SGSTAMOUNT:row.cgstAmount,
       Q_ITEM:row.Item,
-      Q_NETTOTAL: totalAmount, // Ensure this value is passed correctly
+      Q_NETTOTAL: netTotalADDDiscountAmount, // Ensure this value is passed correctly
       Q_GSTTOTALAMOUNT: totalGSTAmount,
       Q_CUSTOMERNAME: customerName || data.customerName,
       Q_HRECORDID:customerRec || selectedCustoreID,
       Q_DATE: queueDate,
       Q_STATUS:"P",
       Q_ADDITIONALDISCOUNT:adValue,
+
+
     
       // Q_SUMMARY:"", // Ensure this value is passed correctly
     };
@@ -922,6 +960,12 @@ console.log(response, '============================response');
 
 if(response.payload.status==="Y"){
 toast.success(response.payload.message)
+setCustomerName("")
+setRefreshKey(!refreshKey);
+setButtonEnable(false);
+
+setRows([]);
+navigate("/pharmacy/pharmacy-pay",{state:{RecordID:customerRec || selectedCustoreID}})
 }else{
   toast.error(response.payload.message)
 }
@@ -929,7 +973,7 @@ toast.success(response.payload.message)
 // var d = new window.Date();
 const dateTime=new window.Date().toISOString();
 console.log(dateTime,'=========dateTime')
-const[customerName,setCustomerName]=useState("");
+const[customerName,setCustomerName]=useState(data.customerName);
 const[customerRec,setCustomerRec]=useState("");
 const HandleSave=async(values)=>{
   const idata={
@@ -945,10 +989,15 @@ if(HeaderInsert.payload.status ==="Y"){
   toast.success(HeaderInsert.payload.message);
   setCustomerRec(HeaderInsert.payload.RecordID);
   setCustomerName(HeaderInsert.payload.CustomerName);
+
+  setRefreshKey(!refreshKey);
+  setButtonEnable(true)
+
 }else{
-  toast.success(HeaderInsert.payload.error);
+  toast.error(HeaderInsert.payload.error);
 }
 }
+console.log(data.customerName,'========data.customerName')
 
   return (
     <Container>
@@ -965,15 +1014,17 @@ if(HeaderInsert.payload.status ==="Y"){
     expiryDate: "",
     mrp: "",
     discount: "",
-    additionalDiscount: "",
+    additionalDiscount: data.additionalDiscount,
     roundOff: "",
     netTotal: "",
     gst: "",
     sgst: "",
     cgst: "",
-    total: "",
+    total:  data.gstTotalAmount,
     queue: null,
       }}  
+      // validationSchema={}
+      enableReinitialize={true}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         HandleSave(values)
           console.log(values);
@@ -1003,74 +1054,70 @@ if(HeaderInsert.payload.status ==="Y"){
             padding: "10px",
           }}
         >
-          <Stack
-            sx={{
-              gridColumn: "span 2",
-              width: "80%",
-              display: "grid",
-              gridTemplateColumns: "repeat(2, 1fr)",
-              gap: 1,
-            }}
-            direction="column"
-            // gap={1}
-          >
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: 2,
-              }}
-            >
-           <TextField
-                label="Date"
-                type="date"
-                id="date"
-                name="date"
-                size="small"
-                sx={{ minWidth: 230 }}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                value={values.date}
-                onChange={handleChange}
-                onBlur={handleBlur}
+ <Stack
+  sx={{
+    gridColumn: "span 4", // Ensure both stacks span the same width
+    width: "100%",
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: 2,
+  }}
+>
+  <Box
+    sx={{
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 2,
+    }}
+  >
+    <TextField
+      label="Date"
+      type="date"
+      id="date"
+      name="date"
+      size="small"
+      sx={{ minWidth: 230 }}
+      InputLabelProps={{ shrink: true }}
+      value={values.date}
+      onChange={handleChange}
+      onBlur={handleBlur}
+    />
 
-              />
+    <TextField
+      fullWidth
+      variant="outlined"
+      type="text"
+      id="customer"
+      name="customer"
+      size="small"
+      label="Customer"
+      value={values.customer}
+      onChange={handleChange}
+      onBlur={handleBlur}
+      sx={{ minWidth: 500 }}
+    />
+  </Box>
 
-              <TextField
-                fullWidth
-                variant="outlined"
-                type="text"
-                id="customer"
-                name="customer"
-                size="small"
-                label="Customer"
-                value={values.customer}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                sx={{ minWidth: 225 }}
-              />
-             
-            </Box>
+  <Box
+    sx={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      // marginLeft:14
+    }}
+  >
+    <Button
+      variant="outlined"
+      sx={{ backgroundColor: "green", color: "white" }}
+      startIcon={<SaveIcon />}
+      type="submit"
+    >
+      Save
+    </Button>
+  </Box>
+</Stack>
 
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: 1,
-                alignItems: "center",
-              }}
-            >
-               <Button
-        variant="outlined"
-        sx={{ backgroundColor: "green", color: "black" }}
-        type="submit"
-      >
-        Save
-      </Button>
-            </Box>
-           
-          </Stack>
+
 
           <Stack sx={{ gridColumn: "span 4" }} direction="column" gap={2}>
             <Grid container spacing={2}>
@@ -1156,181 +1203,205 @@ if(HeaderInsert.payload.status ==="Y"){
                   />
                 </Box>
               </Grid>
-
               <Grid item xs={3.5} sx={{ ml: "auto" }}>
-                <Typography
-                  sx={{
-                    fontWeight: 500,
-                    fontSize: "16px",
-                    lineHeight: "56px",
-                    textAlign: "left",
-                    mb: 1,
-                    mt: -3,
-                  }}
-                >
-                  Select Items Info
-                </Typography>
-                <Grid container spacing={2}>
-  <Grid item xs={12} sm={8}>
-    <TextField
-      fullWidth
-      variant="outlined"
-      size="small"
-      id="uom"
-      name="uom"
-      label="UOM"
-      type="text"
-      value={Uom}
-      onChange={handleChange}
-      onBlur={handleBlur}
-      disabled
-    />
+  <Typography
+    sx={{
+      fontWeight: 500,
+      fontSize: "16px",
+      lineHeight: "56px",
+      textAlign: "left",
+      mb: 1,
+      mt: -3,
+    }}
+  >
+    Select Items Info
+  </Typography>
+  <Grid container spacing={2}>
+    <Grid item xs={12} sm={10}>
+      <TextField
+        fullWidth
+        variant="outlined"
+        size="small"
+        id="uom"
+        name="uom"
+        label="UOM"
+        type="text"
+        value={Uom}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        disabled
+        sx={{ width: "100%" }} // Ensure it takes full width
+      />
+    </Grid>
+
+    <Grid item xs={12} sm={10}>
+      <TextField
+        fullWidth
+        variant="outlined"
+        size="small"
+        id="cuom"
+        name="cuom"
+        label="C.UOM"
+        type="text"
+        value={cuom}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        disabled
+        sx={{ width: "100%" }}
+      />
+    </Grid>
+
+    <Grid item xs={12} sm={10}>
+      <TextField
+        fullWidth
+        variant="outlined"
+        size="small"
+        id="expiryDate"
+        name="expiryDate"
+        label="Expiry Date"
+        type="date"
+        value={formatDateForInput(expiryDate)}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        InputLabelProps={{ shrink: true }}
+        disabled
+        sx={{ width: "100%" }}
+      />
+    </Grid>
+
+    <Grid item xs={12} sm={10}>
+      <TextField
+        fullWidth
+        variant="outlined"
+        size="small"
+        id="mrp"
+        name="mrp"
+        label="MRP"
+        type="text"
+        value={mrp}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        disabled
+        sx={{ width: "100%" }}
+      />
+    </Grid>
+
+    <Grid item xs={12} sm={10}>
+      <TextField
+        fullWidth
+        variant="outlined"
+        size="small"
+        id="discount"
+        name="discount"
+        label="Discount"
+        type="text"
+        value={Disc}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        disabled
+        sx={{ width: "100%" }}
+      />
+    </Grid>
   </Grid>
 
-  <Grid item xs={12} sm={8}>
-    <TextField
-      fullWidth
-      variant="outlined"
-      size="small"
-      id="cuom"
-      name="cuom"
-      label="C.UOM"
-      type="text"
-      value={cuom}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                disabled
-    />
-  </Grid>
+  <Typography
+    sx={{
+      fontWeight: 500,
+      fontSize: "16px",
+      lineHeight: "56px",
+      textAlign: "left",
+      mb: 1,
+    }}
+  >
+    Summary
+  </Typography>
 
-  <Grid item xs={12} sm={8}>
-  <TextField
-  fullWidth
-  variant="outlined"
-  size="small"
-  id="expiryDate"
-  name="expiryDate"
-  label="Expiry Date"
-  type="date"
-  value={formatDateForInput(expiryDate)}
-  onChange={handleChange}
-  onBlur={handleBlur}
-  InputLabelProps={{ shrink: true }}
-  disabled // This makes the field read-only
-/>
-  </Grid>
+  <Grid container spacing={2}>
+    <Grid item xs={12} sm={10}>
+      <TextField
+        fullWidth
+        variant="outlined"
+        size="small"
+        id="netTotal"
+        name="netTotal"
+        label="Net Total"
+        type="text"
+        value={totalAmount}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        disabled
+        sx={{ width: "100%" }}
+      />
+    </Grid>
 
-  <Grid item xs={12} sm={8}>
-    <TextField
-      fullWidth
-      variant="outlined"
-      size="small"
-      id="mrp"
-      name="mrp"
-      label="MRP"
-      type="text"
-      value={mrp}
-      onChange={handleChange}
-      onBlur={handleBlur}
-      disabled
-    />
+    <Grid item xs={12} sm={10}>
+      <TextField
+        fullWidth
+        variant="outlined"
+        size="small"
+        id="discount"
+        name="discount"
+        label="Discount"
+        type="text"
+        value={netTotalDiscountAmount}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        disabled
+        sx={{ width: "100%" }}
+      />
+    </Grid>
+
+    <Grid item xs={12} sm={10}>
+      <TextField
+        fullWidth
+        variant="outlined"
+        size="small"
+        id="additionalDiscount"
+        name="additionalDiscount"
+        label="Additional Discount"
+        type="text"
+        value={adValue}
+        onChange={handleadditionalDiscountChange}
+        onBlur={handleBlur}
+        sx={{ width: "100%" }}
+      />
+    </Grid>
+
+    <Grid item xs={12} sm={10}>
+      <TextField
+        fullWidth
+        variant="outlined"
+        size="small"
+        id="roundOff"
+        name="roundOff"
+        label="Round Off"
+        type="text"
+        value={roundOff}
+        onChange={handleroundOffChange}
+        onBlur={handleBlur}
+        sx={{ width: "100%" }}
+      />
+    </Grid>
+
+    <Grid item xs={12} sm={10}>
+      <TextField
+        fullWidth
+        variant="outlined"
+        size="small"
+        id="netTotal"
+        name="netTotal"
+        label="Total"
+        type="text"
+        value={netTotalADDDiscountAmount}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        disabled
+        sx={{ width: "100%" }}
+      />
+    </Grid>
   </Grid>
 </Grid>
 
-
-                <Typography
-                  sx={{
-                    fontWeight: 500,
-                    fontSize: "16px",
-                    lineHeight: "56px",
-                    textAlign: "left",
-                    mb: 1,
-                  }}
-                >
-                  Summary
-                </Typography>
-
-                <Grid container spacing={2}>
-                <Grid item xs={12} sm={8}>
-    <TextField
-      fullWidth
-      variant="outlined"
-      size="small"
-      id="netTotal"
-      name="netTotal"
-      label="Net Total"
-      type="text"
-      value={totalAmount}
-      onChange={handleChange}
-      onBlur={handleBlur}
-      disabled
-    />
-  </Grid>
-  <Grid item xs={12} sm={8}>
-    <TextField
-      fullWidth
-      variant="outlined"
-      size="small"
-      id="discount"
-      name="discount"
-      label="Discount"
-      type="text"
-      value={Disc}
-      onChange={handleChange}
-      onBlur={handleBlur}
-      disabled
-    />
-  </Grid>
-
-  <Grid item xs={12} sm={8}>
-    <TextField
-      fullWidth
-      variant="outlined"
-      size="small"
-      id="additionalDiscount"
-      name="additionalDiscount"
-      label="Additional Discount"
-      type="text"
-      value={adValue}
-      onChange={handleadditionalDiscountChange}
-      onBlur={handleBlur}
-    />
-  </Grid>
-
-  <Grid item xs={12} sm={8}>
-    <TextField
-      fullWidth
-      variant="outlined"
-      size="small"
-      id="roundOff"
-      name="roundOff"
-      label="Round Off"
-      type="text"
-      value={roundOff}
-      onChange={handleroundOffChange}
-      onBlur={handleBlur}
-      // disabled
-    />
-  </Grid>
-
-  <Grid item xs={12} sm={8}>
-    <TextField
-      fullWidth
-      variant="outlined"
-      size="small"
-      id="netTotal"
-      name="netTotal"
-      label="Total"
-      type="text"
-      value={netTotalADDDiscountAmount}
-      onChange={handleChange}
-      onBlur={handleBlur}
-      disabled
-    />
-  </Grid>
-</Grid>
-
-              </Grid>
             </Grid>
           </Stack>
 
@@ -1341,7 +1412,7 @@ if(HeaderInsert.payload.status ==="Y"){
                 justifyContent: "space-evenly",
                 alignItems: "center",
                 gap: 1,
-                marginTop: -2,
+       
                 marginRight: 52,
                 marginBottom: 0,
               }}
@@ -1358,7 +1429,7 @@ if(HeaderInsert.payload.status ==="Y"){
                 InputLabelProps={{
                   style: { fontWeight: "bold" },
                 }}
-                value={Gst}
+                value={netTotalGSTAmount}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 disabled
@@ -1375,7 +1446,7 @@ if(HeaderInsert.payload.status ==="Y"){
                 InputLabelProps={{
                   style: { fontWeight: "bold" },
                 }}
-                value={Sgst}
+                value={netTotalSGSTAmount}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 disabled
@@ -1393,7 +1464,7 @@ if(HeaderInsert.payload.status ==="Y"){
                 InputLabelProps={{
                   style: { fontWeight: "bold" },
                 }}
-                value={Cgst}
+                value={netTotalCGSTAmount}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 disabled
@@ -1428,6 +1499,7 @@ if(HeaderInsert.payload.status ==="Y"){
     {/* Autocomplete aligned to the start */}
     <Box>
     <FormikOptimizedAutocomplete
+  key={refreshKey}
   sx={{ width: 200 }}
   name="queue"
   id="queue"
@@ -1435,6 +1507,7 @@ if(HeaderInsert.payload.status ==="Y"){
   onChange={(event, newValue) => {
     setFieldValue("queue", newValue);
     setselectedCustoreID(newValue ? newValue.RecordID : null);
+    setButtonEnable(true); // Ensure setButtonEnable is defined
   }}
   label="Queue"
   url={`http://127.0.0.1:5000/api/hms_header/getallheader`}
@@ -1448,6 +1521,7 @@ if(HeaderInsert.payload.status ==="Y"){
         variant="outlined"
         sx={{ width: "100px", backgroundColor: "#FFEB3B", color: "black" }}
         onClick={() => HandleQueueSave()}
+        // disabled={!buttonEnable}
       >
         Queue
       </Button>
@@ -1455,6 +1529,7 @@ if(HeaderInsert.payload.status ==="Y"){
         variant="outlined"
         sx={{ width: "100px", backgroundColor: "#FFEB3B", color: "black" }}
         onClick={() => HandlePaySave()}
+        // disabled={!buttonEnable}
       >
         Pay now
       </Button>
