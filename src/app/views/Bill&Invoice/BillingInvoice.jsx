@@ -51,11 +51,9 @@ const BillingInvoice = () => {
   const rows = [
     {
       RecordId: "1",
-      firstName: "",
-      lastName: "",
+      patientName: "",
       email: "",
       phoneNumber: "",
-      alternatePhone: "",
       dateOfBirth: "",
       dateOfJoining: "",
 
@@ -71,22 +69,14 @@ const BillingInvoice = () => {
       hide: false,
     },
     {
-      headerName: "First Name",
-      field: "firstName",
+      headerName: "Patient Name",
+      field: "patientName",
       width: "150",
       align: "left",
       headerAlign: "left",
       hide: true,
     },
-    {
-      headerName: "Last Name",
-      field: "lastName",
-      width: "150",
-      align: "left",
-      headerAlign: "left",
-      hide: false,
-    },
-
+   
     {
       headerName: "Email",
       field: "email",
@@ -98,23 +88,16 @@ const BillingInvoice = () => {
     {
       headerName: "Phone",
       field: "phoneNumber",
-      width: "170",
+      width: "150",
       align: "right",
       headerAlign: "center",
       hide: false,
     },
-    {
-      headerName: "Alternate Phone",
-      field: "alternatePhone",
-      width: "170",
-      align: "right",
-      headerAlign: "center",
-      hide: false,
-    },
+   
     {
       headerName: "DOB",
       field: "dateOfBirth",
-      width: "170",
+      width: "100",
       align: "right",
       headerAlign: "center",
       hide: false,
@@ -122,7 +105,7 @@ const BillingInvoice = () => {
     {
       headerName: "DOJ",
       field: "dateOfJoining",
-      width: "170",
+      width: "100",
       align: "right",
       headerAlign: "center",
       hide: false,
@@ -130,7 +113,7 @@ const BillingInvoice = () => {
     {
       field: "Action",
       headerName: "Action",
-      minWidth: 300,
+      minWidth: 200,
       flex: 1,
       sortable: false,
       headerAlign: "center",
@@ -247,7 +230,7 @@ const BillingInvoice = () => {
             rowHeight={dataGridRowHeight}
             rows={rows}
             columns={columns}
-            getRowId={(row) => row.firstName}
+            getRowId={(row) => row.patientName}
             initialState={{
               pagination: { paginationModel: { pageSize: 20 } },
             }}

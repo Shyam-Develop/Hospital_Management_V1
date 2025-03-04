@@ -6,6 +6,11 @@ import {
   Box,
   styled,
   useTheme,
+  Grid,
+  Typography,
+  TextField,
+  Checkbox,
+  FormControlLabel
 } from "@mui/material";
 import {
   DataGrid,
@@ -17,6 +22,8 @@ import { dataGridHeight, dataGridRowHeight } from "app/utils/constant";
 
 // ********************** ICONS ********************** //
 import EditIcon from "@mui/icons-material/Edit";
+import { Formik } from "formik";
+
 import { useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,7 +41,7 @@ const Container = styled("div")(({ theme }) => ({
 }));
 
 // ********************** ITEMS SCREEN LISTVIEW ********************** //
-const LaboratoryAndTestManagement = () => {
+const TestGroup = () => {
   // ********************** HOOKS AND CONSTANTS ********************** //
   const theme = useTheme();
   const navigate = useNavigate();
@@ -214,78 +221,110 @@ const LaboratoryAndTestManagement = () => {
 
   return (
     <Container>
-      <div className="breadcrumb">
-        <Breadcrumb routeSegments={[{ name: " " }]} />
-      </div>
+      
+        <Typography
+             variant="h5"
+             sx={{
+               fontSize: "2rem",
+               textAlign: "left",
+               fontWeight: "bold",
+               marginBottom: 3,
+             }}
+           >
+             Test Group
+           </Typography>
 
-      {/* <Paper sx={{ width: "100%", mb: 2 }}>
-        <Box
-          sx={{
-            height: dataGridHeight,
-            "& .MuiDataGrid-root": {
-              border: "none",
-            },
-            "& .MuiDataGrid-cell": {
-              borderBottom: "none",
-            },
-            "& .name-column--cell": {
-              color: theme.palette.info.contrastText,
-            },
-            "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: theme.palette.info.main,
-              color: theme.palette.info.contrastText,
-              fontWeight: "bold",
-              fontSize: theme.typography.subtitle2.fontSize,
+      <Formik
+        initialValues={{
+          serielnumber: "",
+          description: "",
+          narration: "",
+          amount: "",
+        }}
+        onSubmit={(values) => {
+        }}
+      >
+        {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
+          <form onSubmit={handleSubmit}>
+            <Grid container spacing={2} alignItems="center" sx={{ mb: 2 }} direction="rtl">
+              {/* First Name */}
+              <Grid item xs={12} sm={4}>
+                <Typography sx={{ fontWeight: "bold" }}>Code:</Typography>
+              </Grid>
+              <Grid item xs={12} sm={8}>
+                <TextField
+                  fullWidth
+                  variant="standard"
+                  id="firstName"
+                  name="firstName"
+                  size="small"
+                
+                />
+              </Grid>
+
+
+              {/* Email */}
+              <Grid item xs={12} sm={4}>
+                <Typography sx={{ fontWeight: "bold" }}>Name:</Typography>
+              </Grid>
+              <Grid item xs={12} sm={8}>
+                <TextField
+                  fullWidth
+                  variant="standard"
+                  size="small"
+                  id="email"
+                  name="email"
+               
+                />
+              </Grid>
+
+              {/* Phone Number */}
+              <Grid item xs={12} sm={4}>
+                <Typography sx={{ fontWeight: "bold" }}>Sort Order:</Typography>
+              </Grid>
+              <Grid item xs={12} sm={8}>
+                <TextField
+                  fullWidth
+                  variant="standard"
+                  size="small"
+                  id="phoneNumber"
+                  name="phoneNumber"
               
-            },
-            "& .MuiDataGrid-virtualScroller": {
-              backgroundColor: theme.palette.info.light,
-            },
-            "& .MuiDataGrid-footerContainer": {
-              borderTop: "none",
-              backgroundColor: theme.palette.info.main,
-              color: theme.palette.info.contrastText,
-            },
-            "& .MuiCheckbox-root": {
-              color: `${theme.palette.primary.main} !important`,
-            },
-            "& .MuiDataGrid-row:hover": {
-              backgroundColor: theme.palette.action.hover,
-            },
-          }}
-        >
-          <DataGrid
-            slots={{
-              loadingOverlay: LinearProgress,
-              toolbar: CustomToolbar,
-            }}
-            rowHeight={dataGridRowHeight}
-            rows={doctorRows}
-            columns={columns}
-            getRowId={(row) => row.RecordId}
-            initialState={{
-              pagination: { paginationModel: { pageSize: 20 } },
-            }}
-            pageSizeOptions={[5, 10, 20, 25]}
-            columnVisibilityModel={{
-              doctorname: true,
-              RecordId: false,
-            }}
-            disableColumnFilter
-            disableColumnSelector
-            disableDensitySelector
-            slotProps={{
-              toolbar: {
-                showQuickFilter: true,
-              },
-            }}
-            disableSelectionOnClick
-            disableRowSelectionOnClick
-          />
-        </Box>
-      </Paper> */}
+                />
+              </Grid>
+
+              <Box sx={{ flexBasis: '26%', marginLeft: '17px', marginTop: '15px' }}>
+              <FormControlLabel
+               control={<Checkbox size="large" />}
+               label="Disable"
+             />
+           </Box>
+
+            </Grid>
+
+            <Box mt={2}>
+              <Grid container justifyContent="flex-end" spacing={1}>
+                <Grid item>
+                  <Button variant="contained" color="primary" type="submit">
+                    Save
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button variant="contained" color="primary" onClick={() => navigate(" ")}>
+                    Cancel
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
+
+           
+
+          </form>
+        )}
+      </Formik>
+
     </Container>
   );
 };
 
-export default LaboratoryAndTestManagement;
+export default TestGroup;
