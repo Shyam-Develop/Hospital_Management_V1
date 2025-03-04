@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import {
-  Grid, Typography, TextField, Button, Box, FormHelperText, useTheme, LinearProgress, Stack
+  Grid, Typography, TextField, Button, Box, FormHelperText, useTheme, LinearProgress,
 
 } from "@mui/material";
 import { styled } from "@mui/system";
@@ -30,7 +30,7 @@ const Container = styled("div")(({ theme }) => ({
   },
 }));
 
-const BillingInvoiceEdit = () => {
+const Prescription = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -116,7 +116,7 @@ const BillingInvoiceEdit = () => {
           marginBottom: 3,
         }}
       >
-        Billing&Invoice
+        Prescription
       </Typography>
 
       <Formik
@@ -132,6 +132,7 @@ const BillingInvoiceEdit = () => {
         {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2} alignItems="center" sx={{ mb: 2 }} direction="rtl">
+              {/* First Name */}
               <Grid item xs={12} sm={4}>
                 <Typography sx={{ fontWeight: "bold" }}>Patient Name:</Typography>
               </Grid>
@@ -151,6 +152,7 @@ const BillingInvoiceEdit = () => {
               </Grid>
 
 
+              {/* Email */}
               <Grid item xs={12} sm={4}>
                 <Typography sx={{ fontWeight: "bold" }}>Email ID:</Typography>
               </Grid>
@@ -169,6 +171,7 @@ const BillingInvoiceEdit = () => {
                 />
               </Grid>
 
+              {/* Phone Number */}
               <Grid item xs={12} sm={4}>
                 <Typography sx={{ fontWeight: "bold" }}>Phone Number:</Typography>
               </Grid>
@@ -241,157 +244,69 @@ const BillingInvoiceEdit = () => {
               </Grid>
             </Box>
 
-            <Grid item xs={12}>
-              <Typography
-                variant="h5"
-                sx={{
-                  fontSize: "2rem",
-                  textAlign: "left",
+         
+            <Box
+              sx={{
+                width: '65%', // Adjust the width as needed
+                height: '300px', // Adjust the height as needed
+                "& .MuiDataGrid-root": {
+                  border: "none",
+                },
+                "& .MuiDataGrid-cell": {
+                  borderBottom: "none",
+                },
+                "& .name-column--cell": {
+                  color: theme.palette.info.contrastText,
+                },
+                "& .MuiDataGrid-columnHeaders": {
+                  backgroundColor: theme.palette.info.main,
+                  color: theme.palette.info.contrastText,
                   fontWeight: "bold",
-                  marginBottom: 2,
-                  marginTop: 2,
+                  fontSize: theme.typography.subtitle2.fontSize,
+                },
+                "& .MuiDataGrid-virtualScroller": {
+                  backgroundColor: theme.palette.info.light,
+                },
+                "& .MuiDataGrid-footerContainer": {
+                  borderTop: "none",
+                  backgroundColor: theme.palette.info.main,
+                  color: theme.palette.info.contrastText,
+                },
+                "& .MuiCheckbox-root": {
+                  color: `${theme.palette.primary.main} !important`,
+                },
+                "& .MuiDataGrid-row:hover": {
+                  backgroundColor: theme.palette.action.hover,
+                },
+              }}
+            >
+              <DataGrid
+                slots={{
+                  loadingOverlay: LinearProgress,
                 }}
-              >
-                Line Items
-              </Typography>            
-                </Grid>
-            <Stack direction="row" spacing={2}>
-              <Stack sx={{ gridColumn: "span 4" }} direction="column" gap={2}>
-                <Box
-                  sx={{
-                    width: '85%',
-                    height: '300px',
-                    "& .MuiDataGrid-root": {
-                      border: "none",
-                    },
-                    "& .MuiDataGrid-cell": {
-                      borderBottom: "none",
-                    },
-                    "& .name-column--cell": {
-                      color: theme.palette.info.contrastText,
-                    },
-                    "& .MuiDataGrid-columnHeaders": {
-                      backgroundColor: theme.palette.info.main,
-                      color: theme.palette.info.contrastText,
-                      fontWeight: "bold",
-                      fontSize: theme.typography.subtitle2.fontSize,
-                    },
-                    "& .MuiDataGrid-virtualScroller": {
-                      backgroundColor: theme.palette.info.light,
-                    },
-                    "& .MuiDataGrid-footerContainer": {
-                      borderTop: "none",
-                      backgroundColor: theme.palette.info.main,
-                      color: theme.palette.info.contrastText,
-                    },
-                    "& .MuiCheckbox-root": {
-                      color: `${theme.palette.primary.main} !important`,
-                    },
-                    "& .MuiDataGrid-row:hover": {
-                      backgroundColor: theme.palette.action.hover,
-                    },
-                  }}
-                >
-                  <DataGrid
-                    slots={{
-                      loadingOverlay: LinearProgress,
-                    }}
-                    rowHeight={dataGridRowHeight}
-                    rows={rows}
-                    columns={columns}
-                    getRowId={(row) => row.RecordId}
-                    initialState={{
-                      pagination: { paginationModel: { pageSize: 20 } },
-                    }}
-                    pageSizeOptions={[5, 10, 20, 25]}
-                    columnVisibilityModel={{
-                      RecordId: false,
-                    }}
-                    disableColumnFilter
-                    disableColumnSelector
-                    disableDensitySelector
-                    slotProps={{
-                      toolbar: {
-                        showQuickFilter: true,
-                      },
-                    }}
-                    disableSelectionOnClick
-                    disableRowSelectionOnClick
-                  />
-                </Box>
-              </Stack>
-
-              <Stack sx={{ gridColumn: "span 5" }} direction="column" gap={3}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, marginLeft: -7 }}>
-                  <Typography sx={{ fontWeight: "bold", width: '140px' }}>Total Amount:</Typography>
-
-                  <TextField
-                    fullWidth
-                    name="name"
-                    id="name"
-                    variant="outlined"
-                    size="small"
-                    type="text"
-                    sx={{ flex: 1 }}
-                  />
-                </Box>
-
-
-
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, marginLeft: -7 }}>
-                  <Typography sx={{ fontWeight: "bold", width: '140px' }}>Additional Charge:</Typography>
-
-                  <TextField
-                    fullWidth
-                    name="name"
-                    id="name"
-                    variant="outlined"
-                    size="small"
-                    type="text"
-                    sx={{ flex: 1 }}
-                  />
-                </Box>
-
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, marginLeft: -7 }}>
-                  <Typography sx={{ fontWeight: "bold", width: '140px' }}>Additional Discount:</Typography>
-
-                  <TextField
-                    fullWidth
-                    name="name"
-                    id="name"
-                    variant="outlined"
-                    size="small"
-                    type="text"
-                    sx={{ flex: 1 }}
-                  />
-                </Box>
-
-
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, marginLeft: -7 }}>
-                  <Typography sx={{ fontWeight: "bold", width: '140px' }}>Net Amount:</Typography>
-
-                  <TextField
-                    fullWidth
-                    name="name"
-                    id="name"
-                    variant="outlined"
-                    size="small"
-                    type="text"
-                    sx={{ flex: 1 }}
-                  />
-                </Box>
-
-                <Button
-                  variant="contained"
-                  color="primary"
-                  sx={{ marginTop: 1, ml: 'auto', size: 'small' }}
-                >
-                  Pay
-                </Button>
-
-
-              </Stack>
-            </Stack>
+                rowHeight={dataGridRowHeight}
+                rows={rows}
+                columns={columns}
+                getRowId={(row) => row.RecordId}
+                initialState={{
+                  pagination: { paginationModel: { pageSize: 20 } },
+                }}
+                pageSizeOptions={[5, 10, 20, 25]}
+                columnVisibilityModel={{
+                  RecordId: false,
+                }}
+                disableColumnFilter
+                disableColumnSelector
+                disableDensitySelector
+                slotProps={{
+                  toolbar: {
+                    showQuickFilter: true,
+                  },
+                }}
+                disableSelectionOnClick
+                disableRowSelectionOnClick
+              />
+            </Box>
 
           </form>
         )}
@@ -400,4 +315,4 @@ const BillingInvoiceEdit = () => {
   );
 };
 
-export default BillingInvoiceEdit;
+export default Prescription;

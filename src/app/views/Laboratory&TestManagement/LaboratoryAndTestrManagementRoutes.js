@@ -1,12 +1,20 @@
 import Loadable from 'app/components/Loadable';
 import { lazy } from 'react';
 
-const LaboratoryAndTestManagement = Loadable(lazy(() => import('./LaboratoryAndTestManagement')));
+const TestGroup = Loadable(lazy(() => import('./TestGroup')));
+const Test = Loadable(lazy(() => import('./Test')));
+const Prescription = Loadable(lazy(() => import('./Prescription')));
+
+
 
 
 
 const LaboratoryandTestManagementRoutes = [
-    { path: '/Lab/laboratory-and-test-management', element: <LaboratoryAndTestManagement /> },
+    { path: '/Lab/test-group', element: <TestGroup /> },
+    { path: '/Lab/test', element: <Test /> },
+    { path: '/Lab/prescription', element: <Prescription /> },
+
+
   ];
   
   export default LaboratoryandTestManagementRoutes;
