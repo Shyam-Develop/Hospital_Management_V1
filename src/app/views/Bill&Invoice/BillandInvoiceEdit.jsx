@@ -187,42 +187,7 @@ const BillingInvoiceEdit = () => {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={4}>
-                <Typography sx={{ fontWeight: "bold" }}>Date of Birth:</Typography>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <TextField
-                  fullWidth
-                  name="dateofbirth"
-                  id="dateofbirth"
-                  variant="standard"
-                  size="small"
-                  type="date"
-                  value={values.dateofbirth ? new Date(values.dateofbirth).toISOString().split("T")[0] : ""}
-                  error={touched.dateofbirth && Boolean(errors.dateofbirth)}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  helperText={touched.dateofbirth && errors.dateofbirth}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={4}>
-                <Typography sx={{ fontWeight: "bold" }}>Date of Joining:</Typography>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <TextField
-                  fullWidth
-                  name="dateofjoining"
-                  id="dateofjoining"
-                  variant="standard"
-                  size="small"
-                  type="date"
-                  value={values.dateofjoining ? new Date(values.dateofjoining).toISOString().split("T")[0] : ""}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  helperText={touched.dateofjoining && errors.dateofjoining}
-                />
-              </Grid>
+ 
 
             </Grid>
 
