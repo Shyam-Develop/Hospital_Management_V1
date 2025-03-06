@@ -121,7 +121,13 @@ const PrescriptionEdit = () => {
 
       <Formik
         initialValues={{
-       
+          patientName: "",
+          email: "",
+          phoneNumber: "",
+          doctorname: "",
+          date: "",
+          comments: "",
+
         }}
         onSubmit={(values) => { }}
       >
@@ -137,6 +143,9 @@ const PrescriptionEdit = () => {
                     name="patientName"
                     size="small"
                     label="Patient Name"
+                    value={values.patientName}
+                    error={touched.patientName && Boolean(errors.patientName)}
+                    helperText={touched.patientName && errors.patientName}
                   />
                 </Stack>
 
@@ -148,6 +157,9 @@ const PrescriptionEdit = () => {
                     id="email"
                     name="email"
                     label="Email"
+                    value={values.Email}
+                    error={touched.Email && Boolean(errors.Email)}
+                    helperText={touched.Email && errors.Email}
                   />
                 </Stack>
 
@@ -160,6 +172,9 @@ const PrescriptionEdit = () => {
                     id="phoneNumber"
                     name="phoneNumber"
                     label="Phone Number"
+                    value={values.phoneNumber}
+                    error={touched.phoneNumber && Boolean(errors.phoneNumber)}
+                    helperText={touched.phoneNumber && errors.phoneNumber}
                   />
                 </Stack>
               </Stack>
@@ -173,6 +188,9 @@ const PrescriptionEdit = () => {
                     name="doctorname"
                     size="small"
                     label="Doctor Name"
+                    value={values.doctorname}
+                    error={touched.doctorname && Boolean(errors.doctorname)}
+                    helperText={touched.doctorname && errors.doctorname}
                   />
                 </Stack>
 
@@ -184,6 +202,9 @@ const PrescriptionEdit = () => {
                     id="date"
                     name="date"
                     type="date"
+                    value={values.date}
+                    error={touched.date && Boolean(errors.date)}
+                    helperText={touched.date && errors.date}
                   />
                 </Stack>
                 <Stack direction="column" gap={2}>
@@ -194,6 +215,9 @@ const PrescriptionEdit = () => {
                     id="comments"
                     name="comments"
                     label="Comments"
+                    value={values.comments}
+                    error={touched.comments && Boolean(errors.comments)}
+                    helperText={touched.comments && errors.comments}
                   />
                 </Stack>
               </Stack>

@@ -236,7 +236,12 @@ const Test = () => {
 
             <Formik
                 initialValues={{
-                  
+                    code: "",
+                    name: "",
+                    guidelinevalue: "",
+                    fromValue: "",
+                    toValue: "",
+
                 }}
                 onSubmit={(values) => {
                 }}
@@ -255,6 +260,9 @@ const Test = () => {
                                     id="code"
                                     name="code"
                                     size="small"
+                                    value={values.code}
+                                    error={touched.code && Boolean(errors.code)}
+                                    helperText={touched.code && errors.code}
 
                                 />
                             </Grid>
@@ -271,6 +279,9 @@ const Test = () => {
                                     size="small"
                                     id="name"
                                     name="name"
+                                    value={values.name}
+                                    error={touched.name && Boolean(errors.name)}
+                                    helperText={touched.name && errors.name}
 
                                 />
                             </Grid>
@@ -285,6 +296,9 @@ const Test = () => {
                                     size="small"
                                     id="guidelinevalue"
                                     name="guidelinevalue"
+                                    value={values.guidelinevalue}
+                                    error={touched.guidelinevalue && Boolean(errors.guidelinevalue)}
+                                    helperText={touched.guidelinevalue && errors.guidelinevalue}
 
                                 />
                             </Grid>
@@ -299,6 +313,10 @@ const Test = () => {
                                     id="fromValue"
                                     name="fromValue"
                                     label="From"
+                                    value={values.From}
+                                    error={touched.From && Boolean(errors.From)}
+                                    helperText={touched.From && errors.From}
+
                                 />
                             </Grid>
                             <Grid item xs={12} sm={4}>
@@ -309,6 +327,9 @@ const Test = () => {
                                     id="toValue"
                                     name="toValue"
                                     label="To"
+                                    value={values.toValue}
+                                    error={touched.toValue && Boolean(errors.toValue)}
+                                    helperText={touched.toValue && errors.toValue}
                                 />
                             </Grid>
 

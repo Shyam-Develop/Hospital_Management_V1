@@ -236,7 +236,10 @@ const TestGroup = () => {
 
       <Formik
         initialValues={{
-         
+          code: "",
+          name: "",
+          sortorder: "",
+
         }}
         onSubmit={(values) => {
         }}
@@ -255,6 +258,9 @@ const TestGroup = () => {
                   id="code"
                   name="code"
                   size="small"
+                  value={values.code}
+                  error={touched.code && Boolean(errors.code)}
+                  helperText={touched.code && errors.code}
 
                 />
               </Grid>
@@ -271,6 +277,9 @@ const TestGroup = () => {
                   size="small"
                   id="name"
                   name="name"
+                  value={values.name}
+                  error={touched.name && Boolean(errors.name)}
+                  helperText={touched.name && errors.name}
 
                 />
               </Grid>
@@ -286,6 +295,10 @@ const TestGroup = () => {
                   size="small"
                   id="sortorder"
                   name="sortorder"
+                  value={values.sortorder}
+                  error={touched.sortorder && Boolean(errors.sortorder)}
+                  helperText={touched.sortorder && errors.sortorder}
+
 
                 />
               </Grid>
