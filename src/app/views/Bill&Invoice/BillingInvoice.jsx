@@ -23,6 +23,7 @@ import { getPatientListData } from "app/redux/slice/getSlice";
 import { useDispatch, useSelector } from "react-redux";
 import SearchIcon from '@mui/icons-material/Search';
 import PaymentIcon from '@mui/icons-material/Payment'; // Import the payment icon
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 
 
 // ********************** STYLED COMPONENTS ********************** //
@@ -46,19 +47,14 @@ const BillingInvoice = () => {
   // ********************** LOCAL STATE ********************** //
 
   // ********************** REDUX STATE ********************** //
-  
+  const patientRows=useSelector((state)=>state.getSlice.getPatientList)
+  console.log(patientRows,'==patientRows')
+  useEffect
+  (()=>{
+  dispatch(getPatientListData())
+  },[dispatch])
   // ********************** COLUMN AND ROWS ********************** //
-  const rows = [
-    {
-      RecordId: "1",
-      patientName: "",
-      email: "",
-      phoneNumber: "",
-      dateOfBirth: "",
-      dateOfJoining: "",
 
-    }
-  ]
   const columns = [
     {
       headerName: "RecordID",
@@ -70,7 +66,7 @@ const BillingInvoice = () => {
     },
     {
       headerName: "Patient Name",
-      field: "patientName",
+      field: "FirstName",
       width: "150",
       align: "left",
       headerAlign: "left",
@@ -79,7 +75,7 @@ const BillingInvoice = () => {
    
     {
       headerName: "Email",
-      field: "email",
+      field: "Email",
       width: "170",
       align: "left",
       headerAlign: "center",
@@ -87,29 +83,14 @@ const BillingInvoice = () => {
     },
     {
       headerName: "Phone",
-      field: "phoneNumber",
+      field: "PhoneNumber",
       width: "150",
       align: "right",
       headerAlign: "center",
       hide: false,
     },
    
-    {
-      headerName: "DOB",
-      field: "dateOfBirth",
-      width: "100",
-      align: "right",
-      headerAlign: "center",
-      hide: false,
-    },
-    {
-      headerName: "DOJ",
-      field: "dateOfJoining",
-      width: "100",
-      align: "right",
-      headerAlign: "center",
-      hide: false,
-    },
+  
     {
       field: "Action",
       headerName: "Action",
@@ -131,10 +112,11 @@ const BillingInvoice = () => {
               color="primary"
               size="small"
               onClick={() => {
-                navigate("/BillingInvoice/bill-and-invoice-edit");
+                navigate("/BillingInvoice/bill-and-invoice-edit",{state:{RecordId:params.row.RecordId}});
               }}
+              startIcon={<CurrencyRupeeIcon/>}
             >
-              Edit
+              Bill
             </Button>
 
           </div>
@@ -228,9 +210,9 @@ const BillingInvoice = () => {
               toolbar: CustomToolbar,
             }}
             rowHeight={dataGridRowHeight}
-            rows={rows}
+            rows={patientRows}
             columns={columns}
-            getRowId={(row) => row.patientName}
+            getRowId={(row) => row.RecordId}
             initialState={{
               pagination: { paginationModel: { pageSize: 20 } },
             }}

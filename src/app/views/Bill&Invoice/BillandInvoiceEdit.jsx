@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Grid, Typography, TextField, Button, Box, FormHelperText, useTheme, LinearProgress, Stack
 
@@ -34,6 +34,23 @@ const BillingInvoiceEdit = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const theme = useTheme();
+  const location = useLocation();
+  const state = location.state;
+  console.log(state, "state");
+
+
+
+  const data = useSelector((state) => state.getSlice.getPatientData);
+    const status= useSelector((state) => state.getSlice.getPatientDataStatus);
+    console.log(status, "status");
+
+      const error= useSelector((state) => state.getSlice.getPatientDataError);
+      console.log(data, "==PatientData");
+
+
+  useEffect(() => {
+    dispatch(getPatient({ id: state.RecordId }));
+  }, [dispatch, state.RecordId]);
 
 
   // Formik validation schema
@@ -48,17 +65,33 @@ const BillingInvoiceEdit = () => {
     narration: Yup.string().required("Narration is required"),
     amount: Yup.number().positive("Amount must be positive").required("Amount is required"),
   });
-  const rows = [
-    {
-      RecordId: "1",
-      serielnumber: "",
-      description: "",
-      narration: "",
-      amount: "",
-
+  const savePatientData = async (values) => {
+    const patientData = {
+      FirstName: values.firstName,
+      EmailId: values.email,
+      PhoneNumber: values.phoneNumber,
 
     }
-  ]
+    console.log(patientData)
+    if (state.RecordId === 0) {
+      const response = await dispatch(PostPatient({ patientData }))
+      if (response.payload.status === "Y") {
+        toast.success(response.payload.message)
+
+      } else {
+        toast.error(response.payload.message)
+      }
+    } else {
+      const response = await dispatch(PutPatient({ Id: state.RecordId, patientData }))
+      console.log(response, '==========================================UPDATE--RESPONSE');
+      if (response.payload.status === "Y") {
+        toast.success(response.payload.message)
+
+      } else {
+        toast.error(response.payload.message)
+      }
+    }
+  }
   const columns = [
     {
       headerName: "RecordID",
@@ -121,12 +154,12 @@ const BillingInvoiceEdit = () => {
 
       <Formik
         initialValues={{
-          serielnumber: "",
-          description: "",
-          narration: "",
-          amount: "",
+          firstName: data?.FirstName || "",
+          email: data?.Email || "",
+          phoneNumber: data?.Phone || "",
         }}
         onSubmit={(values) => {
+          console.log("Form Values:", values);
         }}
       >
         {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
@@ -187,7 +220,7 @@ const BillingInvoiceEdit = () => {
                 />
               </Grid>
 
- 
+
 
             </Grid>
 
@@ -218,8 +251,8 @@ const BillingInvoiceEdit = () => {
                 }}
               >
                 Line Items
-              </Typography>            
-                </Grid>
+              </Typography>
+            </Grid>
             <Stack direction="row" spacing={2}>
               <Stack sx={{ gridColumn: "span 4" }} direction="column" gap={2}>
                 <Box
@@ -262,7 +295,7 @@ const BillingInvoiceEdit = () => {
                       loadingOverlay: LinearProgress,
                     }}
                     rowHeight={dataGridRowHeight}
-                    rows={rows}
+                    rows={""}
                     columns={columns}
                     getRowId={(row) => row.RecordId}
                     initialState={{

@@ -1,318 +1,246 @@
 import React, { useEffect } from "react";
 import {
-  Grid, Typography, TextField, Button, Box, FormHelperText, useTheme, LinearProgress,
-
+    LinearProgress,
+    Paper,
+    Button,
+    Box,
+    styled,
+    useTheme,
 } from "@mui/material";
-import { styled } from "@mui/system";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getPatient } from "app/redux/slice/getSlice";
-import { Formik } from "formik";
-import * as Yup from "yup";
-import { PostPatient, PutPatient } from "app/redux/slice/postSlice";
-import toast from "react-hot-toast";
-import { dataGridHeight, dataGridRowHeight } from "app/utils/constant";
 import {
-  DataGrid,
-  GridToolbarQuickFilter,
-  GridToolbarContainer,
+    DataGrid,
+    GridToolbarQuickFilter,
+    GridToolbarContainer,
 } from "@mui/x-data-grid";
+import { Breadcrumb } from "app/components";
+import { dataGridHeight, dataGridRowHeight } from "app/utils/constant";
+
+// ********************** ICONS ********************** //
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import { useNavigate } from "react-router-dom";
+import { getPatientListData } from "app/redux/slice/getSlice";
+import { useDispatch, useSelector } from "react-redux";
+import SearchIcon from '@mui/icons-material/Search';
+import PaymentIcon from '@mui/icons-material/Payment'; // Import the payment icon
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 
 
-
-// ********************* STYLED COMPONENTS ********************* //
+// ********************** STYLED COMPONENTS ********************** //
 const Container = styled("div")(({ theme }) => ({
-  margin: "15px",
-  [theme.breakpoints.down("sm")]: { margin: "16px" },
-  "& .breadcrumb": {
-    marginBottom: "10px",
-    [theme.breakpoints.down("sm")]: { marginBottom: "16px" },
-  },
+    margin: "15px",
+    [theme.breakpoints.down("sm")]: { margin: "16px" },
+    "& .breadcrumb": {
+        marginBottom: "10px",
+        [theme.breakpoints.down("sm")]: { marginBottom: "16px" },
+    },
 }));
 
+// ********************** ITEMS SCREEN LISTVIEW ********************** //
 const Prescription = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const theme = useTheme();
+    // ********************** HOOKS AND CONSTANTS ********************** //
+    const theme = useTheme();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
 
-  // Formik validation schema
-  const validationSchema = Yup.object({
-    firstName: Yup.string().required("First Name is required"),
-    lastName: Yup.string().required("Last Name is required"),
-    email: Yup.string().email("Invalid email format").required("Email is required"),
-    phoneNumber: Yup.string().matches(/^[0-9]{10}$/, "Phone number must be 10 digits").required("Phone number is required"),
-    dob: Yup.date().max(new Date(), "Date of birth cannot be in the future").required("Date of birth is required"),
-    doj: Yup.date().max(new Date(), "Date of joining cannot be in the future").required("Date of joining is required"),
-    description: Yup.string().required("Description is required"),
-    narration: Yup.string().required("Narration is required"),
-    amount: Yup.number().positive("Amount must be positive").required("Amount is required"),
-  });
-  const rows = [
-    {
-      RecordId: "1",
-      serielnumber: "",
-      description: "",
-      narration: "",
-      amount: "",
+    // ********************** LOCAL STATE ********************** //
+
+    // ********************** REDUX STATE ********************** //
+    const patientRows = useSelector((state) => state.getSlice.getPatientList)
+    console.log(patientRows, '==patientRows')
+    useEffect
+        (() => {
+            dispatch(getPatientListData())
+        }, [dispatch])
+    // ********************** COLUMN AND ROWS ********************** //
+    const rows = [
+        {
+          RecordId: "",
+          FirstName: "",
+          Email: "",
+          PhoneNumber: "",
+        }
+          ]
+    const columns = [
+        {
+            headerName: "RecordID",
+            field: "RecordId",
+            width: "150",
+            align: "left",
+            headerAlign: "left",
+            hide: false,
+        },
+        {
+            headerName: "Patient Name",
+            field: "FirstName",
+            width: "150",
+            align: "left",
+            headerAlign: "left",
+            hide: true,
+        },
+
+        {
+            headerName: "Email",
+            field: "Email",
+            width: "170",
+            align: "left",
+            headerAlign: "center",
+            hide: false,
+        },
+        {
+            headerName: "Phone",
+            field: "PhoneNumber",
+            width: "150",
+            align: "right",
+            headerAlign: "center",
+            hide: false,
+        },
 
 
-    }
-  ]
-  const columns = [
-    {
-      headerName: "RecordID",
-      field: "RecordId",
-      width: "150",
-      align: "left",
-      headerAlign: "left",
-      hide: false,
-    },
-    {
-      headerName: "SlNo",
-      field: "serielnumber",
-      width: "100",
-      align: "left",
-      headerAlign: "center",
-      hide: true,
-    },
-    {
-      headerName: "Description",
-      field: "description",
-      width: "200",
-      align: "left",
-      headerAlign: "center",
-      hide: false,
-    },
+        {
+            field: "Action",
+            headerName: "Action",
+            minWidth: 200,
+            flex: 1,
+            sortable: false,
+            headerAlign: "center",
+            filterable: false,
+            disableColumnMenu: true,
+            disableExport: true,
+            align: "center",
+            renderCell: (params) => {
+                return (
+                    <div>
 
-    {
-      headerName: "Narration",
-      field: "narration",
-      width: "200",
-      align: "left",
-      headerAlign: "center",
-      hide: false,
-    },
-    {
-      headerName: "Amount",
-      field: "amount",
-      width: "130",
-      align: "left",
-      headerAlign: "center",
-      hide: false,
-    },
+                        <Button
+                            sx={{ height: 25, marginLeft: 1 }}
+                            variant="contained"
+                            color="primary"
+                            size="small"
+                            onClick={() => {
+                                navigate("/Lab/prescription-edit");
+                            }}
+                        >
+                            Prescription
+                        </Button>
+
+                    </div>
+                );
+            },
+        },
+    ];
 
 
-  ];
 
-  return (
-    <Container>
-      <Typography
-        variant="h5"
-        sx={{
-          fontSize: "2rem",
-          textAlign: "left",
-          fontWeight: "bold",
-          marginBottom: 3,
-        }}
-      >
-        Prescription
-      </Typography>
-
-      <Formik
-        initialValues={{
-          serielnumber: "",
-          description: "",
-          narration: "",
-          amount: "",
-        }}
-        onSubmit={(values) => {
-        }}
-      >
-        {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
-            <Grid container spacing={2} alignItems="center" sx={{ mb: 2 }} direction="rtl">
-              {/* First Name */}
-              <Grid item xs={12} sm={4}>
-                <Typography sx={{ fontWeight: "bold" }}>Patient Name:</Typography>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <TextField
-                  fullWidth
-                  variant="standard"
-                  id="firstName"
-                  name="firstName"
-                  size="small"
-                  value={values.firstName}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched.firstName && !!errors.firstName}
-                  helperText={touched.firstName && errors.firstName}
-                />
-              </Grid>
-
-
-              {/* Email */}
-              <Grid item xs={12} sm={4}>
-                <Typography sx={{ fontWeight: "bold" }}>Email ID:</Typography>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <TextField
-                  fullWidth
-                  variant="standard"
-                  size="small"
-                  id="email"
-                  name="email"
-                  value={values.email}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched.email && !!errors.email}
-                  helperText={touched.email && errors.email}
-                />
-              </Grid>
-
-              {/* Phone Number */}
-              <Grid item xs={12} sm={4}>
-                <Typography sx={{ fontWeight: "bold" }}>Phone Number:</Typography>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <TextField
-                  fullWidth
-                  variant="standard"
-                  size="small"
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  value={values.phoneNumber}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched.phoneNumber && !!errors.phoneNumber}
-                  helperText={touched.phoneNumber && errors.phoneNumber}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={4}>
-                <Typography sx={{ fontWeight: "bold" }}>Date of Birth:</Typography>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <TextField
-                  fullWidth
-                  name="dateofbirth"
-                  id="dateofbirth"
-                  variant="standard"
-                  size="small"
-                  type="date"
-                  value={values.dateofbirth ? new Date(values.dateofbirth).toISOString().split("T")[0] : ""}
-                  error={touched.dateofbirth && Boolean(errors.dateofbirth)}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  helperText={touched.dateofbirth && errors.dateofbirth}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={4}>
-                <Typography sx={{ fontWeight: "bold" }}>Date of Joining:</Typography>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <TextField
-                  fullWidth
-                  name="dateofjoining"
-                  id="dateofjoining"
-                  variant="standard"
-                  size="small"
-                  type="date"
-                  value={values.dateofjoining ? new Date(values.dateofjoining).toISOString().split("T")[0] : ""}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  helperText={touched.dateofjoining && errors.dateofjoining}
-                />
-              </Grid>
-
-            </Grid>
-
-            <Box mt={2}>
-              <Grid container justifyContent="flex-end" spacing={1}>
-                <Grid item>
-                  <Button variant="contained" color="primary" type="submit">
-                    Save
-                  </Button>
-                </Grid>
-                <Grid item>
-                  <Button variant="contained" color="primary" onClick={() => navigate("/BillingInvoice/bill-invoice")}>
-                    Cancel
-                  </Button>
-                </Grid>
-              </Grid>
-            </Box>
-
-         
-            <Box
-              sx={{
-                width: '65%', // Adjust the width as needed
-                height: '300px', // Adjust the height as needed
-                "& .MuiDataGrid-root": {
-                  border: "none",
-                },
-                "& .MuiDataGrid-cell": {
-                  borderBottom: "none",
-                },
-                "& .name-column--cell": {
-                  color: theme.palette.info.contrastText,
-                },
-                "& .MuiDataGrid-columnHeaders": {
-                  backgroundColor: theme.palette.info.main,
-                  color: theme.palette.info.contrastText,
-                  fontWeight: "bold",
-                  fontSize: theme.typography.subtitle2.fontSize,
-                },
-                "& .MuiDataGrid-virtualScroller": {
-                  backgroundColor: theme.palette.info.light,
-                },
-                "& .MuiDataGrid-footerContainer": {
-                  borderTop: "none",
-                  backgroundColor: theme.palette.info.main,
-                  color: theme.palette.info.contrastText,
-                },
-                "& .MuiCheckbox-root": {
-                  color: `${theme.palette.primary.main} !important`,
-                },
-                "& .MuiDataGrid-row:hover": {
-                  backgroundColor: theme.palette.action.hover,
-                },
-              }}
+    // ********************** TOOLBAR ********************** //
+    function CustomToolbar() {
+        return (
+            <GridToolbarContainer
+                sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "flex-end", // Align everything to the right
+                    width: "100%",
+                    padding: 0.5,
+                }}
             >
-              <DataGrid
-                slots={{
-                  loadingOverlay: LinearProgress,
-                }}
-                rowHeight={dataGridRowHeight}
-                rows={rows}
-                columns={columns}
-                getRowId={(row) => row.RecordId}
-                initialState={{
-                  pagination: { paginationModel: { pageSize: 20 } },
-                }}
-                pageSizeOptions={[5, 10, 20, 25]}
-                columnVisibilityModel={{
-                  RecordId: false,
-                }}
-                disableColumnFilter
-                disableColumnSelector
-                disableDensitySelector
-                slotProps={{
-                  toolbar: {
-                    showQuickFilter: true,
-                  },
-                }}
-                disableSelectionOnClick
-                disableRowSelectionOnClick
-              />
-            </Box>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 1,
+                    }}
+                >
+                    <GridToolbarQuickFilter />
+                    <Button
+                        sx={{ height: 25, marginLeft: 1 }}
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        onClick={() => {
+                        }}
+                    >
+                        Search
+                    </Button>
+                </Box>
+            </GridToolbarContainer>
+        );
+    }
 
-          </form>
-        )}
-      </Formik>
-    </Container>
-  );
+    return (
+        <Container>
+            <div className="breadcrumb">
+                <Breadcrumb routeSegments={[{ name: "Prescription" }]} />
+            </div>
+
+            <Paper sx={{ width: "100%", mb: 2 }}>
+                <Box
+                    sx={{
+                        height: dataGridHeight,
+                        "& .MuiDataGrid-root": {
+                            border: "none",
+                        },
+                        "& .MuiDataGrid-cell": {
+                            borderBottom: "none",
+                        },
+                        "& .name-column--cell": {
+                            color: theme.palette.info.contrastText,
+                        },
+                        "& .MuiDataGrid-columnHeaders": {
+                            backgroundColor: theme.palette.info.main,
+                            color: theme.palette.info.contrastText,
+                            fontWeight: "bold",
+                            fontSize: theme.typography.subtitle2.fontSize,
+                        },
+                        "& .MuiDataGrid-virtualScroller": {
+                            backgroundColor: theme.palette.info.light,
+                        },
+                        "& .MuiDataGrid-footerContainer": {
+                            borderTop: "none",
+                            backgroundColor: theme.palette.info.main,
+                            color: theme.palette.info.contrastText,
+                        },
+                        "& .MuiCheckbox-root": {
+                            color: `${theme.palette.primary.main} !important`,
+                        },
+                        "& .MuiDataGrid-row:hover": {
+                            backgroundColor: theme.palette.action.hover,
+                        },
+                    }}
+                >
+                    <DataGrid
+                        slots={{
+                            loadingOverlay: LinearProgress,
+                            toolbar: CustomToolbar,
+                        }}
+                        rowHeight={dataGridRowHeight}
+                        rows={rows}
+                        columns={columns}
+                        getRowId={(row) => row.FirstName}
+                        initialState={{
+                            pagination: { paginationModel: { pageSize: 20 } },
+                        }}
+                        pageSizeOptions={[5, 10, 20, 25]}
+                        columnVisibilityModel={{
+                            RecordId: false,
+                        }}
+                        disableColumnFilter
+                        disableColumnSelector
+                        disableDensitySelector
+                        slotProps={{
+                            toolbar: {
+                                showQuickFilter: true,
+                            },
+                        }}
+                        disableSelectionOnClick
+                        disableRowSelectionOnClick
+                    />
+                </Box>
+            </Paper>
+        </Container>
+    );
 };
 
 export default Prescription;
