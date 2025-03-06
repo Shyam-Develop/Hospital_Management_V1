@@ -36,7 +36,7 @@ const PrescriptionEdit = () => {
 
   const [rows, setRows] = useState([
     {
-      id: 1, // Ensure each row has a unique identifier
+      id: 1,
       testgroup: "",
       name: "",
       sortorder: "",
@@ -121,10 +121,7 @@ const PrescriptionEdit = () => {
 
       <Formik
         initialValues={{
-          serialnumber: "",
-          description: "",
-          narration: "",
-          amount: "",
+       
         }}
         onSubmit={(values) => { }}
       >
@@ -136,19 +133,13 @@ const PrescriptionEdit = () => {
                   <TextField
                     fullWidth
                     variant="outlined"
-                    id="firstName"
-                    name="firstName"
+                    id="patientName"
+                    name="patientName"
                     size="small"
                     label="Patient Name"
-                    value={values.firstName}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.firstName && !!errors.firstName}
-                    helperText={touched.firstName && errors.firstName}
                   />
                 </Stack>
 
-                {/* Email */}
                 <Stack direction="column" gap={2}>
                   <TextField
                     fullWidth
@@ -157,11 +148,6 @@ const PrescriptionEdit = () => {
                     id="email"
                     name="email"
                     label="Email"
-                    value={values.email}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.email && !!errors.email}
-                    helperText={touched.email && errors.email}
                   />
                 </Stack>
 
@@ -174,11 +160,6 @@ const PrescriptionEdit = () => {
                     id="phoneNumber"
                     name="phoneNumber"
                     label="Phone Number"
-                    value={values.phoneNumber}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.phoneNumber && !!errors.phoneNumber}
-                    helperText={touched.phoneNumber && errors.phoneNumber}
                   />
                 </Stack>
               </Stack>
@@ -188,15 +169,10 @@ const PrescriptionEdit = () => {
                   <TextField
                     fullWidth
                     variant="outlined"
-                    id="description"
-                    name="description"
+                    id="doctorname"
+                    name="doctorname"
                     size="small"
                     label="Doctor Name"
-                    value={values.description}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.description && !!errors.description}
-                    helperText={touched.description && errors.description}
                   />
                 </Stack>
 
@@ -205,14 +181,9 @@ const PrescriptionEdit = () => {
                     fullWidth
                     variant="outlined"
                     size="small"
-                    id="narration"
-                    name="narration"
+                    id="date"
+                    name="date"
                     type="date"
-                    value={values.narration}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.narration && !!errors.narration}
-                    helperText={touched.narration && errors.narration}
                   />
                 </Stack>
                 <Stack direction="column" gap={2}>
@@ -220,14 +191,9 @@ const PrescriptionEdit = () => {
                     fullWidth
                     variant="outlined"
                     size="small"
-                    id="narration"
-                    name="narration"
+                    id="comments"
+                    name="comments"
                     label="Comments"
-                    value={values.narration}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.narration && !!errors.narration}
-                    helperText={touched.narration && errors.narration}
                   />
                 </Stack>
               </Stack>

@@ -221,7 +221,7 @@ const Test = () => {
 
     return (
         <Container>
-           
+
             <Typography
                 variant="h5"
                 sx={{
@@ -236,10 +236,7 @@ const Test = () => {
 
             <Formik
                 initialValues={{
-                    serielnumber: "",
-                    description: "",
-                    narration: "",
-                    amount: "",
+                  
                 }}
                 onSubmit={(values) => {
                 }}
@@ -255,8 +252,8 @@ const Test = () => {
                                 <TextField
                                     fullWidth
                                     variant="standard"
-                                    id="firstName"
-                                    name="firstName"
+                                    id="code"
+                                    name="code"
                                     size="small"
 
                                 />
@@ -272,13 +269,12 @@ const Test = () => {
                                     fullWidth
                                     variant="standard"
                                     size="small"
-                                    id="email"
-                                    name="email"
+                                    id="name"
+                                    name="name"
 
                                 />
                             </Grid>
 
-                            {/* Phone Number */}
                             <Grid item xs={12} sm={4}>
                                 <Typography sx={{ fontWeight: "bold" }}>Guideline Value:</Typography>
                             </Grid>
@@ -287,8 +283,8 @@ const Test = () => {
                                     fullWidth
                                     variant="standard"
                                     size="small"
-                                    id="phoneNumber"
-                                    name="phoneNumber"
+                                    id="guidelinevalue"
+                                    name="guidelinevalue"
 
                                 />
                             </Grid>
