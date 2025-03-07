@@ -221,7 +221,7 @@ const Test = () => {
 
     return (
         <Container>
-           
+
             <Typography
                 variant="h5"
                 sx={{
@@ -236,10 +236,12 @@ const Test = () => {
 
             <Formik
                 initialValues={{
-                    serielnumber: "",
-                    description: "",
-                    narration: "",
-                    amount: "",
+                    code: "",
+                    name: "",
+                    guidelinevalue: "",
+                    fromValue: "",
+                    toValue: "",
+
                 }}
                 onSubmit={(values) => {
                 }}
@@ -255,9 +257,12 @@ const Test = () => {
                                 <TextField
                                     fullWidth
                                     variant="standard"
-                                    id="firstName"
-                                    name="firstName"
+                                    id="code"
+                                    name="code"
                                     size="small"
+                                    value={values.code}
+                                    error={touched.code && Boolean(errors.code)}
+                                    helperText={touched.code && errors.code}
 
                                 />
                             </Grid>
@@ -272,13 +277,15 @@ const Test = () => {
                                     fullWidth
                                     variant="standard"
                                     size="small"
-                                    id="email"
-                                    name="email"
+                                    id="name"
+                                    name="name"
+                                    value={values.name}
+                                    error={touched.name && Boolean(errors.name)}
+                                    helperText={touched.name && errors.name}
 
                                 />
                             </Grid>
 
-                            {/* Phone Number */}
                             <Grid item xs={12} sm={4}>
                                 <Typography sx={{ fontWeight: "bold" }}>Guideline Value:</Typography>
                             </Grid>
@@ -287,8 +294,11 @@ const Test = () => {
                                     fullWidth
                                     variant="standard"
                                     size="small"
-                                    id="phoneNumber"
-                                    name="phoneNumber"
+                                    id="guidelinevalue"
+                                    name="guidelinevalue"
+                                    value={values.guidelinevalue}
+                                    error={touched.guidelinevalue && Boolean(errors.guidelinevalue)}
+                                    helperText={touched.guidelinevalue && errors.guidelinevalue}
 
                                 />
                             </Grid>
@@ -303,6 +313,10 @@ const Test = () => {
                                     id="fromValue"
                                     name="fromValue"
                                     label="From"
+                                    value={values.From}
+                                    error={touched.From && Boolean(errors.From)}
+                                    helperText={touched.From && errors.From}
+
                                 />
                             </Grid>
                             <Grid item xs={12} sm={4}>
@@ -313,6 +327,9 @@ const Test = () => {
                                     id="toValue"
                                     name="toValue"
                                     label="To"
+                                    value={values.toValue}
+                                    error={touched.toValue && Boolean(errors.toValue)}
+                                    helperText={touched.toValue && errors.toValue}
                                 />
                             </Grid>
 

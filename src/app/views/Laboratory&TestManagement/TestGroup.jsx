@@ -45,16 +45,16 @@ const TestGroup = () => {
   // ********************** HOOKS AND CONSTANTS ********************** //
   const theme = useTheme();
   const navigate = useNavigate();
-  const dispatch= useDispatch();
+  const dispatch = useDispatch();
   // ********************** LOCAL STATE ********************** //
 
   // ********************** REDUX STATE ********************** //
-  const doctorRows=useSelector((state)=>state.getSlice.getDoctorList)
-  console.log(doctorRows,'==DoctorRows')
+  const doctorRows = useSelector((state) => state.getSlice.getDoctorList)
+  console.log(doctorRows, '==DoctorRows')
   useEffect
-  (()=>{
-  dispatch(getDoctorListData())
-  },[dispatch])
+    (() => {
+      dispatch(getDoctorListData())
+    }, [dispatch])
   // ********************** COLUMN AND ROWS ********************** //
   const columns = [
     // {
@@ -177,7 +177,7 @@ const TestGroup = () => {
     // },
   ];
 
- 
+
 
   // ********************** TOOLBAR ********************** //
   // ********************** TOOLBAR ********************** //
@@ -221,25 +221,25 @@ const TestGroup = () => {
 
   return (
     <Container>
-      
-        <Typography
-             variant="h5"
-             sx={{
-               fontSize: "2rem",
-               textAlign: "left",
-               fontWeight: "bold",
-               marginBottom: 3,
-             }}
-           >
-             Test Group
-           </Typography>
+
+      <Typography
+        variant="h5"
+        sx={{
+          fontSize: "2rem",
+          textAlign: "left",
+          fontWeight: "bold",
+          marginBottom: 3,
+        }}
+      >
+        Test Group
+      </Typography>
 
       <Formik
         initialValues={{
-          serielnumber: "",
-          description: "",
-          narration: "",
-          amount: "",
+          code: "",
+          name: "",
+          sortorder: "",
+
         }}
         onSubmit={(values) => {
         }}
@@ -255,10 +255,13 @@ const TestGroup = () => {
                 <TextField
                   fullWidth
                   variant="standard"
-                  id="firstName"
-                  name="firstName"
+                  id="code"
+                  name="code"
                   size="small"
-                
+                  value={values.code}
+                  error={touched.code && Boolean(errors.code)}
+                  helperText={touched.code && errors.code}
+
                 />
               </Grid>
 
@@ -272,9 +275,12 @@ const TestGroup = () => {
                   fullWidth
                   variant="standard"
                   size="small"
-                  id="email"
-                  name="email"
-               
+                  id="name"
+                  name="name"
+                  value={values.name}
+                  error={touched.name && Boolean(errors.name)}
+                  helperText={touched.name && errors.name}
+
                 />
               </Grid>
 
@@ -287,18 +293,22 @@ const TestGroup = () => {
                   fullWidth
                   variant="standard"
                   size="small"
-                  id="phoneNumber"
-                  name="phoneNumber"
-              
+                  id="sortorder"
+                  name="sortorder"
+                  value={values.sortorder}
+                  error={touched.sortorder && Boolean(errors.sortorder)}
+                  helperText={touched.sortorder && errors.sortorder}
+
+
                 />
               </Grid>
 
               <Box sx={{ flexBasis: '26%', marginLeft: '17px', marginTop: '15px' }}>
-              <FormControlLabel
-               control={<Checkbox size="large" />}
-               label="Disable"
-             />
-           </Box>
+                <FormControlLabel
+                  control={<Checkbox size="large" />}
+                  label="Disable"
+                />
+              </Box>
 
             </Grid>
 
@@ -317,7 +327,7 @@ const TestGroup = () => {
               </Grid>
             </Box>
 
-           
+
 
           </form>
         )}
