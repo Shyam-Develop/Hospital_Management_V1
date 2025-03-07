@@ -6,7 +6,7 @@ export const containedLayoutWidth = 1200
 export const dataGridRowHeight = 28
 export const dataGridHeight = 500
 export const dataGridHeightC = 300
-
+export const dataGridHeaderFooterHeight=32
 export const convertHexToRGB = (hex) => {
     // check if it's a rgba
     if (hex.match('rgba')) {
