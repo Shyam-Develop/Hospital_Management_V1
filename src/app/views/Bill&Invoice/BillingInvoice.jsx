@@ -67,7 +67,7 @@ const BillingInvoice = () => {
     {
       headerName: "Patient Name",
       field: "FirstName",
-      width: "150",
+      width: "200",
       align: "left",
       headerAlign: "left",
       hide: true,
@@ -76,7 +76,7 @@ const BillingInvoice = () => {
     {
       headerName: "Email",
       field: "Email",
-      width: "170",
+      width: "250",
       align: "left",
       headerAlign: "center",
       hide: false,
@@ -148,16 +148,6 @@ const BillingInvoice = () => {
           }}
         >
           <GridToolbarQuickFilter />
-          <Button
-            sx={{ height: 25, marginLeft: 1 }}
-            variant="contained"
-            color="primary"
-            size="small"
-            onClick={() => {
-            }}
-          >
-            Search
-          </Button>
         </Box>
       </GridToolbarContainer>
     );

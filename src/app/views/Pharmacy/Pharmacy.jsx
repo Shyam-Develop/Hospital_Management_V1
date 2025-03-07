@@ -1,4 +1,4 @@
-import {React,useEffect,useMemo,useState} from "react";
+import { React, useEffect, useMemo, useState } from "react";
 import {
   Paper,
   Box,
@@ -55,180 +55,180 @@ const Container = styled("div")(({ theme }) => ({
 const Pharmacy = () => {
   // ******************** HOOKS AND CONSTANTS ******************** //
   const theme = useTheme();
-  const location=useLocation();
+  const location = useLocation();
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const params = useParams();
   const navigate = useNavigate();
-  const [pageSize, setPageSize] =useState(10);
+  const [pageSize, setPageSize] = useState(10);
   const dataGridHeight = 500;
   const dataGridRowHeight = 40;
-const dispatch=useDispatch();
+  const dispatch = useDispatch();
 
-//========================================LOCAL-USESTATE=============================//
+  //========================================LOCAL-USESTATE=============================//
 
-const [rows, setRows] = useState([]);
-const [rowModesModel, setRowModesModel] = useState({});
-
-
-const [Uom, setUOM] = useState("");
-const [cuom, setCuom] = useState("");
-const [expiryDate, setExpiryDate] = useState("");
-const [mrp, setMrp] = useState("");
-const [Gst, setGst] = useState("");
-const [Sgst, setSgst] = useState("");
-const [Cgst, setCgst] = useState("");
-const [Disc, setDisc] = useState("");
- const[seletcedCategoryID,setseletcedCategoryID]=useState(null);
- const[selectedCustoreID,setselectedCustoreID]=useState(null);
-const[buttonEnable ,setButtonEnable]=useState(false)
-console.log(selectedCustoreID,'===============selectedCustoreID')
- // ******************** REDUX STATE ******************** //
-const data=useSelector((state)=>state.getSlice.getQueueList);
-console.log(data,'-----getQueueList--')
+  const [rows, setRows] = useState([]);
+  const [rowModesModel, setRowModesModel] = useState({});
 
 
+  const [Uom, setUOM] = useState("");
+  const [cuom, setCuom] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
+  const [mrp, setMrp] = useState("");
+  const [Gst, setGst] = useState("");
+  const [Sgst, setSgst] = useState("");
+  const [Cgst, setCgst] = useState("");
+  const [Disc, setDisc] = useState("");
+  const [seletcedCategoryID, setseletcedCategoryID] = useState(null);
+  const [selectedCustoreID, setselectedCustoreID] = useState(null);
+  const [buttonEnable, setButtonEnable] = useState(false)
+  console.log(selectedCustoreID, '===============selectedCustoreID')
+  // ******************** REDUX STATE ******************** //
+  const data = useSelector((state) => state.getSlice.getQueueList);
+  console.log(data, '-----getQueueList--')
 
 
- 
- 
 
-useEffect(()=>{
- dispatch(getQueueListData({id:selectedCustoreID}));
-},[selectedCustoreID])
 
-const formatDateForInput = (dateStr) => {
-  if (!dateStr) return "";
-  const parts = dateStr.split("-");
-  if (parts.length === 3) {
-    return `${parts[2]}-${parts[1]}-${parts[0]}`; // Convert to "YYYY-MM-DD"
-  }
-  return dateStr;
-};
 
-useEffect(() => {
-  if (data.Rows) {
-    setRows(data.Rows);
-  } else {
-    setRows([]); // Ensures rows don't break if explorelistViewData is undefined or not an array
-  }
-}, [data.Rows, location.key]);
+
+
+  useEffect(() => {
+    dispatch(getQueueListData({ id: selectedCustoreID }));
+  }, [selectedCustoreID])
+
+  const formatDateForInput = (dateStr) => {
+    if (!dateStr) return "";
+    const parts = dateStr.split("-");
+    if (parts.length === 3) {
+      return `${parts[2]}-${parts[1]}-${parts[0]}`; // Convert to "YYYY-MM-DD"
+    }
+    return dateStr;
+  };
+
+  useEffect(() => {
+    if (data.Rows) {
+      setRows(data.Rows);
+    } else {
+      setRows([]); // Ensures rows don't break if explorelistViewData is undefined or not an array
+    }
+  }, [data.Rows, location.key]);
 
   //=============================================================ROWS AND COLUMNS==================================================================================//
 
   const columns = [
     {
       headerName: 'RecordID',
-     field: 'RecordID',
-     width: 100,
-     align: 'left',
-     headerAlign: 'center',
-     hide: true,
- },
- {
-  headerName: 'ItemRecordID',
- field: 'ItemRecordID',
- width: 100,
- align: 'left',
- headerAlign: 'center',
- hide: true,
-},
-{
-  headerName: 'UOM',
- field: 'uom',
- width: 100,
- align: 'left',
- headerAlign: 'center',
- hide: true,
-},
-{
-  headerName: 'CUOM',
- field: 'cuom',
- width: 100,
- align: 'left',
- headerAlign: 'center',
- hide: true,
-},
-{
-  headerName: 'ExpiryDate',
- field: 'expiryDate',
- width: 100,
- align: 'left',
- headerAlign: 'center',
- hide: true,
-},
-{
-  headerName: 'MRP',
- field: 'mrp',
- width: 100,
- align: 'left',
- headerAlign: 'center',
- hide: true,
-},
-{
-  headerName: 'Discount',
- field: 'discount',
- width: 100,
- align: 'left',
- headerAlign: 'center',
- hide: true,
-},
-{
-  headerName: 'GST',
- field: 'gst',
- width: 100,
- align: 'left',
- headerAlign: 'center',
- hide: true,
-},
-{
-  headerName: 'SGST',
- field: 'sgst',
- width: 100,
- align: 'left',
- headerAlign: 'center',
- hide: true,
-},
-{
-  headerName: 'CGST',
- field: 'cgst',
- width: 100,
- align: 'left',
- headerAlign: 'center',
- hide: true,
-},
-{
-  headerName: 'GST AMT',
- field: 'gstAmount',
- width: 100,
- align: 'left',
- headerAlign: 'center',
- hide: true,
-},
-{
-  headerName: 'SGST AMT',
- field: 'sgstAmount',
- width: 100,
- align: 'left',
- headerAlign: 'center',
- hide: true,
-},
-{
-  headerName: 'CGST AMT',
- field: 'cgstAmount',
- width: 100,
- align: 'left',
- headerAlign: 'center',
- hide: true,
-},
- {
-   headerName: 'SL#',
-   field: 'SLNO',
-   width: '100',
-   align: 'left',
-   headerAlign: 'center',
-   hide: true,
-   maxWidth: 50
- },
+      field: 'RecordID',
+      width: 100,
+      align: 'left',
+      headerAlign: 'center',
+      hide: true,
+    },
+    {
+      headerName: 'ItemRecordID',
+      field: 'ItemRecordID',
+      width: 100,
+      align: 'left',
+      headerAlign: 'center',
+      hide: true,
+    },
+    {
+      headerName: 'UOM',
+      field: 'uom',
+      width: 100,
+      align: 'left',
+      headerAlign: 'center',
+      hide: true,
+    },
+    {
+      headerName: 'CUOM',
+      field: 'cuom',
+      width: 100,
+      align: 'left',
+      headerAlign: 'center',
+      hide: true,
+    },
+    {
+      headerName: 'ExpiryDate',
+      field: 'expiryDate',
+      width: 100,
+      align: 'left',
+      headerAlign: 'center',
+      hide: true,
+    },
+    {
+      headerName: 'MRP',
+      field: 'mrp',
+      width: 100,
+      align: 'left',
+      headerAlign: 'center',
+      hide: true,
+    },
+    {
+      headerName: 'Discount',
+      field: 'discount',
+      width: 100,
+      align: 'left',
+      headerAlign: 'center',
+      hide: true,
+    },
+    {
+      headerName: 'GST',
+      field: 'gst',
+      width: 100,
+      align: 'left',
+      headerAlign: 'center',
+      hide: true,
+    },
+    {
+      headerName: 'SGST',
+      field: 'sgst',
+      width: 100,
+      align: 'left',
+      headerAlign: 'center',
+      hide: true,
+    },
+    {
+      headerName: 'CGST',
+      field: 'cgst',
+      width: 100,
+      align: 'left',
+      headerAlign: 'center',
+      hide: true,
+    },
+    {
+      headerName: 'GST AMT',
+      field: 'gstAmount',
+      width: 100,
+      align: 'left',
+      headerAlign: 'center',
+      hide: true,
+    },
+    {
+      headerName: 'SGST AMT',
+      field: 'sgstAmount',
+      width: 100,
+      align: 'left',
+      headerAlign: 'center',
+      hide: true,
+    },
+    {
+      headerName: 'CGST AMT',
+      field: 'cgstAmount',
+      width: 100,
+      align: 'left',
+      headerAlign: 'center',
+      hide: true,
+    },
+    {
+      headerName: 'SL#',
+      field: 'SLNO',
+      width: '100',
+      align: 'left',
+      headerAlign: 'center',
+      hide: true,
+      maxWidth: 50
+    },
     {
       headerName: "Item Number",
       field: "ItemNumber",
@@ -300,22 +300,21 @@ useEffect(() => {
       cellClassName: "actions",
       getActions: (params) => {
         const isInEditMode = rowModesModel[params.id]?.mode === GridRowModes.Edit;
-       
-      
+
+
         if (isInEditMode) {
           return [
             <GridActionsCellItem
               icon={<SaveIcon />}
               label="Save"
-              sx={{ color: '#009688'}}
-             onClick={handleSave(params.id, params)}
-            
+              sx={{ color: '#009688' }}
+              onClick={handleSave(params.id, params)}
+
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
               label="Cancel"
-              onClick={() =>
-              {
+              onClick={() => {
                 setRowModesModel((prev) => ({ ...prev, [params.id]: { mode: GridRowModes.View } }));
                 setUOM("");
                 setCuom("");
@@ -330,61 +329,61 @@ useEffect(() => {
               color="inherit"
             />,
           ];
-        
+
         }
-      return [
-      //   <GridActionsCellItem
-      //   icon={<AddIcon style={{ color: '#00563B' }} />}
-      //   label="Add"
-      //   onClick={() => handleInsertInrow(params.id)}
-      //   color="inherit"
-      // />,
-        <GridActionsCellItem
-        icon={<EditIcon style={{ color: '#3498db' }} />}
-          label="Edit"
-          onClick={handleEditClick(params.id,params)}
-          color="inherit"
-        />,
-        <GridActionsCellItem
-          icon={<DeleteIcon style={{ color: '#e74c3c' }} />}
-          label="Delete"
-          onClick={handleDeleteClick(params.id, params, "harddelete")}
-          color="inherit"
-        />,
-       
-       
-      ];
-    }
-  
-  },
-  
+        return [
+          //   <GridActionsCellItem
+          //   icon={<AddIcon style={{ color: '#00563B' }} />}
+          //   label="Add"
+          //   onClick={() => handleInsertInrow(params.id)}
+          //   color="inherit"
+          // />,
+          <GridActionsCellItem
+            icon={<EditIcon style={{ color: '#3498db' }} />}
+            label="Edit"
+            onClick={handleEditClick(params.id, params)}
+            color="inherit"
+          />,
+          <GridActionsCellItem
+            icon={<DeleteIcon style={{ color: '#e74c3c' }} />}
+            label="Delete"
+            onClick={handleDeleteClick(params.id, params, "harddelete")}
+            color="inherit"
+          />,
+
+
+        ];
+      }
+
+    },
+
   ];
 
-  const handleRowSelectio=async(params)=>{
+  const handleRowSelectio = async (params) => {
 
-const id=params.ItemRecordID;
-console.log(id,'===============RecordID')
+    const id = params.ItemRecordID;
+    console.log(id, '===============RecordID')
 
 
-const response= await dispatch(getPharmacyListData({id}));
-console.log(response,'=========================RESPONSE')
-if(response.payload.status === "Y"){
-  setUOM(response.payload.data.UOM);
-  setCuom(response.payload.data.CUOM);
-  setExpiryDate(response.payload.data.ExpiryDate);
-  setMrp(response.payload.data.MRP);
-  setGst(response.payload.data.GST);
-  setSgst(response.payload.data.SGST);
-  setCgst(response.payload.data.CGST);
-  setDisc(response.payload.data.Discount);
-  console.log(expiryDate,'====expiryDate')
-}else{
-  toast.error("ERROR")
-}
+    const response = await dispatch(getPharmacyListData({ id }));
+    console.log(response, '=========================RESPONSE')
+    if (response.payload.status === "Y") {
+      setUOM(response.payload.data.UOM);
+      setCuom(response.payload.data.CUOM);
+      setExpiryDate(response.payload.data.ExpiryDate);
+      setMrp(response.payload.data.MRP);
+      setGst(response.payload.data.GST);
+      setSgst(response.payload.data.SGST);
+      setCgst(response.payload.data.CGST);
+      setDisc(response.payload.data.Discount);
+      console.log(expiryDate, '====expiryDate')
+    } else {
+      toast.error("ERROR")
+    }
   }
 
-    
-  
+
+
   //=====================================================HANDLEinsert========================================================================//
   const [quantity, setQuantity] = useState(""); // State for quantity
 
@@ -393,81 +392,81 @@ if(response.payload.status === "Y"){
   };
 
   const handleInsert = () => {
-      console.log("----------Step 1");
-    
-      if (!tabletsData) {
-        console.warn("No item selected in Tablets dropdown.");
-        return; // Prevent adding an empty row
-      }
-    
-     // Temporary unique ID
-         const newId = Math.round(Math.random() * 10000);
-      setRows((prevRows) => {
-    
-        const nextSLNO = prevRows.length > 0 ? Math.max(...prevRows.map((row) => row.SLNO || 0)) + 1 : 1; // Determine next SLNO
-    
-        const newRow = {
-          RecordID: newId, // Temporary ID, replaced after backend save
-          SLNO: nextSLNO,
-          ItemRecordID:tabletsData?.item_id || "",
-          ItemNumber: tabletsData?.itemNumber || "", // Insert selected item number
-          Name: tabletsData?.item_name || "", // Insert selected item name
-          Item:`${tabletsData.itemNumber}||${tabletsData.item_name}`,
-          qty: quantity, // Default to 1
-          price: tabletsData?.price || "", // Insert selected price if available
-          amount:0, // Calculate amount
-          uom:tabletsData?.uom ||"",
-          cuom:tabletsData?.cuom || "",
-          expiryDate:tabletsData?.expirydate || "",
-          mrp:tabletsData?.mrp || "",
-          gst:tabletsData?.gst || "",
-          cgst:tabletsData?.cgst || "",
-          sgst:tabletsData?.sgst || "",
-          discount:tabletsData?.DISCOUNT || "",
-          discountAmount:0, 
-          gstAmount:0, 
-          sgstAmount:0, 
-          cgstAmount:0, 
-          isNew: true,
-        };
-    
-        console.log("----step2 setRows initializing Objects");
-        console.log("Inserted row:", newRow); // Log the new row to the console
-    
-        return [...prevRows, newRow]; // Append the new row to the existing rows
-      });
-    
-      console.log("----step3 setRowModesModel initializing Objects");
-      setRowModesModel((prev) => ({
-        ...prev,
-        [newId]: { mode: GridRowModes.Edit },
-      }));
-    
-      // Clear the selected value after adding
-      settabletsData(null);
-      setQuantity("");
-    };
-    
+    console.log("----------Step 1");
+
+    if (!tabletsData) {
+      console.warn("No item selected in Tablets dropdown.");
+      return; // Prevent adding an empty row
+    }
+
+    // Temporary unique ID
+    const newId = Math.round(Math.random() * 10000);
+    setRows((prevRows) => {
+
+      const nextSLNO = prevRows.length > 0 ? Math.max(...prevRows.map((row) => row.SLNO || 0)) + 1 : 1; // Determine next SLNO
+
+      const newRow = {
+        RecordID: newId, // Temporary ID, replaced after backend save
+        SLNO: nextSLNO,
+        ItemRecordID: tabletsData?.item_id || "",
+        ItemNumber: tabletsData?.itemNumber || "", // Insert selected item number
+        Name: tabletsData?.item_name || "", // Insert selected item name
+        Item: `${tabletsData.itemNumber}||${tabletsData.item_name}`,
+        qty: quantity, // Default to 1
+        price: tabletsData?.price || "", // Insert selected price if available
+        amount: 0, // Calculate amount
+        uom: tabletsData?.uom || "",
+        cuom: tabletsData?.cuom || "",
+        expiryDate: tabletsData?.expirydate || "",
+        mrp: tabletsData?.mrp || "",
+        gst: tabletsData?.gst || "",
+        cgst: tabletsData?.cgst || "",
+        sgst: tabletsData?.sgst || "",
+        discount: tabletsData?.DISCOUNT || "",
+        discountAmount: 0,
+        gstAmount: 0,
+        sgstAmount: 0,
+        cgstAmount: 0,
+        isNew: true,
+      };
+
+      console.log("----step2 setRows initializing Objects");
+      console.log("Inserted row:", newRow); // Log the new row to the console
+
+      return [...prevRows, newRow]; // Append the new row to the existing rows
+    });
+
+    console.log("----step3 setRowModesModel initializing Objects");
+    setRowModesModel((prev) => ({
+      ...prev,
+      [newId]: { mode: GridRowModes.Edit },
+    }));
+
+    // Clear the selected value after adding
+    settabletsData(null);
+    setQuantity("");
+  };
+
   //=====================================================HANDLESAVE========================================================================//
   const handleSave = (id, params, action) => () => {
     console.log("-----Step1: Local save called");
-  
+
     const rowToSave = params?.row;
     if (!rowToSave) {
       toast.error("Row not found.");
       return;
     }
-   const isNew = rowToSave.isNew; // Check if this is a new row
-   console.log("Row to save:", rowToSave);
-   setRows((prev) =>
+    const isNew = rowToSave.isNew; // Check if this is a new row
+    console.log("Row to save:", rowToSave);
+    setRows((prev) =>
       prev.map((row) =>
         row.RecordID === id
           ? { ...row, ...rowToSave, isNew: isNew && action !== "delete", isUpdated: !isNew } // Mark as updated if not new
           : row
       )
-      
+
     );
-  
+
     // Update row mode to view
     setRowModesModel((prev) => ({
       ...prev,
@@ -497,104 +496,104 @@ if(response.payload.status === "Y"){
   // };
   const handleEditClick = (id, params) => () => {
     console.log("EditMode");
-    
+
     // Call handleRowSelectio with row data
     handleRowSelectio(params.row);
-    
+
     setRowModesModel((prev) => ({
       ...prev,
       [id]: { mode: GridRowModes.Edit },
     }));
   };
-//=====================================================HANDLEDELETE========================================================================//
+  //=====================================================HANDLEDELETE========================================================================//
   const handleDeleteClick = (id) => async () => {
     try {
       // Debugging the value of recID
-      
+
       // First, remove the row from the state
       setRows((prev) => prev.filter((row) => row.RecordID !== id));
-      
-  
+
+
     } catch (error) {
       console.error("Error deleting row:", error);
       toast.error("Error occurred during delete.");
     }
   };
-  
+
   const handleRowModesModelChange = (newRowModesModel) => {
     console.log("---handleRowModesModelChange calling");
     setRowModesModel(newRowModesModel);
- 
+
   };
   //==================================================================processRowUpdate=========================================================================//
 
-  
-const processRowUpdate = (newRow, oldRow) => {
-  console.log("------inside processRowUpdate");
-  console.log(newRow, "--find newRow");
 
-  const isNew = !oldRow?.RecordID; // Check if this is a new row
-  const updatedRow = { ...newRow, isNew }; // Add `isNew` flag to row data
+  const processRowUpdate = (newRow, oldRow) => {
+    console.log("------inside processRowUpdate");
+    console.log(newRow, "--find newRow");
 
-  // Calculate discounted price
-  const priceMount = Number(updatedRow?.price) * (1 - Number(updatedRow?.discount) / 100);
-  console.log(priceMount, "================== priceMount");
+    const isNew = !oldRow?.RecordID; // Check if this is a new row
+    const updatedRow = { ...newRow, isNew }; // Add `isNew` flag to row data
 
-  // Calculate amount before taxes
-  const amount = Number(priceMount * updatedRow.qty);
-  console.log(amount, "================== amount");
+    // Calculate discounted price
+    const priceMount = Number(updatedRow?.price) * (1 - Number(updatedRow?.discount) / 100);
+    console.log(priceMount, "================== priceMount");
 
-  // Ensure totalAmount is defined before using it in NetTotal
-  const totalAmount = Number(amount * updatedRow?.gst) / 100;
-  console.log(totalAmount, "================== totalAmount");
+    // Calculate amount before taxes
+    const amount = Number(priceMount * updatedRow.qty);
+    console.log(amount, "================== amount");
 
-  // Calculate NetTotal (amount + GST)
-  const NetTotal = Number(amount + totalAmount);
+    // Ensure totalAmount is defined before using it in NetTotal
+    const totalAmount = Number(amount * updatedRow?.gst) / 100;
+    console.log(totalAmount, "================== totalAmount");
 
-  // Calculate total discount amount
-  const TotalDiscount = Number(NetTotal - (updatedRow?.discount * NetTotal) / 100);
-  console.log(TotalDiscount, "================== TotalDiscount");
+    // Calculate NetTotal (amount + GST)
+    const NetTotal = Number(amount + totalAmount);
 
-  // Calculate SGST and CGST amounts
-  const sgstAmt = Number((amount * updatedRow?.sgst) / 100);
-  const cgstAmt = Number((amount * updatedRow?.cgst) / 100);
-  console.log(sgstAmt, "===================== SGST Amount");
-  console.log(cgstAmt, "===================== CGST Amount");
+    // Calculate total discount amount
+    const TotalDiscount = Number(NetTotal - (updatedRow?.discount * NetTotal) / 100);
+    console.log(TotalDiscount, "================== TotalDiscount");
 
-  // Assign calculated values to updatedRow
-  updatedRow.price = priceMount;
-  updatedRow.amount = amount;
-  updatedRow.discountAmount = TotalDiscount;
-  updatedRow.sgstAmount = sgstAmt;
-  updatedRow.cgstAmount = cgstAmt;
-  updatedRow.gstAmount = Number(sgstAmt + cgstAmt); // Fix GST total calculation
+    // Calculate SGST and CGST amounts
+    const sgstAmt = Number((amount * updatedRow?.sgst) / 100);
+    const cgstAmt = Number((amount * updatedRow?.cgst) / 100);
+    console.log(sgstAmt, "===================== SGST Amount");
+    console.log(cgstAmt, "===================== CGST Amount");
 
-  console.log(updatedRow, "--find updatedRow before setRows");
+    // Assign calculated values to updatedRow
+    updatedRow.price = priceMount;
+    updatedRow.amount = amount;
+    updatedRow.discountAmount = TotalDiscount;
+    updatedRow.sgstAmount = sgstAmt;
+    updatedRow.cgstAmount = cgstAmt;
+    updatedRow.gstAmount = Number(sgstAmt + cgstAmt); // Fix GST total calculation
 
-  // Update the rows state
-  setRows((prev) => {
-    const index = prev.findIndex((row) => row.RecordID === updatedRow.RecordID);
-    if (index !== -1) {
-      const newData = [...prev];
-      newData[index] = updatedRow; // Update the row in the array
-      return newData;
-    }
-    return [...prev, updatedRow]; // If not found, add a new row
-  });
+    console.log(updatedRow, "--find updatedRow before setRows");
 
-  // Save the updated row
-  const params = { row: updatedRow };
-  handleSave(updatedRow.RecordID, params);
+    // Update the rows state
+    setRows((prev) => {
+      const index = prev.findIndex((row) => row.RecordID === updatedRow.RecordID);
+      if (index !== -1) {
+        const newData = [...prev];
+        newData[index] = updatedRow; // Update the row in the array
+        return newData;
+      }
+      return [...prev, updatedRow]; // If not found, add a new row
+    });
 
-  return updatedRow; // Return the updated row to reflect changes in the DataGrid
-};
-//==========================================================FILTER-ITEMS============================================================================================//
+    // Save the updated row
+    const params = { row: updatedRow };
+    handleSave(updatedRow.RecordID, params);
 
-const items=medicalItems.filter((item)=>item.category_id === seletcedCategoryID)
+    return updatedRow; // Return the updated row to reflect changes in the DataGrid
+  };
+  //==========================================================FILTER-ITEMS============================================================================================//
 
-console.log(items,"==============items")
+  const items = medicalItems.filter((item) => item.category_id === seletcedCategoryID)
+
+  console.log(items, "==============items")
   // ********************** TOOLBAR ********************** //\
-  const[categoryName,setscategoryName]=useState(null);
+  const [categoryName, setscategoryName] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [tabletsData, settabletsData] = useState(null);
   const handleSelectiontabletsData = (e, newValue) => {
@@ -607,163 +606,163 @@ console.log(items,"==============items")
   function CustomToolbar() {
     return (
       <GridToolbarContainer
-  sx={{
-    display: "flex",
-    alignItems: "center", // Align items vertically
-    flexWrap: "nowrap", // Ensure single row layout
-    width: "100%",
-    padding: 0.5,
-    gap: 2,
-  }}
->
-  {/* Left side: Category and Medical Items selection */}
-  <Box sx={{ display: "flex", gap: 2, flexGrow: 1 }}>
-    <Autocomplete
-      sx={{ minWidth: 230 }}
-      size="small"
-      options={categories}
-      getOptionLabel={(option) => option.name}
-      value={selectedCategory}
-      onChange={(event, newValue) => {
-        setSelectedCategory(newValue);
-        setseletcedCategoryID(newValue ? newValue.RecordID : null);
-      }}
-      renderInput={(params) => <TextField {...params} label="Select Category" />}
-    disabled={!buttonEnable}
-    />
+        sx={{
+          display: "flex",
+          alignItems: "center", // Align items vertically
+          flexWrap: "nowrap", // Ensure single row layout
+          width: "100%",
+          padding: 0.5,
+          gap: 2,
+        }}
+      >
+        {/* Left side: Category and Medical Items selection */}
+        <Box sx={{ display: "flex", gap: 2, flexGrow: 1 }}>
+          <Autocomplete
+            sx={{ minWidth: 230 }}
+            size="small"
+            options={categories}
+            getOptionLabel={(option) => option.name}
+            value={selectedCategory}
+            onChange={(event, newValue) => {
+              setSelectedCategory(newValue);
+              setseletcedCategoryID(newValue ? newValue.RecordID : null);
+            }}
+            renderInput={(params) => <TextField {...params} label="Select Category" />}
+            disabled={!buttonEnable}
+          />
 
-    <Autocomplete
-      sx={{ minWidth: 400 }}
-      size="small"
-      options={items}
-      value={tabletsData}
-      getOptionLabel={(option) => `${option.itemNumber} || ${option.item_name}`}
-      onChange={(event, newValue) => {
-        settabletsData(newValue);
-      }}
-      renderInput={(params) => <TextField {...params} label="Select Medical Items" />}
-      disabled={!buttonEnable}
-   />
-  </Box>
+          <Autocomplete
+            sx={{ minWidth: 400 }}
+            size="small"
+            options={items}
+            value={tabletsData}
+            getOptionLabel={(option) => `${option.itemNumber} || ${option.item_name}`}
+            onChange={(event, newValue) => {
+              settabletsData(newValue);
+            }}
+            renderInput={(params) => <TextField {...params} label="Select Medical Items" />}
+            disabled={!buttonEnable}
+          />
+        </Box>
 
-  {/* Quantity Input */}
-  <TextField
-    sx={{ width: 100 }}
-    size="small"
-    type="number"
-    label="Quantity"
-    variant="outlined"
-    value={quantity}
-    onChange={handleQuantityChange}
-    disabled={!buttonEnable}
-  />
+        {/* Quantity Input */}
+        <TextField
+          sx={{ width: 100 }}
+          size="small"
+          type="number"
+          label="Quantity"
+          variant="outlined"
+          value={quantity}
+          onChange={handleQuantityChange}
+          disabled={!buttonEnable}
+        />
 
-  {/* Add Button */}
-  <Button
-    variant="contained"
-    sx={{
-      width: "100px",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-    }}
-    startIcon={<AddIcon />}
-    onClick={handleInsert}
-  >
-    Add
-  </Button>
-</GridToolbarContainer>
+        {/* Add Button */}
+        <Button
+          variant="contained"
+          sx={{
+            width: "100px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          startIcon={<AddIcon />}
+          onClick={handleInsert}
+        >
+          Add
+        </Button>
+      </GridToolbarContainer>
 
     );
   }
-  
-//   function CustomToolbar() {
-//     return (
-//       <GridToolbarContainer
-//         sx={{
-//           display: "flex",
-//           // justifyContent: "space-between", // Distributes elements across the row
-//           width: "100%",
-//           padding: 0.5,
-//           gap:2
-//         }}
-//       >
-//         <Autocomplete
-//     sx={{ minWidth: 230 }}
-//     size="small"
-//     options={categories}
-//     getOptionLabel={(option) => option.name}
-//     value={selectedCategory} // Ensure the selected value is displayed
-//     onChange={(event, newValue) => {
-//         setSelectedCategory(newValue);
-//         setseletcedCategoryID(newValue ? newValue.RecordID : null); // Avoid null errors
-//     }}
-//     renderInput={(params) => <TextField {...params} label="Select Category" />}
-// />
-//            {/* <FormikCustomAutocompleteSingle
-//                       sx={{ width:200 }}
 
-//                       name="category"
-//                       id="category"
-//                       value={categoryName}
-//                       onChange={handleSelectioncategoryName}
-//                       label="Category"
-//                       url={`http://127.0.0.1:5000/api/medical-items`}
-//                     /> */}
-//         {/* Autocomplete at the Start */}
-//         <Autocomplete
-//          sx={{ minWidth: 230 }}
-//          size="small"
-//       options={items}
-//       value={tabletsData}
-//       getOptionLabel={(option) => `${option.itemNumber}||${option.item_name}`}
-//       onChange={(event, newValue) => {
-//         settabletsData(newValue);
-//         // setseletcedCategoryID(newValue.RecordID);
-//     }}
-    
-//       renderInput={(params) => <TextField {...params} label="Select MedicalItems" />}
-//     />
-//         {/* <FormikCustomAutocompleteTabletsID
-//           sx={{ width: 300 }}
-//           name="Tablets"
-//           id="Tablets"
-//           value={tabletsData}
-//           onChange={handleSelectiontabletsData}
-//           label="Barcode/Enter Material Name - SSDD"
-//           url={`http://127.0.0.1:5000/api/related-items/${seletcedCategoryID}`}
-//         /> */}
-  
-//         {/* Quantity TextField in the Center */}
-//         <TextField
-//         sx={{ width: 100 }}
-//         size="small"
-//         type="number"
-//         label="Quantity"
-//         variant="outlined"
-//         value={quantity} // Controlled value
-//         onChange={handleQuantityChange} // Handle change
-//       />
-  
-//         {/* Add Button at the End */}
-//         <Button
-//           variant="contained"
-//           sx={{
-//             width: "100px",
-//             display: "flex",
-//             justifyContent: "center",
-//             alignItems: "center",
-//           }}
-//           startIcon={<AddIcon />}
-//           onClick={handleInsert}
-//           // disabled={!buttonEnable}
-//         >
-//           Add
-//         </Button>
-//       </GridToolbarContainer>
-//     );
-//   }
-  
+  //   function CustomToolbar() {
+  //     return (
+  //       <GridToolbarContainer
+  //         sx={{
+  //           display: "flex",
+  //           // justifyContent: "space-between", // Distributes elements across the row
+  //           width: "100%",
+  //           padding: 0.5,
+  //           gap:2
+  //         }}
+  //       >
+  //         <Autocomplete
+  //     sx={{ minWidth: 230 }}
+  //     size="small"
+  //     options={categories}
+  //     getOptionLabel={(option) => option.name}
+  //     value={selectedCategory} // Ensure the selected value is displayed
+  //     onChange={(event, newValue) => {
+  //         setSelectedCategory(newValue);
+  //         setseletcedCategoryID(newValue ? newValue.RecordID : null); // Avoid null errors
+  //     }}
+  //     renderInput={(params) => <TextField {...params} label="Select Category" />}
+  // />
+  //            {/* <FormikCustomAutocompleteSingle
+  //                       sx={{ width:200 }}
+
+  //                       name="category"
+  //                       id="category"
+  //                       value={categoryName}
+  //                       onChange={handleSelectioncategoryName}
+  //                       label="Category"
+  //                       url={`http://127.0.0.1:5000/api/medical-items`}
+  //                     /> */}
+  //         {/* Autocomplete at the Start */}
+  //         <Autocomplete
+  //          sx={{ minWidth: 230 }}
+  //          size="small"
+  //       options={items}
+  //       value={tabletsData}
+  //       getOptionLabel={(option) => `${option.itemNumber}||${option.item_name}`}
+  //       onChange={(event, newValue) => {
+  //         settabletsData(newValue);
+  //         // setseletcedCategoryID(newValue.RecordID);
+  //     }}
+
+  //       renderInput={(params) => <TextField {...params} label="Select MedicalItems" />}
+  //     />
+  //         {/* <FormikCustomAutocompleteTabletsID
+  //           sx={{ width: 300 }}
+  //           name="Tablets"
+  //           id="Tablets"
+  //           value={tabletsData}
+  //           onChange={handleSelectiontabletsData}
+  //           label="Barcode/Enter Material Name - SSDD"
+  //           url={`http://127.0.0.1:5000/api/related-items/${seletcedCategoryID}`}
+  //         /> */}
+
+  //         {/* Quantity TextField in the Center */}
+  //         <TextField
+  //         sx={{ width: 100 }}
+  //         size="small"
+  //         type="number"
+  //         label="Quantity"
+  //         variant="outlined"
+  //         value={quantity} // Controlled value
+  //         onChange={handleQuantityChange} // Handle change
+  //       />
+
+  //         {/* Add Button at the End */}
+  //         <Button
+  //           variant="contained"
+  //           sx={{
+  //             width: "100px",
+  //             display: "flex",
+  //             justifyContent: "center",
+  //             alignItems: "center",
+  //           }}
+  //           startIcon={<AddIcon />}
+  //           onClick={handleInsert}
+  //           // disabled={!buttonEnable}
+  //         >
+  //           Add
+  //         </Button>
+  //       </GridToolbarContainer>
+  //     );
+  //   }
+
   // function CustomToolbar() {
   //   return (
   //     <GridToolbarContainer
@@ -808,196 +807,196 @@ console.log(items,"==============items")
   //     </GridToolbarContainer>
   //   );
   // }
-const[adValue,setADValue]=useState(0);
- const handleadditionalDiscountChange=(event)=>{
-  setADValue(event.target.value);
- }
- const[roundOff,setRoundOff]=useState(0);
- const handleroundOffChange=(event)=>{
-  setRoundOff(event.target.value);
- }
+  const [adValue, setADValue] = useState(0);
+  const handleadditionalDiscountChange = (event) => {
+    setADValue(event.target.value);
+  }
+  const [roundOff, setRoundOff] = useState(0);
+  const handleroundOffChange = (event) => {
+    setRoundOff(event.target.value);
+  }
 
 
-//==========================================CALCULATION=============================================================//
+  //==========================================CALCULATION=============================================================//
   const totalAmount = useMemo(() => {
     return rows.reduce((sum, row) => sum + (Number(row.amount) || 0), 0);
   }, [rows]);
 
   const netTotalDiscountAmount = useMemo(() => {
-    return rows.reduce((sum, row) => 
-      sum + ((Number(row.discountAmount) || 0) - (Number(row.amount) || 0)), 
+    return rows.reduce((sum, row) =>
+      sum + ((Number(row.discountAmount) || 0) - (Number(row.amount) || 0)),
       0
     ).toFixed(2);
   }, [rows]);
-  
-
-const netTotalCGSTAmount = useMemo(() => {
-  return rows.reduce((sum, row) => sum + (Number(row.cgstAmount) || 0), 0);
-}, [rows]);
-
-const netTotalSGSTAmount = useMemo(() => {
-  return rows.reduce((sum, row) => sum + (Number(row.sgstAmount) || 0), 0);
-}, [rows]);
-const netTotalGSTAmount = useMemo(() => {
-  return rows.reduce((sum, row) => sum + (Number(row.gstAmount) || 0), 0);
-}, [rows]);
-
-const totalGSTAmount = Number(netTotalCGSTAmount + netTotalSGSTAmount + netTotalGSTAmount);
-console.log(netTotalCGSTAmount,'=========================netTotalCGSTAmount');
-const netTotalADDDiscountAmount = useMemo(() => {
-  return rows.reduce((sum, row) =>(Number(totalAmount) || 0), 0) - (Number(adValue) || 0 ) +(Number(roundOff) || 0);
-}, [rows, adValue,roundOff]);
-
-// console.log(netTotalADDDiscountAmount,'=========================netTotalADDDiscountAmount');
-
-// console.log(netTotalDiscountAmount,'=========================netTotalDiscountAmount');
-//   console.log(totalGSTAmount, '============================totalGstAmount');
-//===============================================================================================================================================================//
-const queueDate=new window.Date().toISOString().split('T')[0];
 
 
-const [refreshKey, setRefreshKey] = useState(false);
-const HandleQueueSave = async(values) => {
+  const netTotalCGSTAmount = useMemo(() => {
+    return rows.reduce((sum, row) => sum + (Number(row.cgstAmount) || 0), 0);
+  }, [rows]);
 
-  if (!customerRec && !selectedCustoreID) {
-    toast.error("Customer Record ID is required!"); // Show an error message
-    return; // Prevent execution if the required value is missing
+  const netTotalSGSTAmount = useMemo(() => {
+    return rows.reduce((sum, row) => sum + (Number(row.sgstAmount) || 0), 0);
+  }, [rows]);
+  const netTotalGSTAmount = useMemo(() => {
+    return rows.reduce((sum, row) => sum + (Number(row.gstAmount) || 0), 0);
+  }, [rows]);
+
+  const totalGSTAmount = Number(netTotalCGSTAmount + netTotalSGSTAmount + netTotalGSTAmount);
+  console.log(netTotalCGSTAmount, '=========================netTotalCGSTAmount');
+  const netTotalADDDiscountAmount = useMemo(() => {
+    return rows.reduce((sum, row) => (Number(totalAmount) || 0), 0) - (Number(adValue) || 0) + (Number(roundOff) || 0);
+  }, [rows, adValue, roundOff]);
+
+  // console.log(netTotalADDDiscountAmount,'=========================netTotalADDDiscountAmount');
+
+  // console.log(netTotalDiscountAmount,'=========================netTotalDiscountAmount');
+  //   console.log(totalGSTAmount, '============================totalGstAmount');
+  //===============================================================================================================================================================//
+  const queueDate = new window.Date().toISOString().split('T')[0];
+
+
+  const [refreshKey, setRefreshKey] = useState(false);
+  const HandleQueueSave = async (values) => {
+
+    if (!customerRec && !selectedCustoreID) {
+      toast.error("Customer Record ID is required!"); // Show an error message
+      return; // Prevent execution if the required value is missing
+    }
+    const idata = rows.map((row) => {
+      return {
+        Q_RECORDID: row.RecordID,
+        Q_UOM: row.uom,
+        Q_CUOM: row.cuom,
+        Q_EXPIRYDATE: row.expiryDate,
+        Q_MRP: row.mrp,
+        Q_GST: row.gst,
+        Q_CGST: row.cgst,
+        Q_SGST: row.sgst,
+        Q_ITEMNUMBER: row.ItemNumber,
+        Q_ITEMRECORDID: row.ItemRecordID,
+        Q_DESCRIPTION: row.Name,
+        Q_QUANTITY: row.qty,
+        Q_AMOUNT: row.amount,
+        Q_PRICE: row.price,
+        Q_DISCOUNT: row.discount,
+        Q_DiscountAmount: row.discountAmount,
+        Q_GSTAMOUNT: row.gstAmount,
+        Q_CGSTAMOUNT: row.sgstAmount,
+        Q_SGSTAMOUNT: row.cgstAmount,
+        Q_ITEM: row.Item,
+        Q_NETTOTAL: netTotalADDDiscountAmount, // Ensure this value is passed correctly
+        Q_GSTTOTALAMOUNT: totalGSTAmount,
+        Q_CUSTOMERNAME: customerName || data.customerName,
+        Q_HRECORDID: customerRec || selectedCustoreID,
+        Q_DATE: queueDate,
+        Q_STATUS: "Q",
+        Q_ADDITIONALDISCOUNT: adValue,
+
+
+
+        // Q_ADDITIONALDISCOUNT:"",
+
+        // Q_SUMMARY:"", // Ensure this value is passed correctly
+      };
+    });
+    console.log(idata, '============================idata');
+
+    const response = await dispatch(QueuePost({ idata }));
+    console.log(response, '============================response');
+
+    if (response.payload.status === "Y") {
+      toast.success(response.payload.message);
+      setCustomerName("")
+      setRefreshKey(!refreshKey);
+      setButtonEnable(false);
+      setRows([]);
+    } else {
+      toast.error(response.payload.message)
+    }
+  };
+
+
+  const HandlePaySave = async (values) => {
+    const idata = rows.map((row) => {
+      return {
+        Q_RECORDID: row.RecordID,
+        Q_UOM: row.uom,
+        Q_CUOM: row.cuom,
+        Q_EXPIRYDATE: row.expiryDate,
+        Q_MRP: row.mrp,
+        Q_GST: row.gst,
+        Q_CGST: row.cgst,
+        Q_SGST: row.sgst,
+        Q_ITEMNUMBER: row.ItemNumber,
+        Q_ITEMRECORDID: row.ItemRecordID,
+        Q_DESCRIPTION: row.Name,
+        Q_QUANTITY: row.qty,
+        Q_AMOUNT: row.amount,
+        Q_PRICE: row.price,
+        Q_DISCOUNT: row.discount,
+        Q_DiscountAmount: row.discountAmount,
+        Q_GSTAMOUNT: row.gstAmount,
+        Q_CGSTAMOUNT: row.sgstAmount,
+        Q_SGSTAMOUNT: row.cgstAmount,
+        Q_ITEM: row.Item,
+        Q_NETTOTAL: netTotalADDDiscountAmount, // Ensure this value is passed correctly
+        Q_GSTTOTALAMOUNT: totalGSTAmount,
+        Q_CUSTOMERNAME: customerName || data.customerName,
+        Q_HRECORDID: customerRec || selectedCustoreID,
+        Q_DATE: queueDate,
+        Q_STATUS: "P",
+        Q_ADDITIONALDISCOUNT: adValue,
+
+
+
+        // Q_SUMMARY:"", // Ensure this value is passed correctly
+      };
+    });
+    console.log(idata, '============================idata');
+    // return;
+    const response = await dispatch(QueuePost({ idata }));
+    console.log(response, '============================response');
+
+    if (response.payload.status === "Y") {
+      toast.success(response.payload.message)
+      setCustomerName("")
+      setRefreshKey(!refreshKey);
+      setButtonEnable(false);
+
+      setRows([]);
+      navigate("/pharmacy/pharmacy-pay", { state: { RecordID: customerRec || selectedCustoreID } })
+    } else {
+      toast.error(response.payload.message)
+    }
+  };
+  // var d = new window.Date();
+  const dateTime = new window.Date().toISOString();
+  console.log(dateTime, '=========dateTime')
+  const [customerName, setCustomerName] = useState(data.customerName);
+  const [customerRec, setCustomerRec] = useState("");
+  const HandleSave = async (values) => {
+    const idata = {
+      // H_RECORDID:"",
+      H_CUSTOMERNAME: values.customer,
+      H_DATE: values.date,
+      H_REFERENCE: dateTime,
+    };
+    console.log(idata, '----------------------DATA');
+    const HeaderInsert = await dispatch(HeaderPost({ idata }));
+    console.log(HeaderInsert, '----------------------HeaderInsert');
+    if (HeaderInsert.payload.status === "Y") {
+      toast.success(HeaderInsert.payload.message);
+      setCustomerRec(HeaderInsert.payload.RecordID);
+      setCustomerName(HeaderInsert.payload.CustomerName);
+
+      setRefreshKey(!refreshKey);
+      setButtonEnable(true)
+
+    } else {
+      toast.error(HeaderInsert.payload.error);
+    }
   }
-  const idata = rows.map((row) => {
-    return {
-      Q_RECORDID: row.RecordID,
-      Q_UOM: row.uom,
-      Q_CUOM: row.cuom,
-      Q_EXPIRYDATE: row.expiryDate,
-      Q_MRP: row.mrp,
-      Q_GST: row.gst,
-      Q_CGST: row.cgst,
-      Q_SGST: row.sgst,
-      Q_ITEMNUMBER: row.ItemNumber,
-      Q_ITEMRECORDID:row.ItemRecordID,
-      Q_DESCRIPTION: row.Name,
-      Q_QUANTITY: row.qty,
-      Q_AMOUNT: row.amount, 
-      Q_PRICE: row.price,
-      Q_DISCOUNT:row.discount,
-      Q_DiscountAmount:row.discountAmount, 
-      Q_GSTAMOUNT:row.gstAmount,
-      Q_CGSTAMOUNT:row.sgstAmount,
-      Q_SGSTAMOUNT:row.cgstAmount,
-      Q_ITEM:row.Item,
-      Q_NETTOTAL: netTotalADDDiscountAmount, // Ensure this value is passed correctly
-      Q_GSTTOTALAMOUNT: totalGSTAmount,
-      Q_CUSTOMERNAME: customerName || data.customerName,
-      Q_HRECORDID:customerRec || selectedCustoreID,
-      Q_DATE: queueDate,
-      Q_STATUS:"Q",
-      Q_ADDITIONALDISCOUNT:adValue,
-     
-       
-    
-      // Q_ADDITIONALDISCOUNT:"",
-    
-      // Q_SUMMARY:"", // Ensure this value is passed correctly
-    };
-  });
-  console.log(idata, '============================idata');
-
-const response=await dispatch(QueuePost({idata}));
-console.log(response, '============================response');
-
-if(response.payload.status==="Y"){
-toast.success(response.payload.message);
-setCustomerName("")
-setRefreshKey(!refreshKey);
-setButtonEnable(false);
-setRows([]);
-}else{
-  toast.error(response.payload.message)
-}
-};
-
-
-const HandlePaySave = async(values) => {
-  const idata = rows.map((row) => {
-    return {
-      Q_RECORDID: row.RecordID,
-      Q_UOM: row.uom,
-      Q_CUOM: row.cuom,
-      Q_EXPIRYDATE: row.expiryDate,
-      Q_MRP: row.mrp,
-      Q_GST: row.gst,
-      Q_CGST: row.cgst,
-      Q_SGST: row.sgst,
-      Q_ITEMNUMBER: row.ItemNumber,
-      Q_ITEMRECORDID:row.ItemRecordID,
-      Q_DESCRIPTION: row.Name,
-      Q_QUANTITY: row.qty,
-      Q_AMOUNT: row.amount, 
-      Q_PRICE: row.price,
-      Q_DISCOUNT:row.discount,
-      Q_DiscountAmount:row.discountAmount, 
-      Q_GSTAMOUNT:row.gstAmount,
-      Q_CGSTAMOUNT:row.sgstAmount,
-      Q_SGSTAMOUNT:row.cgstAmount,
-      Q_ITEM:row.Item,
-      Q_NETTOTAL: netTotalADDDiscountAmount, // Ensure this value is passed correctly
-      Q_GSTTOTALAMOUNT: totalGSTAmount,
-      Q_CUSTOMERNAME: customerName || data.customerName,
-      Q_HRECORDID:customerRec || selectedCustoreID,
-      Q_DATE: queueDate,
-      Q_STATUS:"P",
-      Q_ADDITIONALDISCOUNT:adValue,
-
-
-    
-      // Q_SUMMARY:"", // Ensure this value is passed correctly
-    };
-  });
-  console.log(idata, '============================idata');
-  // return;
-const response=await dispatch(QueuePost({idata}));
-console.log(response, '============================response');
-
-if(response.payload.status==="Y"){
-toast.success(response.payload.message)
-setCustomerName("")
-setRefreshKey(!refreshKey);
-setButtonEnable(false);
-
-setRows([]);
-navigate("/pharmacy/pharmacy-pay",{state:{RecordID:customerRec || selectedCustoreID}})
-}else{
-  toast.error(response.payload.message)
-}
-};
-// var d = new window.Date();
-const dateTime=new window.Date().toISOString();
-console.log(dateTime,'=========dateTime')
-const[customerName,setCustomerName]=useState(data.customerName);
-const[customerRec,setCustomerRec]=useState("");
-const HandleSave=async(values)=>{
-  const idata={
-// H_RECORDID:"",
-H_CUSTOMERNAME:values.customer,
-H_DATE:values.date,
-H_REFERENCE:dateTime,
-};
-console.log(idata,'----------------------DATA');
-const HeaderInsert=await dispatch(HeaderPost({idata}));
-console.log(HeaderInsert,'----------------------HeaderInsert');
-if(HeaderInsert.payload.status ==="Y"){
-  toast.success(HeaderInsert.payload.message);
-  setCustomerRec(HeaderInsert.payload.RecordID);
-  setCustomerName(HeaderInsert.payload.CustomerName);
-
-  setRefreshKey(!refreshKey);
-  setButtonEnable(true)
-
-}else{
-  toast.error(HeaderInsert.payload.error);
-}
-}
-console.log(data.customerName,'========data.customerName')
+  console.log(data.customerName, '========data.customerName')
 
   return (
     <Container>
@@ -1005,546 +1004,546 @@ console.log(data.customerName,'========data.customerName')
         <Breadcrumb routeSegments={[{ name: "Pharmacy" }]} />
       </div>
       <Formik
-      initialValues={{
-        category: "",
-    date: data.date,
-    customer: data.customerName,
-    uom: "",
-    cuom: "",
-    expiryDate: "",
-    mrp: "",
-    discount: "",
-    additionalDiscount: data.additionalDiscount,
-    roundOff: "",
-    netTotal: "",
-    gst: "",
-    sgst: "",
-    cgst: "",
-    total:  data.gstTotalAmount,
-    queue: null,
-      }}  
-      // validationSchema={}
-      enableReinitialize={true}
-      onSubmit={async (values, { setSubmitting, resetForm }) => {
-        HandleSave(values)
+        initialValues={{
+          category: "",
+          date: data.date,
+          customer: data.customerName,
+          uom: "",
+          cuom: "",
+          expiryDate: "",
+          mrp: "",
+          discount: "",
+          additionalDiscount: data.additionalDiscount,
+          roundOff: "",
+          netTotal: "",
+          gst: "",
+          sgst: "",
+          cgst: "",
+          total: data.gstTotalAmount,
+          queue: null,
+        }}
+        // validationSchema={}
+        enableReinitialize={true}
+        onSubmit={async (values, { setSubmitting, resetForm }) => {
+          HandleSave(values)
           console.log(values);
-         
-      }}
->
-          {({
-            errors,
-            touched,
-            handleBlur,
-            handleChange,
-            isSubmitting,
-            values,
-            handleSubmit,
-            setFieldValue,
-          }) => (
-            <form onSubmit={handleSubmit}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
-        <Box
-          display="grid"
-          gap="20px"
-          gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-          sx={{
-            "& > div": {
-              gridColumn: isNonMobile ? undefined : "span 4",
-            },
-            padding: "10px",
-          }}
-        >
- <Stack
-  sx={{
-    gridColumn: "span 4", // Ensure both stacks span the same width
-    width: "100%",
-    display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
-    gap: 2,
-  }}
->
-  <Box
-    sx={{
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr",
-      gap: 2,
-    }}
-  >
-    <TextField
-      label="Date"
-      type="date"
-      id="date"
-      name="date"
-      size="small"
-      sx={{ minWidth: 230 }}
-      InputLabelProps={{ shrink: true }}
-      value={values.date}
-      onChange={handleChange}
-      onBlur={handleBlur}
-    />
 
-    <TextField
-      fullWidth
-      variant="outlined"
-      type="text"
-      id="customer"
-      name="customer"
-      size="small"
-      label="Customer"
-      value={values.customer}
-      onChange={handleChange}
-      onBlur={handleBlur}
-      sx={{ minWidth: 500 }}
-    />
-  </Box>
-
-  <Box
-    sx={{
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      // marginLeft:14
-    }}
-  >
-    <Button
-      variant="outlined"
-      sx={{ backgroundColor: "green", color: "white" }}
-      startIcon={<SaveIcon />}
-      type="submit"
-    >
-      Save
-    </Button>
-  </Box>
-</Stack>
-
-
-
-          <Stack sx={{ gridColumn: "span 4" }} direction="column" gap={2}>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <Box
+        }}
+      >
+        {({
+          errors,
+          touched,
+          handleBlur,
+          handleChange,
+          isSubmitting,
+          values,
+          handleSubmit,
+          setFieldValue,
+        }) => (
+          <form onSubmit={handleSubmit}>
+            <Paper sx={{ width: "100%", mb: 2 }}>
+              <Box
+                display="grid"
+                gap="20px"
+                gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                sx={{
+                  "& > div": {
+                    gridColumn: isNonMobile ? undefined : "span 4",
+                  },
+                  padding: "10px",
+                }}
+              >
+                <Stack
                   sx={{
-                    height: dataGridHeight,
-                    width: "140%",
-                    marginTop: -1,
-
-                    "& .MuiDataGrid-root": {
-                      border: "none",
-                    },
-                    "& .MuiDataGrid-cell": {
-                      borderBottom: "none",
-                    },
-                    "& .name-column--cell": {
-                      color: theme.palette.info.contrastText,
-                    },
-                    "& .MuiDataGrid-columnHeaders": {
-                      backgroundColor: theme.palette.info.main,
-                      color: theme.palette.info.contrastText,
-                      fontWeight: "bold",
-                      fontSize: theme.typography.subtitle2.fontSize,
-                    },
-                    "& .MuiDataGrid-virtualScroller": {
-                      backgroundColor: theme.palette.info.light,
-                    },
-                    "& .MuiDataGrid-footerContainer": {
-                      borderTop: "none",
-                      backgroundColor: theme.palette.info.main,
-                      color: theme.palette.info.contrastText,
-                    },
-                    "& .MuiCheckbox-root": {
-                      color: `${theme.palette.primary.main} !important`,
-                    },
-                    "& .MuiDataGrid-row:hover": {
-                      backgroundColor: theme.palette.action.hover,
-                    },
+                    gridColumn: "span 4", // Ensure both stacks span the same width
+                    width: "100%",
+                    display: "grid",
+                    gridTemplateColumns: "repeat(2, 1fr)",
+                    gap: 2,
                   }}
                 >
-                  <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    // loading={exploreLoading}
-                    rowModesModel={rowModesModel}
-                    getRowId={(row) => row.RecordID}
-                    editMode="row"
-                    onRowClick={handleRowSelectio}
-                    experimentalFeatures={{ newEditingApi: true }}
-                    onRowModesModelChange={handleRowModesModelChange}
-                    columnVisibilityModel={{
-                      RecordID: false,// Hide RecordID
-                      ItemRecordID: false,
-                      uom: false,
-                      cuom : false,
-                      expiryDate: false,
-                      mrp: false,
-                      gst:false,
-                      sgst:false,
-                      cgst:false,
-                      SLNO:false,
-                      discount:false,
-                      ItemNumber:false,
-                      Name:false,
-                      discountAmount:false,
-                      sgstAmount:false,
-                      cgstAmount:false,
-                      gstAmount:false
+                  <Box
+                    sx={{
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1fr",
+                      gap: 2,
                     }}
-                    processRowUpdate={processRowUpdate}
-                    // onProcessRowUpdateError={handleProcessRowUpdateError}
-                    components={{
-                      Toolbar: CustomToolbar,
+                  >
+                    <TextField
+                      label="Date"
+                      type="date"
+                      id="date"
+                      name="date"
+                      size="small"
+                      sx={{ minWidth: 230 }}
+                      InputLabelProps={{ shrink: true }}
+                      value={values.date}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      type="text"
+                      id="customer"
+                      name="customer"
+                      size="small"
+                      label="Customer"
+                      value={values.customer}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      sx={{ minWidth: 500 }}
+                    />
+                  </Box>
+
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      // marginLeft:14
                     }}
-                    componentsProps={{
-                      toolbar: { setRows, setRowModesModel },
+                  >
+                    <Button
+                      variant="outlined"
+                      sx={{ backgroundColor: "green", color: "white" }}
+                      startIcon={<SaveIcon />}
+                      type="submit"
+                    >
+                      Save
+                    </Button>
+                  </Box>
+                </Stack>
+
+
+
+                <Stack sx={{ gridColumn: "span 4" }} direction="column" gap={2}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      <Box
+                        sx={{
+                          height: dataGridHeight,
+                          width: "140%",
+                          marginTop: -1,
+
+                          "& .MuiDataGrid-root": {
+                            border: "none",
+                          },
+                          "& .MuiDataGrid-cell": {
+                            borderBottom: "none",
+                          },
+                          "& .name-column--cell": {
+                            color: theme.palette.info.contrastText,
+                          },
+                          "& .MuiDataGrid-columnHeaders": {
+                            backgroundColor: theme.palette.info.main,
+                            color: theme.palette.info.contrastText,
+                            fontWeight: "bold",
+                            fontSize: theme.typography.subtitle2.fontSize,
+                          },
+                          "& .MuiDataGrid-virtualScroller": {
+                            backgroundColor: theme.palette.info.light,
+                          },
+                          "& .MuiDataGrid-footerContainer": {
+                            borderTop: "none",
+                            backgroundColor: theme.palette.info.main,
+                            color: theme.palette.info.contrastText,
+                          },
+                          "& .MuiCheckbox-root": {
+                            color: `${theme.palette.primary.main} !important`,
+                          },
+                          "& .MuiDataGrid-row:hover": {
+                            backgroundColor: theme.palette.action.hover,
+                          },
+                        }}
+                      >
+                        <DataGrid
+                          rows={rows}
+                          columns={columns}
+                          // loading={exploreLoading}
+                          rowModesModel={rowModesModel}
+                          getRowId={(row) => row.RecordID}
+                          editMode="row"
+                          onRowClick={handleRowSelectio}
+                          experimentalFeatures={{ newEditingApi: true }}
+                          onRowModesModelChange={handleRowModesModelChange}
+                          columnVisibilityModel={{
+                            RecordID: false,// Hide RecordID
+                            ItemRecordID: false,
+                            uom: false,
+                            cuom: false,
+                            expiryDate: false,
+                            mrp: false,
+                            gst: false,
+                            sgst: false,
+                            cgst: false,
+                            SLNO: false,
+                            discount: false,
+                            ItemNumber: false,
+                            Name: false,
+                            discountAmount: false,
+                            sgstAmount: false,
+                            cgstAmount: false,
+                            gstAmount: false
+                          }}
+                          processRowUpdate={processRowUpdate}
+                          // onProcessRowUpdateError={handleProcessRowUpdateError}
+                          components={{
+                            Toolbar: CustomToolbar,
+                          }}
+                          componentsProps={{
+                            toolbar: { setRows, setRowModesModel },
+                          }}
+                          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                          rowsPerPageOptions={[5, 10, 20]}
+                          pagination
+
+                        />
+                      </Box>
+                    </Grid>
+                    <Grid item xs={3.5} sx={{ ml: "auto" }}>
+                      <Typography
+                        sx={{
+                          fontWeight: 500,
+                          fontSize: "16px",
+                          lineHeight: "56px",
+                          textAlign: "left",
+                          mb: 1,
+                          mt: -3,
+                        }}
+                      >
+                        Select Items Info
+                      </Typography>
+                      <Grid container spacing={2}>
+                        <Grid item xs={12} sm={10}>
+                          <TextField
+                            fullWidth
+                            variant="outlined"
+                            size="small"
+                            id="uom"
+                            name="uom"
+                            label="UOM"
+                            type="text"
+                            value={Uom}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            disabled
+                            sx={{ width: "100%" }} // Ensure it takes full width
+                          />
+                        </Grid>
+
+                        <Grid item xs={12} sm={10}>
+                          <TextField
+                            fullWidth
+                            variant="outlined"
+                            size="small"
+                            id="cuom"
+                            name="cuom"
+                            label="C.UOM"
+                            type="text"
+                            value={cuom}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            disabled
+                            sx={{ width: "100%" }}
+                          />
+                        </Grid>
+
+                        <Grid item xs={12} sm={10}>
+                          <TextField
+                            fullWidth
+                            variant="outlined"
+                            size="small"
+                            id="expiryDate"
+                            name="expiryDate"
+                            label="Expiry Date"
+                            type="date"
+                            value={formatDateForInput(expiryDate)}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            InputLabelProps={{ shrink: true }}
+                            disabled
+                            sx={{ width: "100%" }}
+                          />
+                        </Grid>
+
+                        <Grid item xs={12} sm={10}>
+                          <TextField
+                            fullWidth
+                            variant="outlined"
+                            size="small"
+                            id="mrp"
+                            name="mrp"
+                            label="MRP"
+                            type="text"
+                            value={mrp}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            disabled
+                            sx={{ width: "100%" }}
+                          />
+                        </Grid>
+
+                        <Grid item xs={12} sm={10}>
+                          <TextField
+                            fullWidth
+                            variant="outlined"
+                            size="small"
+                            id="discount"
+                            name="discount"
+                            label="Discount"
+                            type="text"
+                            value={Disc}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            disabled
+                            sx={{ width: "100%" }}
+                          />
+                        </Grid>
+                      </Grid>
+
+                      <Typography
+                        sx={{
+                          fontWeight: 500,
+                          fontSize: "16px",
+                          lineHeight: "56px",
+                          textAlign: "left",
+                          mb: 1,
+                        }}
+                      >
+                        Summary
+                      </Typography>
+
+                      <Grid container spacing={2}>
+                        <Grid item xs={12} sm={10}>
+                          <TextField
+                            fullWidth
+                            variant="outlined"
+                            size="small"
+                            id="netTotal"
+                            name="netTotal"
+                            label="Net Total"
+                            type="text"
+                            value={totalAmount}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            disabled
+                            sx={{ width: "100%" }}
+                          />
+                        </Grid>
+
+                        <Grid item xs={12} sm={10}>
+                          <TextField
+                            fullWidth
+                            variant="outlined"
+                            size="small"
+                            id="discount"
+                            name="discount"
+                            label="Discount"
+                            type="text"
+                            value={netTotalDiscountAmount}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            disabled
+                            sx={{ width: "100%" }}
+                          />
+                        </Grid>
+
+                        <Grid item xs={12} sm={10}>
+                          <TextField
+                            fullWidth
+                            variant="outlined"
+                            size="small"
+                            id="additionalDiscount"
+                            name="additionalDiscount"
+                            label="Additional Discount"
+                            type="text"
+                            value={adValue}
+                            onChange={handleadditionalDiscountChange}
+                            onBlur={handleBlur}
+                            sx={{ width: "100%" }}
+                          />
+                        </Grid>
+
+                        <Grid item xs={12} sm={10}>
+                          <TextField
+                            fullWidth
+                            variant="outlined"
+                            size="small"
+                            id="roundOff"
+                            name="roundOff"
+                            label="Round Off"
+                            type="text"
+                            value={roundOff}
+                            onChange={handleroundOffChange}
+                            onBlur={handleBlur}
+                            sx={{ width: "100%" }}
+                          />
+                        </Grid>
+
+                        <Grid item xs={12} sm={10}>
+                          <TextField
+                            fullWidth
+                            variant="outlined"
+                            size="small"
+                            id="netTotal"
+                            name="netTotal"
+                            label="Total"
+                            type="text"
+                            value={netTotalADDDiscountAmount}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            disabled
+                            sx={{ width: "100%" }}
+                          />
+                        </Grid>
+                      </Grid>
+                    </Grid>
+
+                  </Grid>
+                </Stack>
+
+                <Stack sx={{ gridColumn: "span 5" }} direction="column" gap={2}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-evenly",
+                      alignItems: "center",
+                      gap: 1,
+
+                      marginRight: 52,
+                      marginBottom: 0,
                     }}
-                    onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                    rowsPerPageOptions={[5, 10, 20]}
-                    pagination
-                  
-                  />
-                </Box>
-              </Grid>
-              <Grid item xs={3.5} sx={{ ml: "auto" }}>
-  <Typography
-    sx={{
-      fontWeight: 500,
-      fontSize: "16px",
-      lineHeight: "56px",
-      textAlign: "left",
-      mb: 1,
-      mt: -3,
-    }}
-  >
-    Select Items Info
-  </Typography>
-  <Grid container spacing={2}>
-    <Grid item xs={12} sm={10}>
-      <TextField
-        fullWidth
-        variant="outlined"
-        size="small"
-        id="uom"
-        name="uom"
-        label="UOM"
-        type="text"
-        value={Uom}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        disabled
-        sx={{ width: "100%" }} // Ensure it takes full width
-      />
-    </Grid>
+                  >
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      type="text"
+                      id="gst"
+                      name="gst"
+                      size="small"
+                      label="GST"
+                      sx={{ minWidth: 118 }}
+                      InputLabelProps={{
+                        style: { fontWeight: "bold" },
+                      }}
+                      value={netTotalGSTAmount}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      disabled
+                    />
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      type="text"
+                      id="sgst"
+                      name="sgst"
+                      size="small"
+                      label="SGST"
+                      sx={{ minWidth: 118 }}
+                      InputLabelProps={{
+                        style: { fontWeight: "bold" },
+                      }}
+                      value={netTotalSGSTAmount}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      disabled
+                    />
 
-    <Grid item xs={12} sm={10}>
-      <TextField
-        fullWidth
-        variant="outlined"
-        size="small"
-        id="cuom"
-        name="cuom"
-        label="C.UOM"
-        type="text"
-        value={cuom}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        disabled
-        sx={{ width: "100%" }}
-      />
-    </Grid>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      type="text"
+                      id="cgst"
+                      name="cgst"
+                      size="small"
+                      label="CGST"
+                      sx={{ minWidth: 118 }}
+                      InputLabelProps={{
+                        style: { fontWeight: "bold" },
+                      }}
+                      value={netTotalCGSTAmount}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      disabled
+                    />
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      type="text"
+                      id="total"
+                      name="total"
+                      size="small"
+                      label="Total"
+                      sx={{ minWidth: 118 }}
+                      InputLabelProps={{
+                        style: { fontWeight: "bold" },
+                      }}
+                      value={totalGSTAmount}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                  </Box>
+                </Stack>
+                <Stack sx={{ gridColumn: "span 5" }} direction="column" gap={2}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
 
-    <Grid item xs={12} sm={10}>
-      <TextField
-        fullWidth
-        variant="outlined"
-        size="small"
-        id="expiryDate"
-        name="expiryDate"
-        label="Expiry Date"
-        type="date"
-        value={formatDateForInput(expiryDate)}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        InputLabelProps={{ shrink: true }}
-        disabled
-        sx={{ width: "100%" }}
-      />
-    </Grid>
+                    }}
+                  >
+                    {/* Autocomplete aligned to the start */}
+                    <Box>
+                      <FormikOptimizedAutocomplete
+                        key={refreshKey}
+                        sx={{ width: 200 }}
+                        name="queue"
+                        id="queue"
+                        value={values.queue}
+                        onChange={(event, newValue) => {
+                          setFieldValue("queue", newValue);
+                          setselectedCustoreID(newValue ? newValue.RecordID : null);
+                          setButtonEnable(true); // Ensure setButtonEnable is defined
+                        }}
+                        label="Queue"
+                        url={`http://127.0.0.1:5000/api/hms_header/getallheader`}
+                      />
 
-    <Grid item xs={12} sm={10}>
-      <TextField
-        fullWidth
-        variant="outlined"
-        size="small"
-        id="mrp"
-        name="mrp"
-        label="MRP"
-        type="text"
-        value={mrp}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        disabled
-        sx={{ width: "100%" }}
-      />
-    </Grid>
+                    </Box>
 
-    <Grid item xs={12} sm={10}>
-      <TextField
-        fullWidth
-        variant="outlined"
-        size="small"
-        id="discount"
-        name="discount"
-        label="Discount"
-        type="text"
-        value={Disc}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        disabled
-        sx={{ width: "100%" }}
-      />
-    </Grid>
-  </Grid>
+                    {/* Buttons aligned to the end */}
+                    <Box sx={{ display: "flex", gap: 2 }}>
+                      <Button
+                        variant="outlined"
+                        sx={{ width: "100px", backgroundColor: "#FFEB3B", color: "black" }}
+                        onClick={() => HandleQueueSave()}
+                      // disabled={!buttonEnable}
+                      >
+                        Queue
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        sx={{ width: "100px", backgroundColor: "#FFEB3B", color: "black" }}
+                        onClick={() => HandlePaySave()}
+                      // disabled={!buttonEnable}
+                      >
+                        Pay now
+                      </Button>
+                    </Box>
+                  </Box>
+                </Stack>
 
-  <Typography
-    sx={{
-      fontWeight: 500,
-      fontSize: "16px",
-      lineHeight: "56px",
-      textAlign: "left",
-      mb: 1,
-    }}
-  >
-    Summary
-  </Typography>
+              </Box>
 
-  <Grid container spacing={2}>
-    <Grid item xs={12} sm={10}>
-      <TextField
-        fullWidth
-        variant="outlined"
-        size="small"
-        id="netTotal"
-        name="netTotal"
-        label="Net Total"
-        type="text"
-        value={totalAmount}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        disabled
-        sx={{ width: "100%" }}
-      />
-    </Grid>
 
-    <Grid item xs={12} sm={10}>
-      <TextField
-        fullWidth
-        variant="outlined"
-        size="small"
-        id="discount"
-        name="discount"
-        label="Discount"
-        type="text"
-        value={netTotalDiscountAmount}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        disabled
-        sx={{ width: "100%" }}
-      />
-    </Grid>
+            </Paper>
+          </form>
+        )}
+      </Formik>
 
-    <Grid item xs={12} sm={10}>
-      <TextField
-        fullWidth
-        variant="outlined"
-        size="small"
-        id="additionalDiscount"
-        name="additionalDiscount"
-        label="Additional Discount"
-        type="text"
-        value={adValue}
-        onChange={handleadditionalDiscountChange}
-        onBlur={handleBlur}
-        sx={{ width: "100%" }}
-      />
-    </Grid>
-
-    <Grid item xs={12} sm={10}>
-      <TextField
-        fullWidth
-        variant="outlined"
-        size="small"
-        id="roundOff"
-        name="roundOff"
-        label="Round Off"
-        type="text"
-        value={roundOff}
-        onChange={handleroundOffChange}
-        onBlur={handleBlur}
-        sx={{ width: "100%" }}
-      />
-    </Grid>
-
-    <Grid item xs={12} sm={10}>
-      <TextField
-        fullWidth
-        variant="outlined"
-        size="small"
-        id="netTotal"
-        name="netTotal"
-        label="Total"
-        type="text"
-        value={netTotalADDDiscountAmount}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        disabled
-        sx={{ width: "100%" }}
-      />
-    </Grid>
-  </Grid>
-</Grid>
-
-            </Grid>
-          </Stack>
-
-          <Stack sx={{ gridColumn: "span 5" }} direction="column" gap={2}>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-evenly",
-                alignItems: "center",
-                gap: 1,
-       
-                marginRight: 52,
-                marginBottom: 0,
-              }}
-            >
-              <TextField
-                fullWidth
-                variant="outlined"
-                type="text"
-                id="gst"
-                name="gst"
-                size="small"
-                label="GST"
-                sx={{ minWidth: 118 }}
-                InputLabelProps={{
-                  style: { fontWeight: "bold" },
-                }}
-                value={netTotalGSTAmount}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                disabled
-              />
-              <TextField
-                fullWidth
-                variant="outlined"
-                type="text"
-                id="sgst"
-                name="sgst"
-                size="small"
-                label="SGST"
-                sx={{ minWidth: 118 }}
-                InputLabelProps={{
-                  style: { fontWeight: "bold" },
-                }}
-                value={netTotalSGSTAmount}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                disabled
-              />
-
-              <TextField
-                fullWidth
-                variant="outlined"
-                type="text"
-                id="cgst"
-                name="cgst"
-                size="small"
-                label="CGST"
-                sx={{ minWidth: 118 }}
-                InputLabelProps={{
-                  style: { fontWeight: "bold" },
-                }}
-                value={netTotalCGSTAmount}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                disabled
-              />
-              <TextField
-                fullWidth
-                variant="outlined"
-                type="text"
-                id="total"
-                name="total"
-                size="small"
-                label="Total"
-                sx={{ minWidth: 118 }}
-                InputLabelProps={{
-                  style: { fontWeight: "bold" },
-                }}
-                value={totalGSTAmount}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-            </Box>
-          </Stack>
-          <Stack sx={{ gridColumn: "span 5" }} direction="column" gap={2}>
-  <Box
-    sx={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-  
-    }}
-  >
-    {/* Autocomplete aligned to the start */}
-    <Box>
-    <FormikOptimizedAutocomplete
-  key={refreshKey}
-  sx={{ width: 200 }}
-  name="queue"
-  id="queue"
-  value={values.queue}
-  onChange={(event, newValue) => {
-    setFieldValue("queue", newValue);
-    setselectedCustoreID(newValue ? newValue.RecordID : null);
-    setButtonEnable(true); // Ensure setButtonEnable is defined
-  }}
-  label="Queue"
-  url={`http://127.0.0.1:5000/api/hms_header/getallheader`}
-/>
-
-    </Box>
-
-    {/* Buttons aligned to the end */}
-    <Box sx={{ display: "flex", gap: 2 }}>
-      <Button
-        variant="outlined"
-        sx={{ width: "100px", backgroundColor: "#FFEB3B", color: "black" }}
-        onClick={() => HandleQueueSave()}
-        // disabled={!buttonEnable}
-      >
-        Queue
-      </Button>
-      <Button
-        variant="outlined"
-        sx={{ width: "100px", backgroundColor: "#FFEB3B", color: "black" }}
-        onClick={() => HandlePaySave()}
-        // disabled={!buttonEnable}
-      >
-        Pay now
-      </Button>
-    </Box>
-  </Box>
-</Stack>
-
-        </Box>
-
-        
-      </Paper>
-      </form>
-          )}
-        </Formik>
-  
     </Container>
   );
 };
@@ -1565,7 +1564,7 @@ const categories = [
   { RecordID: 10, name: "Inhalers" }
 ];
 
-const medicalItems=[
+const medicalItems = [
   {
     "item_id": 114,
     "category_id": 1,

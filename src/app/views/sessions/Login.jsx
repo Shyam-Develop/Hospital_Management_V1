@@ -58,7 +58,7 @@ export default function LoginPortal() {
       icon: <AttachMoneyIcon color="primary" /> // Use the new icon
     },
     
-    { label: "Laboratory and Test Management", path: "/session/laboratory-and-test-management", icon: <ScienceIcon color="primary" /> },
+    { label: "Lab,Xray & Scan", path: "/session/laboratory-and-test-management", icon: <ScienceIcon color="primary" /> },
     {
       label: "Electronic Health Records",
       path: "/session/electronic-health-records",

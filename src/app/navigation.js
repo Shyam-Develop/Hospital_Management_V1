@@ -109,7 +109,7 @@ export const navigations = [
                 role: authRoles.laboratoryandtestmanagement,
               },
               {
-                name: "ElectronicHealthRecords",
+                name: "Electronic Health Records",
                 path: "/ERecords/electronic-health-records",
                 iconText: "V",
                 accessID: null,

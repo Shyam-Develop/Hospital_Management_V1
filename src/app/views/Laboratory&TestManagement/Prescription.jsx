@@ -54,14 +54,7 @@ const Prescription = () => {
             dispatch(getPatientListData())
         }, [dispatch])
     // ********************** COLUMN AND ROWS ********************** //
-    const rows = [
-        {
-          RecordId: "",
-          FirstName: "",
-          Email: "",
-          PhoneNumber: "",
-        }
-          ]
+ 
     const columns = [
         {
             headerName: "RecordID",
@@ -70,33 +63,32 @@ const Prescription = () => {
             align: "left",
             headerAlign: "left",
             hide: false,
-        },
-        {
+          },
+          {
             headerName: "Patient Name",
             field: "FirstName",
-            width: "150",
+            width: "200",
             align: "left",
             headerAlign: "left",
             hide: true,
-        },
-
-        {
+          },
+         
+          {
             headerName: "Email",
             field: "Email",
-            width: "170",
+            width: "250",
             align: "left",
             headerAlign: "center",
             hide: false,
-        },
-        {
+          },
+          {
             headerName: "Phone",
             field: "PhoneNumber",
             width: "150",
             align: "right",
             headerAlign: "center",
             hide: false,
-        },
-
+          },
 
         {
             field: "Action",
@@ -119,7 +111,7 @@ const Prescription = () => {
                             color="primary"
                             size="small"
                             onClick={() => {
-                                navigate("/Lab/prescription-edit");
+                                navigate("/Lab/prescription-edit",{state:{RecordId:params.row.RecordId}});
                             }}
                         >
                             Prescription
@@ -216,9 +208,9 @@ const Prescription = () => {
                             toolbar: CustomToolbar,
                         }}
                         rowHeight={dataGridRowHeight}
-                        rows={rows}
+                        rows={patientRows}
                         columns={columns}
-                        getRowId={(row) => row.FirstName}
+                        getRowId={(row) => row.RecordId}
                         initialState={{
                             pagination: { paginationModel: { pageSize: 20 } },
                         }}
